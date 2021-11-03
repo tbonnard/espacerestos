@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<h1>Events</h1>
+    {% for i in events %}
+    <div>
+        <a href="{% url 'event_details' event_id=i.id %}">{{i}}</a>
+    </div>
+    {% endfor %}
+
+<h3>New event</h3>
+<a href="{% url 'event_create' %}">New Event</a>
+
+
+<h1>Locations</h1>
+    {% for i in locations %}
+    <div>
+        <a href="{% url 'location_details' location_id=i.id %}">{{i}}</a>
+    </div>
+    {% endfor %}
+
+<h3>New location</h3>
+<a href="{% url 'location_create' %}">New Location</a>
+
+{% endblock %}

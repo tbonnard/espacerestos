@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    <h3>Nom</h3><p>{{ location.name }}</p>
+    <h3>Address Number</h3><p>{{ location.address_number }}</p>
+    <h3>Address</h3><p>{{ location.address }}</p>
+    <h3>Address 2</h3><p>{{ location.address_2 }}</p>
+    <h3>City</h3><p>{{ location.city }}</p>
+    <h3>Zip Code</h3><p>{{ location.zipcode }}</p>
+    <h3>Country</h3><p>{{ location.country }}</p>
+    <h3>Manager</h3><p>{{ location.manager_location }}</p>
+</div>
+
+<a href="{% url 'location_edit' location_id=location.id %}">Edit location</a>
+{% endblock %}

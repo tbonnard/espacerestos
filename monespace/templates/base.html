@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+    <link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet">
+
+    {% block script %}
+    {% endblock %}
+
+    <title>{% block title %}Mon Espace{% endblock %}</title>
+</head>
+<body>
+
+
+<a href="{% url 'index' %}">Home</a>
+{% if request.user.is_authenticated %}
+<p>{{user}}</p>
+<a href="{% url 'logout_view' %}">Logout</a>
+{% else%}
+<a href="{% url 'login_view' %}">Login</a>
+<a href="{% url 'register' %}">Register</a>
+{% endif%}
+
+
+{% block content%}
+
+{% endblock %}
+
+
+</body>
+</html>

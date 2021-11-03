@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+
+{% if is_edit%}
+<h1>Modifier un event</h1>
+{% else %}
+<h1>Ajouter un event</h1>
+{% endif %}
+
+    <form  {% if is_edit%} action="{% url 'event_edit' event_id=event_id %}"
+           {% else %} action="{% url 'event_create' %}"
+           {% endif %}
+           method='POST'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type='submit' value="Confirmer" class='input'/>
+    </form>
+<h1>Location</h1>
+<a href="{% url 'location_create' %}">New Location</a>
+
+{% endblock %}
