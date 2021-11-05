@@ -5,7 +5,7 @@
 <h1>Events</h1>
     {% for i in events %}
     <div>
-        <a href="{% url 'event_details' event_id=i.id %}">{{i}}</a>
+        <a href="{% url 'event_details' event_id=i.id %}">{{i}}</a> // <span>{{ i.id }}</span>
     </div>
     {% endfor %}
 
@@ -13,14 +13,22 @@
 <a href="{% url 'event_create' %}">New Event</a>
 
 
-<h1>Locations</h1>
+<h1>Patterns</h1>
+    {% for i in patterns %}
+    <div>
+       Event =  {{i.event}} //  {{i.id }} // {{i.separation_count }}
+    </div>
+    {% endfor %}
+
+
+<h1>Sites</h1>
     {% for i in locations %}
     <div>
         <a href="{% url 'location_details' location_id=i.id %}">{{i}}</a>
     </div>
     {% endfor %}
 
-<h3>New location</h3>
-<a href="{% url 'location_create' %}">New Location</a>
+<h3>creer new site</h3>
+<a href="{% url 'location_create' %}">New site</a>
 
 {% endblock %}

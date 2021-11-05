@@ -28,11 +28,28 @@ class Event(models.Model):
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=False, related_name="events_locations")
     name = models.CharField( blank=False, max_length=255)
     description = models.TextField(blank=True, default="")
-    date = models.DateField( blank=False, default=utils.timezone.now)
+    start_date = models.DateField( blank=False, default=utils.timezone.now)
+    end_date = models.DateField( blank=True, null=True)
     time_from = models.TimeField(blank=True, default="00:00:00")
     time_to = models.TimeField(blank=True, default="00:00:00")
+    is_recurring = models.BooleanField(default=False)
+    is_full_day = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
+
+    def __repr__(self):
+        return f"{self.name} - {self.id}"
 
 
+class RecurringPattern(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
+    separation_count = models.IntegerField(blank=True, null=True)
+    repeat_each_x = models.IntegerField(blank=True, null=True)
+    day_of_week = models.IntegerField(blank=True, null=True)
+    week_of_month = models.IntegerField(blank=True, null=True)
+    day_of_month = models.IntegerField(blank=True, null=True)
+    month_of_year = models.IntegerField(blank=True, null=True)
+    max_num_occurrences = models.IntegerField(blank=True, null=True)
+
+#https://vertabelo.com/blog/again-and-again-managing-recurring-events-in-a-data-model/
