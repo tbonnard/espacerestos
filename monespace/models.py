@@ -53,3 +53,23 @@ class RecurringPattern(models.Model):
     max_num_occurrences = models.IntegerField(blank=True, null=True)
 
 #https://vertabelo.com/blog/again-and-again-managing-recurring-events-in-a-data-model/
+
+
+class EventExceptionCancelledRescheduled(models.Model):
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=False, related_name="events_exceptions_locations")
+    name = models.CharField( blank=False, max_length=255)
+    description = models.TextField(blank=True, default="")
+    start_date = models.DateField( blank=False, default=utils.timezone.now)
+    end_date = models.DateField( blank=True, null=True)
+    time_from = models.TimeField(blank=True, default="00:00:00")
+    time_to = models.TimeField(blank=True, default="00:00:00")
+    is_cancelled = models.BooleanField(default=False)
+    is_rescheduled = models.BooleanField(default=False)
+    is_full_day = models.BooleanField(default=False)
+    parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
+
+
+class AttendeesEvents(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
+    status = models.IntegerField(blank=False, null=False, default=0)

@@ -31,7 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+if (document.querySelector('#id_separation_count').value =='') {
   document.querySelector('#id_separation_count').value =1;
+}
 
 
 });
