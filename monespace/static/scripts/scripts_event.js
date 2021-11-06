@@ -22,14 +22,15 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-  let id_repeat_each_x = document.querySelector('#id_repeat_each_x');
-  id_repeat_each_x.addEventListener('change', () => {
-    if (id_repeat_each_x.value == "1" ) {
-      document.querySelector('#id_day_of_week').style.display='none';
-    } else {
-      document.querySelector('#id_day_of_week').style.display='block';
-    }
-  });
+  document.querySelector('#id_day_of_week').style.display='none';
+  // let id_repeat_each_x = document.querySelector('#id_repeat_each_x');
+  // id_repeat_each_x.addEventListener('change', () => {
+  //   if (id_repeat_each_x.value == "1" ) {
+  //     document.querySelector('#id_day_of_week').style.display='none';
+  //   } else {
+  //     document.querySelector('#id_day_of_week').style.display='block';
+  //   }
+  // });
 
 if (document.querySelector('#id_separation_count').value =='') {
   document.querySelector('#id_separation_count').value =1;

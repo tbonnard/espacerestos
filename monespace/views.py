@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
+import datetime
+import time
+import pprint
 
 from .models import Event, Location, User, RecurringPattern
 from .forms import EventForm, LocationForm, EventRecurringPatternForm
@@ -10,6 +14,41 @@ def index(request):
     all_locations = Location.objects.all()
     all_patterns = RecurringPattern.objects.all()
     return render(request, 'index.html', context={"events": all_events, 'locations': all_locations, 'patterns': all_patterns})
+
+
+def events_list_date(request):
+    date_from = datetime.datetime.now()
+    days = 365
+    days_added = datetime.timedelta(days=days)
+    date_to = date_from + days_added
+    all_events = Event.objects.all()
+    eligible_events_date = {}
+    for i in all_events:
+        if i.is_recurring:
+            rec_pattern = RecurringPattern.objects.filter(event=i).first()
+            event_date = i.start_date
+            for n in range(rec_pattern.max_num_occurrences+1):
+                if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
+                    try:
+                        events = eligible_events_date[event_date]
+                        events.append(i)
+                        eligible_events_date[event_date] = events
+                    except:
+                        eligible_events_date.setdefault(event_date, [i])
+                if rec_pattern.repeat_each_x == 0:
+                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count*7)
+                elif rec_pattern.repeat_each_x == 1:
+                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count*1)
+                elif rec_pattern.repeat_each_x == 2:
+                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*4)
+                elif rec_pattern.repeat_each_x == 3:
+                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*12)
+                elif rec_pattern.repeat_each_x == 4:
+                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*24)
+                elif rec_pattern.repeat_each_x == 5:
+                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*56)
+    pprint.pprint(eligible_events_date)
+    return render(request, 'all_events.html', context={"events": eligible_events_date})
 
 
 def create_event_unit(form):
@@ -104,7 +143,8 @@ def event_edit(request, event_id):
     form = EventForm(instance=event_page)
     if event_page.is_recurring:
         event_rec_pattern = RecurringPattern.objects.filter(event=event_page).first()
-        rec_form = EventRecurringPatternForm(instance=event_rec_pattern)
+        #rec_form = EventRecurringPatternForm(instance=event_rec_pattern)
+        rec_form = EventRecurringPatternForm(initial=model_to_dict(event_rec_pattern))
     else:
         rec_form = EventRecurringPatternForm()
     if request.method == "POST":

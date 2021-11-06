@@ -46,7 +46,7 @@ class RecurringPattern(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
     separation_count = models.IntegerField(blank=True, null=True)
     repeat_each_x = models.IntegerField(blank=True, null=True)
-    day_of_week = models.IntegerField(blank=True, null=True)
+    day_of_week = models.CharField(blank=True, null=True, max_length=255)
     week_of_month = models.IntegerField(blank=True, null=True)
     day_of_month = models.IntegerField(blank=True, null=True)
     month_of_year = models.IntegerField(blank=True, null=True)
@@ -70,6 +70,6 @@ class EventExceptionCancelledRescheduled(models.Model):
 
 
 class AttendeesEvents(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
+    parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
     status = models.IntegerField(blank=False, null=False, default=0)

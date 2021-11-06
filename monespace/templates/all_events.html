@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+<script src= ""></script>
+{% endblock %}
+
+
+{% block content%}
+
+<h1>All evenements</h1>
+{{events}}
+
+{% for key,value in events.items %}
+<h4>{{ key }}</h4>
+    {% for i in value%}
+<p>{{ i }}</p>
+{% endfor %}
+
+{% endfor %}
+
+
+{% endblock %}

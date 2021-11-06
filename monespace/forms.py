@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db.models.base import Model
 from django import forms
-
+import json
 from .models import User, Event, Location, RecurringPattern
 
 
@@ -21,7 +21,7 @@ class EventForm(forms.ModelForm):
         fields = '__all__'
         # fields = ('transaction_type', 'quantity')
         widgets = {
-            "date": forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
+            "start_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
             "time_from": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
             "time_to": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
         }
@@ -30,8 +30,8 @@ class EventForm(forms.ModelForm):
 class EventRecurringPatternForm(forms.ModelForm):
     class Meta:
         model = RecurringPattern
-        repeat_each_x_choices = ((0, 'semaine'), (1, 'jour'), (2, '2 semaines'), (3, 'mois'), (4, 'trimestre'),
-                                (5, 'semestre'), (6, 'année'))
+        repeat_each_x_choices = ((0, 'semaine'), (1, 'jour'), (2, 'mois'), (3, 'trimestre'),
+                                (4, 'semestre'), (5, 'année'))
         day_of_week_choices = ((0, 'Lundi'), (1, 'Mardi'), (2, 'Mercredi'), (3, 'Jeudi'), (4, 'Vendredi'),
                                (5, 'Samedi'), (6, 'Dimanche'))
         # fields = ('separation_count', "repeat_each_x", "max_num_occurrences", "day_of_week", "week_of_month",
@@ -41,11 +41,12 @@ class EventRecurringPatternForm(forms.ModelForm):
             "day_of_week": forms.RadioSelect(choices=day_of_week_choices),
             "repeat_each_x": forms.Select(choices=repeat_each_x_choices),
         }
+
         labels = {
             "day_of_week": "le",
             'separation_count': 'répéter tous/toutes les',
             'repeat_each_x': '',
-            "max_num_occurrences": "le répéter pendant... fois"
+            "max_num_occurrences": "le répéter en plus du celui ci pendant... fois"
         }
 
 
