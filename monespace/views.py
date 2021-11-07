@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
 
-from dateutil import relativedelta
 
 import pprint
 
@@ -39,9 +38,6 @@ def events_list_date(request):
                     except:
                         eligible_events_date.setdefault(event_date, [i])
                 if rec_pattern.repeat_each_x == 0:
-                    # relativedelta
-                    # http://labix.org/python-dateutil#head-ba5ffd4df8111d1b83fc194b97ebecf837add454
-                    #event_date = event_date + relativedelta.relativedelta(days=rec_pattern.separation_count*7)
                     event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count*7)
                 elif rec_pattern.repeat_each_x == 1:
                     event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count*1)
@@ -50,7 +46,6 @@ def events_list_date(request):
                 elif rec_pattern.repeat_each_x == 3:
                     event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*12)
                 elif rec_pattern.repeat_each_x == 4:
-                    #event_date = event_date + relativedelta.relativedelta(weeks=rec_pattern.separation_count*24)
                     event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*24)
                 elif rec_pattern.repeat_each_x == 5:
                     event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*56)
