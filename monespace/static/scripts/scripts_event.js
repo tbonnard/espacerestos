@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-  document.querySelector('#id_day_of_week').style.display='none';
+  //document.querySelector('#id_day_of_week').style.display='none';
   // let id_repeat_each_x = document.querySelector('#id_repeat_each_x');
   // id_repeat_each_x.addEventListener('change', () => {
   //   if (id_repeat_each_x.value == "1" ) {

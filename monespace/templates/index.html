@@ -17,6 +17,35 @@
 <a href="{% url 'event_create' %}">New Event</a>
 
 
+<h1>Sites</h1>
+    {% for i in locations %}
+    <div>
+        <a href="{% url 'location_details' location_id=i.id %}">{{i}}</a>
+        <h4>Evenements dans ce site</h4>
+            {% for j in events %}
+                {% if j.location == i %}
+                <p>{{j}}</p>
+                {% endif %}
+            {% endfor %}
+        <h4>Manager dans ce site</h4>
+        {{i.manager_location}}
+        <h4>Membres dans ce site</h4>
+            {% for z in users %}
+                {% if z.location == i %}
+                    <p>{{z}}</p>
+                {% else %}
+        <p><i>pas de membre specifiquement attitré à ce site encore</i></p>
+                {% endif %}
+            {% endfor %}
+
+    </div>
+
+    {% endfor %}
+
+<h3>creer new site</h3>
+<a href="{% url 'location_create' %}">New site</a>
+
+
 <h1>Patterns</h1>
     {% for i in patterns %}
     <div>
@@ -24,15 +53,5 @@
     </div>
     {% endfor %}
 
-
-<h1>Sites</h1>
-    {% for i in locations %}
-    <div>
-        <a href="{% url 'location_details' location_id=i.id %}">{{i}}</a>
-    </div>
-    {% endfor %}
-
-<h3>creer new site</h3>
-<a href="{% url 'location_create' %}">New site</a>
 
 {% endblock %}

@@ -36,7 +36,7 @@ class EventRecurringPatternForm(forms.ModelForm):
                                (5, 'Samedi'), (6, 'Dimanche'))
         # fields = ('separation_count', "repeat_each_x", "max_num_occurrences", "day_of_week", "week_of_month",
         #           "day_of_month", "month_of_year" )
-        fields = ('separation_count', "repeat_each_x", "day_of_week", "max_num_occurrences")
+        fields = ('separation_count', "repeat_each_x", "max_num_occurrences")
         widgets = {
             "day_of_week": forms.RadioSelect(choices=day_of_week_choices),
             "repeat_each_x": forms.Select(choices=repeat_each_x_choices),
