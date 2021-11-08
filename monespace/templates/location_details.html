@@ -1,6 +1,13 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
+
+    <div class="sub_nav">
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_edit' location_id=location.id %}">Modifier le site</a></span>
+        </div>
+    </div>
 
 <div>
     <h3>Nom</h3><p>{{ location.name }}</p>
@@ -13,5 +20,5 @@
     <h3>Manager</h3><p>{{ location.manager_location }}</p>
 </div>
 
-<a href="{% url 'location_edit' location_id=location.id %}">Edit location</a>
+
 {% endblock %}

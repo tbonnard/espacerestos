@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+    <div class="sub_nav">
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_create' %}">Créer un site</a></span>
+        </div>
+    </div>
+
+{% for i in all_locations %}
+    <div>
+        <a href="{% url 'location_details' location_id=i.id %}">{{i}}</a> // <span>{{ i.id }}</span>
+    </div>
+    {% endfor %}
+
+{% endblock %}

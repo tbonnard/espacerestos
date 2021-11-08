@@ -15,20 +15,37 @@
 <body>
 
 
-<a href="{% url 'index' %}">Home</a>
-{% if request.user.is_authenticated %}
-<p>{{user}}</p>
-<a href="{% url 'logout_view' %}">Logout</a>
-{% else%}
-<a href="{% url 'login_view' %}">Login</a>
-<a href="{% url 'register' %}">Register</a>
-{% endif%}
+<nav>
+    <div class="items_nav">
+        <div class="item_nav">
+            <a href="{% url 'index' %}"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>
+        </div>
+    </div>
 
+    <div class="items_nav">
+    {% if request.user.is_authenticated %}
+        <div class="item_nav">
+            <span>Bonjour <a href="{% url 'index' %}">{{user}}</a></span>
+        </div>
+        <div class="item_nav">
+            <a href="{% url 'logout_view' %}">Se déconnecter</a>
+        </div>
+    {% else%}
+        <div class="item_nav">
+            <a href="{% url 'login_view' %}">Se connecter</a>
+        </div>
+        <div class="item_nav">
+            <a href="{% url 'register' %}">S'inscrire</a>
+        </div>
+    {% endif%}
+    </div>
+</nav>
 
+<div class="container_master">
 {% block content%}
 
 {% endblock %}
-
+</div>
 
 </body>
 </html>

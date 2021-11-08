@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
 
+# from dateutil import relativedelta
 
 import pprint
 
@@ -9,13 +10,15 @@ from .models import Event, Location, User, RecurringPattern
 from .forms import EventForm, LocationForm, EventRecurringPatternForm
 
 
+@login_required(login_url='/login/')
 def index(request):
-    all_events = Event.objects.all()
-    all_locations = Location.objects.all()
-    all_patterns = RecurringPattern.objects.all()
-    all_users = User.objects.all()
-    return render(request, 'index.html', context={"events": all_events, 'locations': all_locations,
-                                                  'patterns': all_patterns, 'users':all_users})
+    if request.user.user_type == 3:
+        location = Location.objects.filter(manager_location=request.user).first()
+        all_events = Event.objects.filter(location=location)
+    else:
+        all_events = Event.objects.all()
+        location = None
+    return render(request, 'index.html', context={"events": all_events, "location":location})
 
 
 def events_list_date(request):
@@ -29,26 +32,30 @@ def events_list_date(request):
         if i.is_recurring:
             rec_pattern = RecurringPattern.objects.filter(event=i).first()
             event_date = i.start_date
-            for n in range(rec_pattern.max_num_occurrences+1):
+            for n in range(rec_pattern.max_num_occurrences + 1):
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
                     try:
                         events = eligible_events_date[event_date]
                         events.append(i)
                         eligible_events_date[event_date] = events
-                    except:
+                    except KeyError:
                         eligible_events_date.setdefault(event_date, [i])
                 if rec_pattern.repeat_each_x == 0:
-                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count*7)
+                    # relativedelta
+                    # http://labix.org/python-dateutil#head-ba5ffd4df8111d1b83fc194b97ebecf837add454
+                    # event_date = event_date + relativedelta.relativedelta(days=rec_pattern.separation_count*7)
+                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 7)
                 elif rec_pattern.repeat_each_x == 1:
-                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count*1)
+                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 1)
                 elif rec_pattern.repeat_each_x == 2:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*4)
+                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 4)
                 elif rec_pattern.repeat_each_x == 3:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*12)
+                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 12)
                 elif rec_pattern.repeat_each_x == 4:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*24)
+                    # event_date = event_date + relativedelta.relativedelta(weeks=rec_pattern.separation_count*24)
+                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 24)
                 elif rec_pattern.repeat_each_x == 5:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count*56)
+                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 56)
     pprint.pprint(eligible_events_date)
     return render(request, 'all_events.html', context={"events": eligible_events_date})
 
@@ -124,6 +131,11 @@ def edit_recurring_pattern_event_unit(recurring_pattern, form):
     return recurring_pattern
 
 
+def edit_location_manager(user):
+    user.user_type = 3
+    user.save()
+
+
 @login_required(login_url='/login/')
 def event_create(request):
     form = EventForm()
@@ -155,8 +167,9 @@ def event_edit(request, event_id):
             edit_event_unit(event=event_page, form=form)
             if event_page.is_recurring:
                 if RecurringPattern.objects.filter(event=event_page).first():
-                    edit_recurring_pattern_event_unit(recurring_pattern=RecurringPattern.objects.filter(event=event_page).first(),
-                                                      form=rec_form)
+                    edit_recurring_pattern_event_unit(
+                        recurring_pattern=RecurringPattern.objects.filter(event=event_page).first(),
+                        form=rec_form)
                 else:
                     create_recurring_pattern_event_unit(event=event_page, form=rec_form)
             else:
@@ -182,6 +195,7 @@ def location_create(request):
         form = LocationForm(data=request.POST)
         if form.is_valid():
             form.save()
+            edit_location_manager(form.cleaned_data['manager_location'])
             return redirect('index')
     return render(request, 'location.html', context={"form": form})
 
@@ -202,7 +216,8 @@ def location_edit(request, location_id):
             location_page.country = form.cleaned_data['country']
             try:
                 location_page.manager_location = User.objects.get(id=request.POST['manager_location'])
-            except:
+                edit_location_manager(location_page.manager_location)
+            except User.DoesNotExist:
                 location_page.manager_location = None
             location_page.save()
             return redirect('index')
@@ -217,3 +232,7 @@ def location_details(request, location_id):
     return redirect('index')
 
 
+@login_required(login_url='/login/')
+def locations(request):
+    all_locations = Location.objects.all()
+    return render(request, 'locations.html', context={"all_locations": all_locations})

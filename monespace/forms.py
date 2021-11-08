@@ -1,11 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.db.models.base import Model
 from django import forms
-import json
 from .models import User, Event, Location, RecurringPattern
 
 
-class UserCreationForm(UserCreationForm):
+class UserCreateForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("username", "email", "password1", "password2")

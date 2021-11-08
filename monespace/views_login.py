@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import User
-from .forms import UserCreationForm, UserAuthenticationForm
+from .forms import UserCreateForm, UserAuthenticationForm
 
 
 def login_view(request):
@@ -25,9 +25,9 @@ def login_view(request):
 def register(request):
     if request.user.is_authenticated:
         return redirect('index')
-    form = UserCreationForm()
+    form = UserCreateForm()
     if request.method == "POST":
-        form = UserCreationForm(data=request.POST)
+        form = UserCreateForm(data=request.POST)
         if form.is_valid():
             new_user = User.objects.create_user(username=form.cleaned_data['username'],
                                                 password=form.cleaned_data['password1'])
@@ -35,7 +35,6 @@ def register(request):
             login(request, new_user)
             return redirect('index')
     return render(request, 'register.html', context={"form": form})
-
 
 
 @login_required(login_url='/login/')

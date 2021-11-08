@@ -9,6 +9,7 @@ class User(AbstractUser):
     location = models.ForeignKey("Location", on_delete=models.SET_NULL, null=True, blank=True, related_name="users_locations")
 
 
+
 class Location(models.Model):
     name = models.CharField(blank=False, max_length=255)
     address = models.CharField(blank=False, max_length=255)
@@ -18,7 +19,8 @@ class Location(models.Model):
     zip_code = models.CharField( blank=False, max_length=5)
     country_list = (("FR", 'France'), ("CA", 'Canada'))
     country = models.CharField(choices=country_list, blank=False, max_length=2)
-    manager_location = models.ForeignKey(User, limit_choices_to={'user_type':3}, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
+    # manager_location = models.ForeignKey(User, limit_choices_to={'user_type':3}, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
+    manager_location = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
 
     def __str__(self):
         return self.name
@@ -39,7 +41,7 @@ class Event(models.Model):
         return f"{self.name}"
 
     def __repr__(self):
-        return f"{self.name} - {self.id}"
+        return f"{self.name} - {self.pk}"
 
 
 class RecurringPattern(models.Model):
