@@ -47,10 +47,10 @@ class RecurringPattern(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
     separation_count = models.IntegerField(blank=True, null=True)
     repeat_each_x = models.IntegerField(blank=True, null=True)
-    day_of_week = models.IntegerField(blank=True, null=True)
-    week_of_month = models.IntegerField(blank=True, null=True)
-    day_of_month = models.IntegerField(blank=True, null=True)
-    month_of_year = models.IntegerField(blank=True, null=True)
+    # day_of_week = models.IntegerField(blank=True, null=True)
+    # week_of_month = models.IntegerField(blank=True, null=True)
+    # day_of_month = models.IntegerField(blank=True, null=True)
+    # month_of_year = models.IntegerField(blank=True, null=True)
     max_num_occurrences = models.IntegerField(blank=True, null=True)
 
 #https://vertabelo.com/blog/again-and-again-managing-recurring-events-in-a-data-model/
