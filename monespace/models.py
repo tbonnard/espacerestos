@@ -9,7 +9,6 @@ class User(AbstractUser):
     location = models.ForeignKey("Location", on_delete=models.SET_NULL, null=True, blank=True, related_name="users_locations")
 
 
-
 class Location(models.Model):
     name = models.CharField(blank=False, max_length=255)
     address = models.CharField(blank=False, max_length=255)
@@ -48,7 +47,7 @@ class RecurringPattern(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
     separation_count = models.IntegerField(blank=True, null=True)
     repeat_each_x = models.IntegerField(blank=True, null=True)
-    day_of_week = models.CharField(blank=True, null=True, max_length=255)
+    day_of_week = models.IntegerField(blank=True, null=True)
     week_of_month = models.IntegerField(blank=True, null=True)
     day_of_month = models.IntegerField(blank=True, null=True)
     month_of_year = models.IntegerField(blank=True, null=True)
