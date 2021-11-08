@@ -14,24 +14,33 @@ from .forms import EventForm, LocationForm, EventRecurringPatternForm
 def index(request):
     if request.user.user_type == 3:
         location = Location.objects.filter(manager_location=request.user).first()
+        eligible_events_date = events_list(date_from=None, date_to=None, location=location)
+    else:
+        location = None
+        eligible_events_date = None
+    return render(request, 'index.html', context={"events": eligible_events_date, "location":location})
+
+
+def events_list(date_from, date_to, location):
+    if date_from is None:
+        date_from = datetime.datetime.now() - datetime.timedelta(days=1)
+    else:
+        date_from = date_from - datetime.timedelta(days=1)
+    if date_to is None:
+        days = 14
+        days_added = datetime.timedelta(days=days)
+        date_to = date_from + days_added
+    else:
+        date_to = date_to
+    if location is not None:
         all_events = Event.objects.filter(location=location)
     else:
         all_events = Event.objects.all()
-        location = None
-    return render(request, 'index.html', context={"events": all_events, "location":location})
-
-
-def events_list_date(request):
-    date_from = datetime.datetime.now()
-    days = 365
-    days_added = datetime.timedelta(days=days)
-    date_to = date_from + days_added
-    all_events = Event.objects.all()
     eligible_events_date = {}
     for i in all_events:
+        event_date = i.start_date
         if i.is_recurring:
             rec_pattern = RecurringPattern.objects.filter(event=i).first()
-            event_date = i.start_date
             for n in range(rec_pattern.max_num_occurrences + 1):
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
                     try:
@@ -56,7 +65,29 @@ def events_list_date(request):
                     event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 24)
                 elif rec_pattern.repeat_each_x == 5:
                     event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 56)
-    pprint.pprint(eligible_events_date)
+        else:
+            if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
+                try:
+                    events = eligible_events_date[event_date]
+                    events.append(i)
+                    eligible_events_date[event_date] = events
+                except KeyError:
+                    eligible_events_date.setdefault(event_date, [i])
+    return eligible_events_date
+
+
+def events_list_date(request):
+    try:
+        request.GET['from']
+        date_from = datetime.datetime.strptime(request.GET['from'], '%Y-%m-%d')
+    except:
+        date_from = None
+    try:
+        request.GET['to']
+        date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
+    except:
+        date_to = None
+    eligible_events_date = events_list(date_from, date_to, None)
     return render(request, 'all_events.html', context={"events": eligible_events_date})
 
 
@@ -138,7 +169,7 @@ def edit_location_manager(user):
 
 @login_required(login_url='/login/')
 def event_create(request):
-    form = EventForm()
+    form = EventForm(initial={"location":Location.objects.get(pk=11)})
     rec_form = EventRecurringPatternForm()
     if request.method == "POST":
         form = EventForm(data=request.POST)
@@ -236,3 +267,11 @@ def location_details(request, location_id):
 def locations(request):
     all_locations = Location.objects.all()
     return render(request, 'locations.html', context={"all_locations": all_locations})
+
+
+@login_required(login_url='/login/')
+def users_site(request, location_id):
+    users_site = User.objects.filter(location=Location.objects.get(pk=location_id))
+    return render(request, 'benevoles.html', context={"users": users_site})
+
+

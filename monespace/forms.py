@@ -16,14 +16,14 @@ class UserAuthenticationForm(AuthenticationForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
+        location = forms.CharField(disabled=True)
         fields = '__all__'
-        # fields = ('transaction_type', 'quantity')
         widgets = {
             "start_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
+            "end_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
             "time_from": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
             "time_to": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
         }
-
 
 class EventRecurringPatternForm(forms.ModelForm):
     class Meta:

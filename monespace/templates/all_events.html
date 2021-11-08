@@ -2,21 +2,28 @@
 {% load static %}
 
 {% block script %}
-<script src= ""></script>
+<script src= "{% static 'scripts/scripts_all_events.js' %}"></script>
 {% endblock %}
-
 
 {% block content%}
 
-<h1>All evenements</h1>
-{{events}}
+<h1>Rechercher les évenements</h1>
+
+    <label for="date_from">Entre</label>
+    <input id="date_from" type="date">
+    <label for="date_to">et</label>
+    <input id="date_to" type="date">
+    <a href="" id="form_search_dates">Search</a>
+
+</form>
+
+<h1>Tous les évenements</h1>
 
 {% for key,value in events.items %}
 <h4>{{ key }}</h4>
     {% for i in value%}
-<p>{{ i }}</p>
-{% endfor %}
-
+    <p>{{ i }}</p>
+    {% endfor %}
 {% endfor %}
 
 

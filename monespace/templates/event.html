@@ -19,7 +19,24 @@
            {% endif %}
            method='POST'>
         {% csrf_token %}
-        {{ form.as_p }}
+        <label>Nom de l'évenement</label>
+        <p>{{ form.name }}</p>
+        <label>Site de l'évenement</label>
+        <p>{{ form.location }}</p>
+        <label>Description</label>
+        <p>{{ form.description }}</p>
+        <label>Date de début</label>
+        <p>{{ form.start_date }}</p>
+        <label>Date de fin</label>
+        <p>{{ form.end_date }}</p>
+        <label>Heure de fin</label>
+        <p>{{ form.time_from }}</p>
+        <label>Heure de fin</label>
+        <p>{{ form.time_to }}</p>
+        <label>Evenement durant toute la journée</label>
+        <p>{{ form.is_full_day }}</p>
+        <label>Evenement récurrent</label>
+        <p>{{ form.is_recurring }}</p>
 
         <div id="recurring">
             {{ rec_form }}

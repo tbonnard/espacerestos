@@ -10,7 +10,7 @@
             <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_details' location_id=location.pk %}">Gérer mon site</a></span>
         </div>
         <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_details' location_id=location.pk %}">Voir les bénévoles du site</a></span>
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'users_site' location_id=location.pk %}">Voir les bénévoles du site</a></span>
         </div>
     {% elif request.user.user_type == 1 %}
         <div class="sub_nav_item">
@@ -26,14 +26,20 @@
 {% endif %}
 
 
-<h1>Voici les évenements des prochains jours</h1>
-    {% for i in events %}
-    <div>
-        <a href="{% url 'event_details' event_id=i.id %}">{{i}}</a> // <span>{{ i.id }}</span>
-    </div>
+<h1>Voici les évenements des 14 prochains jours</h1>
+
+    {% for key,value in events.items %}
+    <h4>{{ key }}</h4>
+        {% for i in value%}
+            <p><a href="{% url 'event_details' event_id=i.pk %}">{{ i }}</a></p>
+        {% endfor %}
     {% endfor %}
 
-<a href="{% url 'events_list_date' %}">Voir plus d'évenements</a>
+    <div class="sub_nav">
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}">Voir plus d'évenements</a></span>
+        </div>
+    </div>
 
 
 {% endblock %}

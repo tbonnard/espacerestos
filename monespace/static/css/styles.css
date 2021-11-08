@@ -11,7 +11,7 @@ a {
   text-decoration: none;
 }
 
-a:visited{
+a:visited, a:active, a{
   color: inherit;
 }
 
@@ -70,7 +70,7 @@ nav a {
 
 
 .sub_nav{
-  margin: 0 0 5% 0;
+  margin: 2% 0 5% 0;
 }
 
 .sub_nav_item{
