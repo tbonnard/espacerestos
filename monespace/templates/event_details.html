@@ -11,8 +11,14 @@
     <h3>Location</h3><p>{{ event.location }}</p>
 </div>
 
+
 {% if manager_location %}
-<a href="{% url 'event_edit' event_id=event.id %}">Edit evenement</a>
+    <div class="sub_nav">
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a></span>
+        </div>
+    </div>
 {%endif%}
+
 
 {% endblock %}

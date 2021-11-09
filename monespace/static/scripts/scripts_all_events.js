@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   date_from_select.value = param_from_value ;
   date_to_select.value = param_to_value ;
 
+
   function diff_dates () {
     let date_from = document.querySelector('#date_from').value;
     let date_to = document.querySelector('#date_to').value;
