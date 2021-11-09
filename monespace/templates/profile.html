@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{%load static%}
 
 {% block content %}
 <h1>Votre profil</h1>
@@ -13,5 +14,11 @@
 {% for i in locations%}
 <p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&location={{i.pk}}">{{i}}</a></p>
 {%endfor%}
+
+    <div class="sub_nav">
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'select_locations' %}">Modifier vos sites</a></span>
+        </div>
+    </div>
 
 {% endblock %}

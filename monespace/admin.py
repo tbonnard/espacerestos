@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User, Location, Event, RecurringPattern
+from .models import User, Location, Event, RecurringPattern, StatusUsersLocations
 
 
 class UserAdminCustom(admin.ModelAdmin):
@@ -20,7 +20,12 @@ class RecurringPatternAdmin(admin.ModelAdmin):
     list_display = ('event', "separation_count")
 
 
+class StatusUsersLocationsAdmin(admin.ModelAdmin):
+    list_display = ('location', "user", 'status')
+
+
 admin.site.register(User, UserAdminCustom)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(RecurringPattern, RecurringPatternAdmin)
+admin.site.register(StatusUsersLocations, StatusUsersLocationsAdmin)

@@ -22,7 +22,6 @@ class Location(models.Model):
     manager_location = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
     users = models.ManyToManyField(User)
 
-
     def __str__(self):
         return self.name
 
@@ -76,3 +75,18 @@ class AttendeesEvents(models.Model):
     parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
     status = models.IntegerField(blank=False, null=False, default=0)
+
+
+class StatusUsersLocations(models.Model):
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=False, null=False,
+                                 related_name="location_status_user")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False,
+                             related_name="user_status_location")
+    status_choices = ((1, 'Pending'), (2, 'Active'), (3, 'Rejected'), (4, 'Deactivated'), (5, 'Cancelled_from_user'))
+    status = models.IntegerField(choices=status_choices, null=False, blank=False, default=1)
+
+    def __str__(self):
+        return f"{self.user} - {self.location} - {self.status}"
+
+    def __repr__(self):
+        return f"{self.user} - {self.location} - {self.status}"
