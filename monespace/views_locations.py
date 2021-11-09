@@ -84,8 +84,7 @@ def locations(request):
 @login_required(login_url='/login/')
 def select_locations(request):
     try:
-        status_user_locations = StatusUsersLocations.objects.filter(user=request.user, status=1)\
-                                and StatusUsersLocations.objects.filter(user=request.user, status=1)
+        status_user_locations = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
         locations_user_status = [i.location.pk for i in status_user_locations]
     except:
         form = SelectLocationsForm()

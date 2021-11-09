@@ -82,7 +82,7 @@ class StatusUsersLocations(models.Model):
                                  related_name="location_status_user")
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False,
                              related_name="user_status_location")
-    status_choices = ((1, 'Pending'), (2, 'Active'), (3, 'Rejected'), (4, 'Deactivated'), (5, 'Cancelled_from_user'))
+    status_choices = ((1, 'En attente'), (2, 'Actif'), (3, 'Rejeté'), (4, 'Désactivé'), (5, "Annulé par l'utilisateur"))
     status = models.IntegerField(choices=status_choices, null=False, blank=False, default=1)
 
     def __str__(self):

@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
-from .models import User, Event, Location, RecurringPattern
+from .models import User, Event, Location, RecurringPattern, StatusUsersLocations
 
 
 class UserCreateForm(UserCreationForm):
@@ -24,6 +24,7 @@ class EventForm(forms.ModelForm):
             "time_from": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
             "time_to": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
         }
+
 
 class EventRecurringPatternForm(forms.ModelForm):
     class Meta:
@@ -57,3 +58,9 @@ class LocationForm(forms.ModelForm):
 
 class SelectLocationsForm(forms.Form):
     locations = forms.ModelMultipleChoiceField(queryset=Location.objects.all(), required=True)
+
+
+class StatusUsersLocationsForm(forms.ModelForm):
+    class Meta:
+        model = StatusUsersLocations
+        fields = ('status',)
