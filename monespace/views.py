@@ -180,7 +180,7 @@ def edit_location_manager(user):
 
 @login_required(login_url='/login/')
 def event_create(request):
-    form = EventForm(initial={"location":Location.objects.get(pk=11)})
+    form = EventForm(initial={"location":Location.objects.filter(manager_location=request.user).first()})
     rec_form = EventRecurringPatternForm()
     if request.method == "POST":
         form = EventForm(data=request.POST)
