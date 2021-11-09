@@ -225,8 +225,12 @@ def event_edit(request, event_id):
 @login_required(login_url='/login/')
 def event_details(request, event_id):
     event_page = Event.objects.get(id=event_id)
+    if event_page.location.manager_location == request.user:
+        manager_location = True
+    else:
+        manager_location = False
     if event_page:
-        return render(request, 'event_details.html', context={"event": event_page})
+        return render(request, 'event_details.html', context={"event": event_page, "manager_location":manager_location})
     return redirect('index')
 
 

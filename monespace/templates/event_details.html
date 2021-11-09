@@ -11,5 +11,8 @@
     <h3>Location</h3><p>{{ event.location }}</p>
 </div>
 
+{% if manager_location %}
 <a href="{% url 'event_edit' event_id=event.id %}">Edit evenement</a>
+{%endif%}
+
 {% endblock %}
