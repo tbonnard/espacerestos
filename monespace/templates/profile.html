@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Votre profil</h1>
+<p>{{request.user.username}}</p>
+<p>{{request.user.email}}</p>
+<p>{{request.user.first_name}}</p>
+<p>{{request.user.last_name}}</p>
+
+
+<h1>Vos sites</h1>
+
+{% for i in locations%}
+<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&location={{i.pk}}">{{i}}</a></p>
+{%endfor%}
+
+{% endblock %}

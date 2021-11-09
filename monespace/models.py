@@ -6,7 +6,7 @@ from django import utils
 class User(AbstractUser):
     user_type_choices = ((1, 'Admin'), (2, 'User'), (3, 'Manager'))
     user_type = models.IntegerField(choices=user_type_choices, null=False, blank=False, default=2)
-    location = models.ForeignKey("Location", on_delete=models.SET_NULL, null=True, blank=True, related_name="users_locations")
+    # location = models.ForeignKey("Location", on_delete=models.SET_NULL, null=True, blank=True, related_name="users_locations")
 
 
 class Location(models.Model):
@@ -20,6 +20,8 @@ class Location(models.Model):
     country = models.CharField(choices=country_list, blank=False, max_length=2)
     # manager_location = models.ForeignKey(User, limit_choices_to={'user_type':3}, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
     manager_location = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
+    users = models.ManyToManyField(User)
+
 
     def __str__(self):
         return self.name

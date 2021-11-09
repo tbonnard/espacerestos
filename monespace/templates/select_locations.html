@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Sélectionner le/les sites pour lesquels vous souhaitez être bénevole</h1>
+
+
+<form action="{% url 'select_locations' %}" method="POST">
+    {% csrf_token %}
+    <label>Les sites disponibles</label>
+    {{form.locations}}
+    <input type='submit' value="Confirmer" class='input'/>
+</form>
+
+
+{% endblock %}

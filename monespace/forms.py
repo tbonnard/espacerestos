@@ -55,3 +55,5 @@ class LocationForm(forms.ModelForm):
 #         fields = ("name", "address", "address_2", "address_number", "city", "zip_code", "country", "manager_location")
 
 
+class SelectLocationsForm(forms.Form):
+    locations = forms.ModelMultipleChoiceField(queryset=Location.objects.all(), required=True)

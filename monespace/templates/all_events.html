@@ -22,7 +22,7 @@
 {% for key,value in events.items %}
 <h4>{{ key }}</h4>
     {% for i in value%}
-    <p>{{ i }}</p>
+    <p>{{ i }} // {{ i.location }}</p>
     {% endfor %}
 {% endfor %}
 

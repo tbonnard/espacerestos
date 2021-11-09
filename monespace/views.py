@@ -2,23 +2,27 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
 
-# from dateutil import relativedelta
-
-import pprint
-
 from .models import Event, Location, User, RecurringPattern
 from .forms import EventForm, LocationForm, EventRecurringPatternForm
 
 
 @login_required(login_url='/login/')
 def index(request):
+    user_locations = Location.objects.filter(users=request.user)
+
+    #BY LOCATION
+    eligible_events_date_locations = {}
+    for i in user_locations:
+        events = events_list(date_from=None, date_to=None, location=i)
+        eligible_events_date_locations[i] = events
+
+    # BY DATES
+
     if request.user.user_type == 3:
-        location = Location.objects.filter(manager_location=request.user).first()
-        eligible_events_date = events_list(date_from=None, date_to=None, location=location)
-    else:
-        location = None
-        eligible_events_date = None
-    return render(request, 'index.html', context={"events": eligible_events_date, "location":location})
+        location_manager = Location.objects.filter(manager_location=request.user).first()
+        return render(request, 'index.html', context={"events": eligible_events_date_locations,
+                                                      "location":location_manager})
+    return render(request, 'index.html', context={"events": eligible_events_date_locations})
 
 
 def events_list(date_from, date_to, location):
@@ -26,16 +30,19 @@ def events_list(date_from, date_to, location):
         date_from = datetime.datetime.now() - datetime.timedelta(days=1)
     else:
         date_from = date_from - datetime.timedelta(days=1)
+
     if date_to is None:
         days = 14
         days_added = datetime.timedelta(days=days)
         date_to = date_from + days_added
     else:
         date_to = date_to
+
     if location is not None:
         all_events = Event.objects.filter(location=location)
     else:
         all_events = Event.objects.all()
+
     eligible_events_date = {}
     for i in all_events:
         event_date = i.start_date
@@ -44,15 +51,14 @@ def events_list(date_from, date_to, location):
             for n in range(rec_pattern.max_num_occurrences + 1):
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
                     try:
+                        # events = eligible_events_date[event_date]['events']
                         events = eligible_events_date[event_date]
                         events.append(i)
                         eligible_events_date[event_date] = events
                     except KeyError:
                         eligible_events_date.setdefault(event_date, [i])
+                        # eligible_events_date.setdefault(event_date, {'events':[i]})
                 if rec_pattern.repeat_each_x == 0:
-                    # relativedelta
-                    # http://labix.org/python-dateutil#head-ba5ffd4df8111d1b83fc194b97ebecf837add454
-                    # event_date = event_date + relativedelta.relativedelta(days=rec_pattern.separation_count*7)
                     event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 7)
                 elif rec_pattern.repeat_each_x == 1:
                     event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 1)
@@ -61,7 +67,6 @@ def events_list(date_from, date_to, location):
                 elif rec_pattern.repeat_each_x == 3:
                     event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 12)
                 elif rec_pattern.repeat_each_x == 4:
-                    # event_date = event_date + relativedelta.relativedelta(weeks=rec_pattern.separation_count*24)
                     event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 24)
                 elif rec_pattern.repeat_each_x == 5:
                     event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 56)
@@ -76,6 +81,7 @@ def events_list(date_from, date_to, location):
     return eligible_events_date
 
 
+@login_required(login_url='/login/')
 def events_list_date(request):
     try:
         request.GET['from']
@@ -87,7 +93,12 @@ def events_list_date(request):
         date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
     except:
         date_to = None
-    eligible_events_date = events_list(date_from, date_to, None)
+    try:
+        request.GET['location']
+        location = request.GET['location']
+    except:
+        location = None
+    eligible_events_date = events_list(date_from, date_to, location)
     return render(request, 'all_events.html', context={"events": eligible_events_date})
 
 
@@ -271,7 +282,12 @@ def locations(request):
 
 @login_required(login_url='/login/')
 def users_site(request, location_id):
-    users_site = User.objects.filter(location=Location.objects.get(pk=location_id))
-    return render(request, 'benevoles.html', context={"users": users_site})
+    locations_users = Location.objects.get(pk=location_id).users.all()
+    return render(request, 'benevoles.html', context={"users": locations_users})
 
+
+@login_required(login_url='/login/')
+def profile(request):
+    user_locations = Location.objects.filter(users=request.user)
+    return render(request, 'profile.html', context={'locations':user_locations})
 

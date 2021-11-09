@@ -27,7 +27,7 @@
     <div class="items_nav">
     {% if request.user.is_authenticated %}
         <div class="item_nav">
-            <span>Bonjour <a href="{% url 'index' %}">{{user}}</a></span>
+            <span>Bonjour <a href="{% url 'profile' %}">{{user}}</a></span>
         </div>
         <div class="item_nav">
             <a href="{% url 'logout_view' %}">Se déconnecter</a>

@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import User
-from .forms import UserCreateForm, UserAuthenticationForm
+from .forms import UserCreateForm, UserAuthenticationForm, SelectLocationsForm
 
 
 def login_view(request):
@@ -33,7 +33,7 @@ def register(request):
                                                 password=form.cleaned_data['password1'])
             new_user.save()
             login(request, new_user)
-            return redirect('index')
+            return redirect('select_locations')
     return render(request, 'register.html', context={"form": form})
 
 
@@ -41,3 +41,16 @@ def register(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+
+@login_required(login_url='/login/')
+def select_locations(request):
+    form = SelectLocationsForm()
+    if request.method == "POST":
+        form = SelectLocationsForm(data=request.POST)
+        if form.is_valid():
+            for i in form.cleaned_data['locations']:
+                i.users.add(request.user)
+                i.save()
+        return redirect('index')
+    return render(request, 'select_locations.html', context={"form": form})
