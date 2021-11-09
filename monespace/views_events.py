@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
 
-from .models import Event, Location, RecurringPattern
+from .models import Event, Location, RecurringPattern, StatusUsersLocations
 from .forms import EventForm, EventRecurringPatternForm
 
 
 def events_list(date_from, date_to, location):
+    print(location)
     if date_from is None:
         date_from = datetime.datetime.now() - datetime.timedelta(days=1)
     else:
@@ -20,45 +21,47 @@ def events_list(date_from, date_to, location):
         date_to = date_to
 
     if location is not None:
-        all_events = Event.objects.filter(location=location)
+        #all_events = Event.objects.filter(location=location)
+        all_events = [Event.objects.filter(location=i) for i in location]
     else:
         all_events = Event.objects.all()
 
     eligible_events_date = {}
-    for i in all_events:
-        event_date = i.start_date
-        if i.is_recurring:
-            rec_pattern = RecurringPattern.objects.filter(event=i).first()
-            for n in range(rec_pattern.max_num_occurrences + 1):
+    for i in range(len(all_events)):
+        for j in all_events[i]:
+            event_date = j.start_date
+            if j.is_recurring:
+                rec_pattern = RecurringPattern.objects.filter(event=j).first()
+                for n in range(rec_pattern.max_num_occurrences + 1):
+                    if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
+                        try:
+                            # events = eligible_events_date[event_date]['events']
+                            events = eligible_events_date[event_date]
+                            events.append(j)
+                            eligible_events_date[event_date] = events
+                        except KeyError:
+                            eligible_events_date.setdefault(event_date, [j])
+                            # eligible_events_date.setdefault(event_date, {'events':[all_events[0][i]]})
+                    if rec_pattern.repeat_each_x == 0:
+                        event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 7)
+                    elif rec_pattern.repeat_each_x == 1:
+                        event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 1)
+                    elif rec_pattern.repeat_each_x == 2:
+                        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 4)
+                    elif rec_pattern.repeat_each_x == 3:
+                        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 12)
+                    elif rec_pattern.repeat_each_x == 4:
+                        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 24)
+                    elif rec_pattern.repeat_each_x == 5:
+                        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 56)
+            else:
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
                     try:
-                        # events = eligible_events_date[event_date]['events']
                         events = eligible_events_date[event_date]
-                        events.append(i)
+                        events.append(j)
                         eligible_events_date[event_date] = events
                     except KeyError:
-                        eligible_events_date.setdefault(event_date, [i])
-                        # eligible_events_date.setdefault(event_date, {'events':[i]})
-                if rec_pattern.repeat_each_x == 0:
-                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 7)
-                elif rec_pattern.repeat_each_x == 1:
-                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 1)
-                elif rec_pattern.repeat_each_x == 2:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 4)
-                elif rec_pattern.repeat_each_x == 3:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 12)
-                elif rec_pattern.repeat_each_x == 4:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 24)
-                elif rec_pattern.repeat_each_x == 5:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 56)
-        else:
-            if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
-                try:
-                    events = eligible_events_date[event_date]
-                    events.append(i)
-                    eligible_events_date[event_date] = events
-                except KeyError:
-                    eligible_events_date.setdefault(event_date, [i])
+                        eligible_events_date.setdefault(event_date, [j])
     return eligible_events_date
 
 
@@ -76,10 +79,15 @@ def events_list_date(request):
         date_to = None
     try:
         request.GET['location']
-        location = request.GET['location']
+        location = [Location.objects.get(pk=request.GET['location'])]
     except:
-        location = None
-    eligible_events_date = events_list(date_from, date_to, location)
+        user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
+                         StatusUsersLocations.objects.filter(user=request.user, status=2)
+        user_locations = [i.location.pk for i in user_locations_pre]
+    else:
+        user_locations = [i.pk for i in location]
+    finally:
+        eligible_events_date = events_list(date_from, date_to, user_locations)
     return render(request, 'all_events.html', context={"events": eligible_events_date})
 
 

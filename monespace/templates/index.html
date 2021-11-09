@@ -31,22 +31,12 @@
 
 <h1>Voici les évenements des 14 prochains jours</h1>
 
-    {% for key,value in events.items %}
-    <h4><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&location={{key.pk}}">{{key}}</a></h4>
-{% if value%}
-{%else%}
-<p>pas d'evenement dans ces prochains jours</p>
-{% endif%}
-    {% for keydate, valuedate in value.items %}
-        <h4>{{keydate}}</h4>
-{% for i in valuedate %}
-
-<p><a href="{% url 'event_details' event_id=i.id %}">{{i}}</a>
-</p>
-{% endfor %}
-        {% endfor %}
+{% for key,value in events.items %}
+<h4>{{ key }}</h4>
+    {% for i in value%}
+    <p>{{ i }} // {{ i.location }}</p>
     {% endfor %}
-
+{% endfor %}
 
 
 

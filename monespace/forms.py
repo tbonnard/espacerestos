@@ -52,8 +52,21 @@ class EventRecurringPatternForm(forms.ModelForm):
 class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
-        fields = '__all__'
-#         fields = ("name", "address", "address_2", "address_number", "city", "zip_code", "country", "manager_location")
+        # fields = '__all__'
+        fields = ("name", "address", "address_2", "address_number", "city", "zip_code", "country", "manager_location")
+
+
+#https://stackoverflow.com/questions/232435/how-do-i-restrict-foreign-keys-choices-to-related-objects-only-in-django
+
+    def get_not_manager(self):
+        no_manager = []
+        for i in User.objects.all():
+            for j in Location.object.all():
+                if i == i.manager_location:
+                    pass
+                else:
+                    no_manager.append(i)
+        return no_manager
 
 
 class SelectLocationsForm(forms.Form):
