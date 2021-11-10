@@ -16,7 +16,7 @@ class UserAuthenticationForm(AuthenticationForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        location = forms.CharField()
+        # location = forms.ChoiceField(choices=Location.objects.all())
         fields = '__all__'
         widgets = {
             "start_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),

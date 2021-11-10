@@ -37,36 +37,27 @@ def check_if_new_status_to_create_update(location, user_to_update, manager):
     :return: return status updated or None if no status updated
     """
     final_user_status = None
-    try:
-        status_to_update = StatusUsersLocations.objects.filter(location=location, user=user_to_update)
-    except:
-        if manager:
+    if StatusUsersLocations.objects.filter(location=location, user=user_to_update).exclude(status=3).exclude(status=4).exclude(status=5):
+        if StatusUsersLocations.objects.filter(location=location, user=user_to_update, status=1).first():
+            if manager or location.manager_location == user_to_update:
+                status_to_update = StatusUsersLocations.objects.filter(location=location, user=user_to_update, status=1).first()
+                status_to_update.status = 2
+                status_to_update.save()
+                final_user_status = status_to_update
+        else:
+            if manager or location.manager_location == user_to_update:
+                new_status = StatusUsersLocations(location=location, user=user_to_update, status=2)
+                final_user_status = new_status
+            else:
+                new_status = StatusUsersLocations(location=location, user=user_to_update)
+                final_user_status = new_status
+    else:
+        if manager or location.manager_location == user_to_update:
             new_status = StatusUsersLocations(location=location, user=user_to_update, status=2)
         else:
             new_status = StatusUsersLocations(location=location, user=user_to_update)
         new_status.save()
         final_user_status = new_status
-    else:
-        status_check = []
-        for i in status_to_update:
-            status_check.append(i.status)
-        if 1 in status_check and 2 in status_check:
-            status_to_delete = StatusUsersLocations.objects.filter(location=location, user=user_to_update, status=1).first()
-            status_to_delete.delete()
-        elif 1 in status_check and manager:
-            status_to_update = StatusUsersLocations.objects.filter(location=location, user=user_to_update, status=1).first()
-            status_to_update.status = 2
-            status_to_update.save()
-            final_user_status = status_to_update
-        elif 2 in status_check:
-            pass
-        else:
-            if manager:
-                new_status = StatusUsersLocations(location=location, user=user_to_update, status=2)
-            else:
-                new_status = StatusUsersLocations(location=location, user=user_to_update)
-            final_user_status = new_status
-            new_status.save()
     return final_user_status
 
 
@@ -152,16 +143,20 @@ def select_locations(request):
     if request.method == "POST":
         form = SelectLocationsForm(data=request.POST)
         if form.is_valid():
-            for i in form.cleaned_data['locations']:
+            locations_form = form.cleaned_data['locations']
+            print(locations_form)
+            for i in locations_form:
                 status_check = check_if_new_status_to_create_update(i, request.user, False)
                 if status_check is not None and status_check.status == 1:
                     try:
                         send_email(request.user, i.manager_location.email)
                     except:
                         print('error - email send notif status location manager')
-            for j in StatusUsersLocations.objects.filter(user=request.user):
-                if j.location not in form.cleaned_data['locations']:
-                    j.status = 5
+            print(StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(status=5))
+            for j in StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(status=5):
+                print(j.location)
+                if (j.location not in locations_form and request.user.user_type !=1) and (j.location not in locations_form and j.location.manager_location != request.user):
+                    j.status =5
                     j.save()
         return redirect('index')
     return render(request, 'select_locations.html', context={"form": form})
