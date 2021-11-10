@@ -18,19 +18,12 @@ def get_date_to():
 def index(request):
     date_to = get_date_to()
 
-    #user_locations = Location.objects.filter(users=request.user)
     user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
                      StatusUsersLocations.objects.filter(user=request.user, status=2)
     user_locations = [i.location.pk for i in user_locations_pre]
-    # BY LOCATION
-    # eligible_events_date_locations = {}
-    # for i in user_locations:
-    #     events = events_list(date_from=None, date_to=None, location=i)
-    #     eligible_events_date_locations[i] = events
 
     # BY DATES
     eligible_events_date_locations = events_list(date_from=None, date_to=None, location=user_locations)
-
     if request.user.user_type == 3:
         location_manager = Location.objects.filter(manager_location=request.user).first()
         return render(request, 'index.html', context={"events": eligible_events_date_locations,

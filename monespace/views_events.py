@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
+import pprint
 
 from .models import Event, Location, RecurringPattern, StatusUsersLocations
 from .forms import EventForm, EventRecurringPatternForm
@@ -61,7 +62,8 @@ def events_list(date_from, date_to, location):
                         eligible_events_date[event_date] = events
                     except KeyError:
                         eligible_events_date.setdefault(event_date, [j])
-    return eligible_events_date
+    sorted_eligible_events_date = sorted(eligible_events_date.items())
+    return sorted_eligible_events_date
 
 
 @login_required(login_url='/login/')
