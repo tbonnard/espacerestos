@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-import pprint
 
 from .models import Event, Location, RecurringPattern, StatusUsersLocations
 from .forms import EventForm, EventRecurringPatternForm
@@ -174,7 +173,15 @@ def event_create(request):
     if request.user.user_type == 2:
         return redirect('index')
     else:
-        form = EventForm(initial={"location":Location.objects.filter(manager_location=request.user).first()})
+        form = EventForm()
+        if request.user.user_type == 1:
+            form.fields['location'].queryset = Location.objects.all()
+            if Location.objects.all().count() == 1:
+                form.initial["location"] = Location.objects.all().first()
+        else:
+            form.fields['location'].queryset = Location.objects.all().filter(manager_location=request.user)
+            if Location.objects.all().filter(manager_location=request.user).count() == 1:
+                form.initial["location"] = Location.objects.all().filter(manager_location=request.user).first()
         rec_form = EventRecurringPatternForm()
         if request.method == "POST":
             form = EventForm(data=request.POST)

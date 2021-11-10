@@ -21,6 +21,7 @@ class Location(models.Model):
     # manager_location = models.ForeignKey(User, limit_choices_to={'user_type':3}, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
     manager_location = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
     # users = models.ManyToManyField(User) ==> legacy -- use of a new table: StatusUsersLocations
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -36,6 +37,7 @@ class Event(models.Model):
     time_to = models.TimeField(blank=True, default="00:00:00")
     is_recurring = models.BooleanField(default=False)
     is_full_day = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -53,6 +55,7 @@ class RecurringPattern(models.Model):
     # day_of_month = models.IntegerField(blank=True, null=True)
     # month_of_year = models.IntegerField(blank=True, null=True)
     max_num_occurrences = models.IntegerField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 #https://vertabelo.com/blog/again-and-again-managing-recurring-events-in-a-data-model/
 
@@ -69,12 +72,14 @@ class EventExceptionCancelledRescheduled(models.Model):
     is_rescheduled = models.BooleanField(default=False)
     is_full_day = models.BooleanField(default=False)
     parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
+    created = models.DateTimeField(auto_now_add=True)
 
 
 class AttendeesEvents(models.Model):
     parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
     status = models.IntegerField(blank=False, null=False, default=0)
+    created = models.DateTimeField(auto_now_add=True)
 
 
 class StatusUsersLocations(models.Model):
@@ -84,6 +89,8 @@ class StatusUsersLocations(models.Model):
                              related_name="user_status_location")
     status_choices = ((1, 'En attente'), (2, 'Actif'), (3, 'Rejeté'), (4, 'Désactivé'), (5, "Annulé par l'utilisateur"))
     status = models.IntegerField(choices=status_choices, null=False, blank=False, default=1)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.user} - {self.location} - {self.status}"

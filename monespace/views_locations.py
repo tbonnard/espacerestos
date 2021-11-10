@@ -19,10 +19,11 @@ def edit_user_type_to_user(user):
     :param user: user for which we want to update status
     :return:
     """
-    user_manager_other_location = Location.objects.filter(manager_location=user)
-    if user_manager_other_location.count() ==1:
-        user.user_type = 2
-        user.save()
+    if user.user_type !=1:
+        user_manager_other_location = Location.objects.filter(manager_location=user)
+        if user_manager_other_location.count() ==1:
+            user.user_type = 2
+            user.save()
 
 
 def check_if_new_status_to_create_update(location, user_to_update, manager):

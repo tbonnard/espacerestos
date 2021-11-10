@@ -16,7 +16,6 @@ class UserAuthenticationForm(AuthenticationForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        # location = forms.ChoiceField(choices=Location.objects.all())
         fields = '__all__'
         widgets = {
             "start_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
@@ -24,6 +23,18 @@ class EventForm(forms.ModelForm):
             "time_from": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
             "time_to": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
         }
+
+# class EventForm(forms.Form):
+#     location_choices = Location.objects.all()
+#     location = forms.ModelChoiceField(queryset=location_choices)
+#     name = forms.CharField()
+#     description = forms.CharField(widget=forms.Textarea)
+#     start_date = forms.DateField()
+#     end_date = forms.DateField()
+#     time_from = forms.TimeField()
+#     time_to = forms.TimeField()
+#     is_recurring = forms.BooleanField()
+#     is_full_day = forms.BooleanField()
 
 
 class EventRecurringPatternForm(forms.ModelForm):
@@ -54,19 +65,6 @@ class LocationForm(forms.ModelForm):
         model = Location
         # fields = '__all__'
         fields = ("name", "address", "address_2", "address_number", "city", "zip_code", "country", "manager_location")
-
-
-#https://stackoverflow.com/questions/232435/how-do-i-restrict-foreign-keys-choices-to-related-objects-only-in-django
-
-    def get_not_manager(self):
-        no_manager = []
-        for i in User.objects.all():
-            for j in Location.object.all():
-                if i == i.manager_location:
-                    pass
-                else:
-                    no_manager.append(i)
-        return no_manager
 
 
 class SelectLocationsForm(forms.Form):
