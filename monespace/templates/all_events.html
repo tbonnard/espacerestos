@@ -22,7 +22,7 @@
 {% for key,value in events.items %}
 <h4>{{ key }}</h4>
     {% for i in value%}
-    <p>{{ i }} // {{ i.location }}</p>
+    <p><a href="{% url 'event_details' event_id=i.id %}">{{i}}</a> // {{ i.location }}</p>
     {% endfor %}
 {% endfor %}
 
