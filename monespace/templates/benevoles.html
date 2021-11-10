@@ -7,6 +7,8 @@
 
 {% block content %}
 
+<p>Total des bénévoles pour ce site: {{ status_users_location.count }}</p>
+
 {% for i in status_users_location %}
     <div>
     {{i.user}} -- {{i.get_status_display}} ---- {{i.pk}}

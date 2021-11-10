@@ -18,6 +18,30 @@ def edit_user_type_to_user(user):
         user.save()
 
 
+def check_if_new_status_to_create_update(location, manager):
+    try:
+        status_to_update = StatusUsersLocations.objects.filter(location=location, user=manager)
+    except:
+        new_status = StatusUsersLocations(location=location, user=manager, status=2)
+        new_status.save()
+    else:
+        status_check = []
+        for i in status_to_update:
+            status_check.append(i.status)
+        if 1 in status_check and 2 in status_check:
+            status_to_delete = StatusUsersLocations.objects.filter(location=location, user=manager, status=1).first()
+            status_to_delete.delete()
+        elif 1 in status_check:
+            status_to_update = StatusUsersLocations.objects.filter(location=location, user=manager, status=1).first()
+            status_to_update.status = 2
+            status_to_update.save()
+        elif 2 in status_check:
+            pass
+        else:
+            new_status = StatusUsersLocations(location=location, user=manager, status=2)
+            new_status.save()
+
+
 @login_required(login_url='/login/')
 def location_create(request):
     if request.user.user_type != 1:
@@ -27,8 +51,9 @@ def location_create(request):
         if request.method == "POST":
             form = LocationForm(data=request.POST)
             if form.is_valid():
-                form.save()
-                edit_user_type_to_manager(form.cleaned_data['manager_location'])
+                new_location = form.save()
+                edit_user_type_to_manager(new_location.manager_location)
+                check_if_new_status_to_create_update(new_location, new_location.manager_location)
                 return redirect('index')
         return render(request, 'location.html', context={"form": form})
 
@@ -59,6 +84,7 @@ def location_edit(request, location_id):
                         edit_user_type_to_user(location_page.manager_location)
                         location_page.manager_location = manager
                         edit_user_type_to_manager(manager)
+                        check_if_new_status_to_create_update(location_page, manager)
                 location_page.save()
                 return redirect('index')
         return render(request, 'location.html', context={"form": form, 'is_edit': True, 'location_id': location_id})

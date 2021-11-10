@@ -7,7 +7,6 @@ from .forms import EventForm, EventRecurringPatternForm
 
 
 def events_list(date_from, date_to, location):
-    print(location)
     if date_from is None:
         date_from = datetime.datetime.now() - datetime.timedelta(days=1)
     else:
@@ -24,7 +23,7 @@ def events_list(date_from, date_to, location):
         #all_events = Event.objects.filter(location=location)
         all_events = [Event.objects.filter(location=i) for i in location]
     else:
-        all_events = Event.objects.all()
+        all_events = [Event.objects.all()]
 
     eligible_events_date = {}
     for i in range(len(all_events)):

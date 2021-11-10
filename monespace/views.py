@@ -12,7 +12,6 @@ def index(request):
     user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
                      StatusUsersLocations.objects.filter(user=request.user, status=2)
     user_locations = [i.location.pk for i in user_locations_pre]
-    print(user_locations)
     # BY LOCATION
     # eligible_events_date_locations = {}
     # for i in user_locations:
@@ -68,5 +67,6 @@ def user_site_update_status(request, location_id):
 
 @login_required(login_url='/login/')
 def profile(request):
-    user_locations = Location.objects.filter(users=request.user)
+    user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
+    user_locations = [i.location for i in user_locations_pre]
     return render(request, 'profile.html', context={'locations': user_locations})
