@@ -12,7 +12,7 @@
 <h1>Vos sites</h1>
 
 {% for i in locations%}
-<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&location={{i.pk}}">{{i}}</a></p>
+<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a></p>
 {%endfor%}
 
     <div class="sub_nav">

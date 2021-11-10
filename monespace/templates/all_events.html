@@ -7,23 +7,26 @@
 
 {% block content%}
 
+{% if request.GET.location %}
+<h1>Rechercher les évenements pour le site {{ request.GET.location }}</h1>
+{%else%}
 <h1>Rechercher les évenements</h1>
+{% endif %}
 
     <label for="date_from">Entre</label>
     <input id="date_from" type="date">
     <label for="date_to">et</label>
     <input id="date_to" type="date">
-    <a href="" id="form_search_dates">Search</a>
-
-</form>
+    <span class="sub_nav_item"><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="" id="form_search_dates">Search</a></span>
 
 <h1>Tous les évenements</h1>
 
 {% for key,value in events.items %}
 <h4>{{ key }}</h4>
     {% for i in value%}
-    <p><a href="{% url 'event_details' event_id=i.id %}">{{i}}</a> // {{ i.location }}</p>
-    {% endfor %}
+    <p><a href="{% url 'event_details' event_id=i.id %}">{{i}}</a> //
+                <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.location.pk}}">{{i.location}}</a></p>
+ {% endfor %}
 {% endfor %}
 
 

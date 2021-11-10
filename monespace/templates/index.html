@@ -34,7 +34,8 @@
 {% for key,value in events.items %}
 <h4>{{ key }}</h4>
     {% for i in value%}
-    <p><a href="{% url 'event_details' event_id=i.id %}">{{i}}</a> // {{ i.location }}</p>
+    <p><a href="{% url 'event_details' event_id=i.id %}">{{i}}</a> //
+        <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.location.pk}}">{{i.location}}</a></p>
     {% endfor %}
 {% endfor %}
 
@@ -43,7 +44,7 @@
 
     <div class="sub_nav">
         <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}">Voir plus d'évenements</a></span>
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}">Voir plus d'évenements</a></span>
         </div>
     </div>
 

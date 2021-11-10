@@ -1,13 +1,23 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
+import datetime
 
-from .models import Location, StatusUsersLocations, User
+from .models import Location, StatusUsersLocations
 from .views_events import events_list
 from .forms import StatusUsersLocationsForm
 
 
+def get_date_to():
+    weeks = 8
+    days_added = datetime.timedelta(weeks=weeks)
+    date_to = (datetime.datetime.now() + days_added).strftime("%Y-%m-%d")
+    return date_to
+
+
 @login_required(login_url='/login/')
 def index(request):
+    date_to = get_date_to()
+
     #user_locations = Location.objects.filter(users=request.user)
     user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
                      StatusUsersLocations.objects.filter(user=request.user, status=2)
@@ -24,8 +34,8 @@ def index(request):
     if request.user.user_type == 3:
         location_manager = Location.objects.filter(manager_location=request.user).first()
         return render(request, 'index.html', context={"events": eligible_events_date_locations,
-                                                      "location": location_manager})
-    return render(request, 'index.html', context={"events": eligible_events_date_locations})
+                                                      "location": location_manager, "date_to":date_to})
+    return render(request, 'index.html', context={"events": eligible_events_date_locations, "date_to":date_to})
 
 
 @login_required(login_url='/login/')
@@ -67,6 +77,7 @@ def user_site_update_status(request, location_id):
 
 @login_required(login_url='/login/')
 def profile(request):
+    date_to = get_date_to()
     user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
     user_locations = [i.location for i in user_locations_pre]
-    return render(request, 'profile.html', context={'locations': user_locations})
+    return render(request, 'profile.html', context={'locations': user_locations, "date_to":date_to})
