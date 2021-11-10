@@ -91,21 +91,24 @@ def events_list_date(request):
 
 
 def create_event_unit(form):
-    if Location.objects.get(id=form['location'].value()):
-        location = Location.objects.get(id=form['location'].value())
-    else:
+    try:
+        Location.objects.get(id=form['location'].value())
+    except:
         location = None
-    new_event = Event(name=form.cleaned_data['name'],
-                      description=form.cleaned_data['description'],
-                      start_date=form.cleaned_data['start_date'],
-                      time_from=form.cleaned_data['time_from'],
-                      time_to=form.cleaned_data['time_to'],
-                      is_recurring=form.cleaned_data['is_recurring'],
-                      is_full_day=form.cleaned_data['is_full_day'],
-                      location=location
-                      )
-    new_event.save()
-    return new_event
+    else:
+        location = Location.objects.get(id=form['location'].value())
+    finally:
+        new_event = Event(name=form.cleaned_data['name'],
+                          description=form.cleaned_data['description'],
+                          start_date=form.cleaned_data['start_date'],
+                          time_from=form.cleaned_data['time_from'],
+                          time_to=form.cleaned_data['time_to'],
+                          is_recurring=form.cleaned_data['is_recurring'],
+                          is_full_day=form.cleaned_data['is_full_day'],
+                          location=location
+                          )
+        new_event.save()
+        return new_event
 
 
 def edit_event_unit(event, form):
@@ -122,12 +125,15 @@ def edit_event_unit(event, form):
     event.time_to = form.cleaned_data['time_to']
     event.is_recurring = form.cleaned_data['is_recurring']
     event.is_full_day = form.cleaned_data['is_full_day']
-    if Location.objects.get(id=form['location'].value()):
-        event.location = Location.objects.get(id=form['location'].value())
-    else:
+    try:
+        Location.objects.get(id=form['location'].value())
+    except:
         event.location = None
-    event.save()
-    return event
+    else:
+        event.location = Location.objects.get(id=form['location'].value())
+    finally:
+        event.save()
+        return event
 
 
 def create_recurring_pattern_event_unit(event, form):

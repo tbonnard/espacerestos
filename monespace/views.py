@@ -39,6 +39,12 @@ def index(request):
 
 
 @login_required(login_url='/login/')
+def all_users_site(request):
+    status_users_location = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
+    return render(request, 'benevoles.html', context={"status_users_location": status_users_location})
+
+
+@login_required(login_url='/login/')
 def users_site(request, location_id):
     if request.user.user_type == 2:
         return redirect('index')
@@ -56,7 +62,7 @@ def users_site(request, location_id):
                 user_status_update.status = 2
                 user_status_update.save()
                 return redirect(reverse('users_site', kwargs={'location_id': location_id}))
-        return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form})
+        return render(request, 'benevoles_site.html', context={"status_users_location": status_users_location, "form": form})
 
 
 @login_required(login_url='/login/')

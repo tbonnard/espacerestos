@@ -3,6 +3,15 @@
 
 {% block content %}
 
+    <div class="sub_nav">
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_edit' location_id=location.pk %}">Modifier le site</a></span>
+        </div>
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'users_site' location_id=location.pk %}">Voir les bénévoles</a></span>
+        </div>
+    </div>
+
 <div>
     <h3>Nom</h3><p>{{ location.name }}</p>
     <h3>Address Number</h3><p>{{ location.address_number }}</p>
@@ -14,10 +23,6 @@
     <h3>Manager</h3><p>{{ location.manager_location }}</p>
 </div>
 
-    <div class="sub_nav">
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_edit' location_id=location.id %}">Modifier le site</a></span>
-        </div>
-    </div>
+
 
 {% endblock %}

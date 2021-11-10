@@ -20,7 +20,7 @@ class Location(models.Model):
     country = models.CharField(choices=country_list, blank=False, max_length=2)
     # manager_location = models.ForeignKey(User, limit_choices_to={'user_type':3}, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
     manager_location = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
-    users = models.ManyToManyField(User)
+    # users = models.ManyToManyField(User) ==> legacy -- use of a new table: StatusUsersLocations
 
     def __str__(self):
         return self.name

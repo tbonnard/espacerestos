@@ -4,11 +4,14 @@
 
 {% block content %}
 
+{%if admin %}
     <div class="sub_nav">
         <div class="sub_nav_item">
             <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_create' %}">Créer un site</a></span>
         </div>
     </div>
+{% endif %}
+
 
 {% for i in all_locations %}
     <div>
