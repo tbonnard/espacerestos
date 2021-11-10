@@ -19,6 +19,7 @@ def edit_user_type_to_user(user):
 
 
 def check_if_new_status_to_create_update(location, manager):
+    email_to_send=False
     try:
         status_to_update = StatusUsersLocations.objects.filter(location=location, user=manager)
     except:
@@ -40,7 +41,8 @@ def check_if_new_status_to_create_update(location, manager):
         else:
             new_status = StatusUsersLocations(location=location, user=manager, status=2)
             new_status.save()
-
+            email_to_send=True
+    return email_to_send
 
 @login_required(login_url='/login/')
 def location_create(request):
@@ -121,10 +123,8 @@ def select_locations(request):
         if form.is_valid():
             for i in form.cleaned_data['locations']:
                 i.users.add(request.user)
-                if not StatusUsersLocations.objects.filter(location=i, user=request.user, status=1) \
-                        or not not StatusUsersLocations.objects.filter(location=i, user=request.user, status=2):
-                    new_status = StatusUsersLocations(location=i, user=request.user)
-                    new_status.save()
+                add_status_check = check_if_new_status_to_create_update(i, request.user)
+                if add_status_check:
                     try:
                         send_email(request.user, i.manager_location.email)
                     except:
