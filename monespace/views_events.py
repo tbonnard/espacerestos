@@ -4,6 +4,7 @@ import datetime
 
 from .models import Event, Location, RecurringPattern, StatusUsersLocations
 from .forms import EventForm, EventRecurringPatternForm
+from .functions_global import get_date_to
 
 
 def events_list(date_from, date_to, location):
@@ -76,7 +77,7 @@ def events_list_date(request):
         request.GET['to']
         date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
     except:
-        date_to = None
+        date_to = get_date_to()
     try:
         request.GET['location']
         location = [Location.objects.get(pk=request.GET['location'])]
@@ -88,7 +89,7 @@ def events_list_date(request):
         user_locations = [i.pk for i in location]
     finally:
         eligible_events_date = events_list(date_from, date_to, user_locations)
-    return render(request, 'all_events.html', context={"events": eligible_events_date})
+    return render(request, 'all_events.html', context={"events": eligible_events_date, "date_to":date_to.strftime("%Y-%m-%d")})
 
 
 def create_event_unit(form):

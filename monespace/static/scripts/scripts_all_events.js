@@ -30,5 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
     diff_dates()
   })
 
+  window.history.replaceState(null, 'Recherche Mon Espace', '/events');
 
 });

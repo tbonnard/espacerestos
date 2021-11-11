@@ -153,9 +153,7 @@ def select_locations(request):
                         send_email(request.user, i.manager_location.email)
                     except:
                         print('error - email send notif status location manager')
-            print(StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(status=5))
             for j in StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(status=5):
-                print(j.location)
                 if (j.location not in locations_form and request.user.user_type !=1) and (j.location not in locations_form and j.location.manager_location != request.user):
                     j.status =5
                     j.save()

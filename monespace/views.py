@@ -5,13 +5,7 @@ import datetime
 from .models import Location, StatusUsersLocations
 from .views_events import events_list
 from .forms import StatusUsersLocationsForm
-
-
-def get_date_to():
-    weeks = 8
-    days_added = datetime.timedelta(weeks=weeks)
-    date_to = (datetime.datetime.now() + days_added).strftime("%Y-%m-%d")
-    return date_to
+from .functions_global import get_date_to
 
 
 @login_required(login_url='/login/')
@@ -22,7 +16,6 @@ def index(request):
                      StatusUsersLocations.objects.filter(user=request.user, status=2)
     user_locations = [i.location.pk for i in user_locations_pre]
 
-    # BY DATES
     eligible_events_date_locations = events_list(date_from=None, date_to=None, location=user_locations)
     if request.user.user_type == 3:
         location_manager = Location.objects.filter(manager_location=request.user).first()
@@ -33,6 +26,8 @@ def index(request):
 
 @login_required(login_url='/login/')
 def all_users_site(request):
+    if request.user.user_type == 2:
+        return redirect('index')
     status_users_location = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
     return render(request, 'benevoles.html', context={"status_users_location": status_users_location})
 
@@ -40,6 +35,8 @@ def all_users_site(request):
 @login_required(login_url='/login/')
 def users_site(request, location_id):
     if request.user.user_type == 2:
+        return redirect('index')
+    elif request.user.user_type == 3 and Location.objects.get(pk=location_id) not in Location.objects.filter(manager_location=request.user):
         return redirect('index')
     else:
         status_users_location = StatusUsersLocations.objects.filter(location=Location.objects.get(pk=location_id),
