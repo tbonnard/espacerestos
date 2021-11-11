@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 import datetime
 
-from .models import Location, StatusUsersLocations
+from .models import Location, StatusUsersLocations, LogsStatusUsersLocations
 from .views_events import events_list
 from .forms import StatusUsersLocationsForm
 from .functions_global import get_date_to
@@ -21,7 +21,7 @@ def index(request):
         location_manager = Location.objects.filter(manager_location=request.user).first()
         return render(request, 'index.html', context={"events": eligible_events_date_locations,
                                                       "location": location_manager, "date_to":date_to})
-    return render(request, 'index.html', context={"events": eligible_events_date_locations, "date_to":date_to})
+    return render(request, 'index.html', context={"events": eligible_events_date_locations, "date_to": date_to})
 
 
 @login_required(login_url='/login/')
@@ -52,6 +52,7 @@ def users_site(request, location_id):
             else:
                 user_status_update.status = 2
                 user_status_update.save()
+                LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=2, current_status=user_status_update.status).save()
                 return redirect(reverse('users_site', kwargs={'location_id': location_id}))
         return render(request, 'benevoles_site.html', context={"status_users_location": status_users_location, "form": form})
 
@@ -69,6 +70,7 @@ def user_site_update_status(request, location_id):
             else:
                 user_status_update.status = request.POST['status']
                 user_status_update.save()
+                LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=request.POST['status'], current_status=user_status_update.status).save()
                 return redirect(reverse('users_site', kwargs={'location_id': location_id}))
 
 

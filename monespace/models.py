@@ -28,7 +28,7 @@ class Location(models.Model):
 
 
 class Event(models.Model):
-    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=False, related_name="events_locations")
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=False, related_name="events_locations")
     name = models.CharField( blank=False, max_length=255)
     description = models.TextField(blank=True, default="")
     start_date = models.DateField( blank=False, default=utils.timezone.now)
@@ -61,7 +61,7 @@ class RecurringPattern(models.Model):
 
 
 class EventExceptionCancelledRescheduled(models.Model):
-    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=False, related_name="events_exceptions_locations")
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=False, related_name="events_exceptions_locations")
     name = models.CharField( blank=False, max_length=255)
     description = models.TextField(blank=True, default="")
     start_date = models.DateField( blank=False, default=utils.timezone.now)
@@ -71,12 +71,12 @@ class EventExceptionCancelledRescheduled(models.Model):
     is_cancelled = models.BooleanField(default=False)
     is_rescheduled = models.BooleanField(default=False)
     is_full_day = models.BooleanField(default=False)
-    parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
+    parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True, related_name="EventExceptionCancelledRescheduled_event")
     created = models.DateTimeField(auto_now_add=True)
 
 
 class AttendeesEvents(models.Model):
-    parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True)
+    parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True, related_name="AttendeesEvents_event")
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
     status = models.IntegerField(blank=False, null=False, default=0)
     created = models.DateTimeField(auto_now_add=True)
@@ -97,3 +97,22 @@ class StatusUsersLocations(models.Model):
 
     def __repr__(self):
         return f"{self.user} - {self.location} - {self.status}"
+
+
+class LogsStatusUsersLocations(models.Model):
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=False, null=False,
+                                 related_name="Logs_location_status_user")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False,
+                             related_name="logs_user_status_location")
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True,
+                             related_name="logs_fromuser_status_location")
+    status_choices = ((1, 'En attente'), (2, 'Actif'), (3, 'Rejeté'), (4, 'Désactivé'), (5, "Annulé par l'utilisateur"))
+    status = models.IntegerField(choices=status_choices, null=False, blank=False, default=1)
+    current_status = models.IntegerField(null=True, blank=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Log: {self.user} - {self.location} - {self.status}"
+
+    def __repr__(self):
+        return f"Log: {self.user} - {self.location} - {self.status}"

@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+
   let date_from_select= document.querySelector('#date_from');
   let date_to_select = document.querySelector('#date_to');
   let form_action = document.querySelector('#form_search_dates');
@@ -8,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let params = new URLSearchParams(url.search);
   let param_from_value = params.get('from');
   let param_to_value = params.get('to');
+  let param_loc_value = params.get('location');
 
   date_from_select.value = param_from_value ;
   date_to_select.value = param_to_value ;
@@ -19,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // dt1 = new Date(date_from);
     // dt2 = new Date(date_to);
     // diff_dates_result= Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
-    form_action.href = `${window.location.origin}/events/?from=${date_from}&to=${date_to}`
+    form_action.href = `${window.location.origin}/events/?from=${date_from}&to=${date_to}&location=${param_loc_value}`
     }
 
   date_from_select.addEventListener('change', () => {
@@ -30,6 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
     diff_dates()
   })
 
-  window.history.replaceState(null, 'Recherche Mon Espace', '/events');
+  //window.history.replaceState(null, 'Recherche Mon Espace', '/events');
 
 });

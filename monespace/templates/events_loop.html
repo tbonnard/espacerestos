@@ -1,0 +1,8 @@
+
+{% for i in events %}
+        <h4>{{i.0}}</h4>
+        {% for j in i.1 %}
+    <p><a href="{% url 'event_details' event_id=j.id %}">{{j}}</a> //
+        <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></p>
+    {% endfor %}
+{% endfor %}
