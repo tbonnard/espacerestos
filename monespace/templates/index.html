@@ -8,21 +8,18 @@
         <div class="sub_nav_item">
             <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'locations' %}">Gérer le(s) site(s)</a></span>
         </div>
-        {% if request.user.user_type == 3 %}
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'users_site' location_id=location.pk %}">Voir les bénévoles</a></span>-->
-<!--        </div>-->
-    {% elif request.user.user_type == 1 %}
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'all_users_site' %}">Voir tous les bénévoles</a></span>
-        </div>
-            {% endif %}
 
         <div class="sub_nav_item">
             <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_create' %}">Créer un évenement</a></span>
         </div>
-    </div>
 
+        {% if request.user.user_type == 1 %}
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'all_users_site' %}">Voir tous les bénévoles</a></span>
+        </div>
+        {% endif %}
+
+    </div>
 {% endif %}
 
 

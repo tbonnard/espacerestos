@@ -9,10 +9,10 @@
     </form>
     {% endif %}
 
-    <button class="button_form_status" data-user="{{i.user.pk}}">Autre statut</button>
+    <button class="button_form_status" data-user="{{i.user.pk}}{{i.location.pk}}">Autre statut</button>
 
     <div>
-        <form class="form_status" data-user="{{i.user.pk}}" method="POST" action="{% url 'user_site_update_status' location_id=i.location.pk %}?id={{i.pk}}">
+        <form class="form_status" data-user="{{i.user.pk}}{{i.location.pk}}" method="POST" action="{% url 'user_site_update_status' location_id=i.location.pk %}?id={{i.pk}}">
             {% csrf_token %}
             {{form}}
             <input type='submit' value="Confirmer" class='input'/>

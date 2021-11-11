@@ -26,10 +26,11 @@ def index(request):
 
 @login_required(login_url='/login/')
 def all_users_site(request):
-    if request.user.user_type == 2:
+    if request.user.user_type != 1:
         return redirect('index')
+    form = StatusUsersLocationsForm()
     status_users_location = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
-    return render(request, 'benevoles.html', context={"status_users_location": status_users_location})
+    return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form})
 
 
 @login_required(login_url='/login/')
