@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 import datetime
 
-from .models import Location, StatusUsersLocations, LogsStatusUsersLocations
+from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, User
 from .views_events import events_list
 from .forms import StatusUsersLocationsForm
 from .functions_global import get_date_to
@@ -12,15 +12,15 @@ from .functions_global import get_date_to
 def index(request):
     date_to = get_date_to()
 
-    user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
-                     StatusUsersLocations.objects.filter(user=request.user, status=2)
-    user_locations = [i.location.pk for i in user_locations_pre]
+    if request.user.user_type == 1:
+        user_locations = Location.objects.all()
+    else:
+        user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
+                         StatusUsersLocations.objects.filter(user=request.user, status=2)
+        user_locations = [i.location.pk for i in user_locations_pre]
 
     eligible_events_date_locations = events_list(date_from=None, date_to=None, location=user_locations)
-    if request.user.user_type == 3:
-        location_manager = Location.objects.filter(manager_location=request.user).first()
-        return render(request, 'index.html', context={"events": eligible_events_date_locations,
-                                                      "location": location_manager, "date_to":date_to})
+
     return render(request, 'index.html', context={"events": eligible_events_date_locations, "date_to": date_to})
 
 
@@ -28,9 +28,10 @@ def index(request):
 def all_users_site(request):
     if request.user.user_type != 1:
         return redirect('index')
+    users = User.objects.all()
     form = StatusUsersLocationsForm()
     status_users_location = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
-    return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form})
+    return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form, "users":users})
 
 
 @login_required(login_url='/login/')
@@ -79,4 +80,5 @@ def profile(request):
     date_to = get_date_to()
     user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
     user_locations = [i.location for i in user_locations_pre]
-    return render(request, 'profile.html', context={'locations': user_locations, "date_to":date_to})
+    user_manager_locations = Location.objects.filter(manager_location=request.user)
+    return render(request, 'profile.html', context={'locations': user_locations, "date_to":date_to, 'manager_locations': user_manager_locations})

@@ -12,6 +12,11 @@
     </div>
 {% endif %}
 
+{% if request.user.user_type == 1 %}
+<p>En tant qu'administrateur, vous pouvez gérer tous les sites, même ceux pour lesquels vous n'êtes pas directement associé au site</p>
+{%else%}
+<p>Voici tous les sites pour lesquels vous êtes le gestionnaire</p>
+{%endif %}
 
 {% for i in all_locations %}
     <div>

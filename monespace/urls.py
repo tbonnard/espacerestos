@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, views_login, views_events, views_locations
+from . import views, views_login, views_events, views_locations, views_download
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -19,5 +19,8 @@ urlpatterns = [
     path('select_locations/', views_locations.select_locations, name='select_locations'),
     path('location/<int:location_id>', views_locations.location_details, name='location_details'),
     path('location_edit/<int:location_id>', views_locations.location_edit, name='location_edit'),
+    path('download_users_csv/', views_download.download_users_csv, name='download_users_csv'),
+
+
 ]
 

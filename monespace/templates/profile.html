@@ -13,7 +13,13 @@
 <h1>Vos sites</h1>
 
 {% for i in locations%}
-<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a></p>
+<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a>
+    {% for j in manager_locations %}
+    {% if j == i%}
+    <span> --> vous êtes le gestionnaire</span>
+    {%endif%}
+    {%endfor%}
+</p>
 {%endfor%}
 
     <div class="sub_nav">

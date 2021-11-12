@@ -88,6 +88,8 @@ def events_list_date(request):
     else:
         user_locations = [i.pk for i in location]
     finally:
+        if request.user.user_type == 1:
+            user_locations = Location.objects.all()
         eligible_events_date = events_list(date_from, date_to, user_locations)
     return render(request, 'all_events.html', context={"events": eligible_events_date, "date_to":date_to.strftime("%Y-%m-%d")})
 

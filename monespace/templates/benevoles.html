@@ -7,8 +7,48 @@
 
 {% block content %}
 
-<p>Total des bénévoles (actif, en attente): {{ status_users_location.count }}</p>
+<h1>Total des bénévoles (actif, en attente): {{ users.count }}</h1>
 
-{% include "benevoles_loop.html" %}
+
+<p>En tant qu'administrateur, vous pouvez gérer tous les utilisateurs, même ceux pour lesquels vous n'êtes pas directement associé au site de l'utilisateur</p>
+
+<h4>Télecharger tous les membres</h4>
+<button><a href="{% url 'download_users_csv' %}">Download</a></button>
+
+
+<h4>Liste des utilisateurs</h4>
+{% for j in users%}
+<h4>{{j}} -- {{ j.user_type }}</h4>
+
+{% for i in status_users_location %}
+{% if i.user == j%}
+    <div>
+    {{i.user}} -- {{i.get_status_display}} ---- {{i.pk}} ---- {{ i.location }}
+
+    {% if i.status != 2 %}
+    <form method="POST" action="{% url 'users_site' location_id=i.location.pk %}?id={{i.pk}}">
+        {% csrf_token %}
+        <button class="button_active_status">Activer</button>
+    </form>
+    {% endif %}
+
+    <button class="button_form_status" data-user="{{i.user.pk}}{{i.location.pk}}">Autre statut</button>
+
+    <div>
+        <form class="form_status" data-user="{{i.user.pk}}{{i.location.pk}}" method="POST" action="{% url 'user_site_update_status' location_id=i.location.pk %}?id={{i.pk}}">
+            {% csrf_token %}
+            {{form}}
+            <input type='submit' value="Confirmer" class='input'/>
+        </form>
+    </div>
+</div>
+{% endif%}
+{% endfor %}
+
+
+{% endfor %}
+
+<!--{% include "benevoles_loop.html" %}-->
+
 
 {% endblock %}
