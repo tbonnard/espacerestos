@@ -128,7 +128,16 @@ def location_edit(request, location_id):
 def location_details(request, location_id):
     location_page = Location.objects.get(id=location_id)
     if location_page:
-        return render(request, 'location_details.html', context={"location": location_page})
+        manager_of_location = location_page.manager_location
+        print(manager_of_location)
+        manager_location = False
+        print(request.user)
+        if location_page.manager_location == request.user:
+            manager_location = True
+            print(manager_location)
+        print(manager_location)
+
+        return render(request, 'location_details.html', context={"location": location_page, "manager_location":manager_location})
     return redirect('index')
 
 

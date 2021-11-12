@@ -3,6 +3,15 @@
 
 {% block content %}
 
+{% if manager_location or request.user.user_type == 1 %}
+
+    <div class="sub_nav">
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a></span>
+        </div>
+    </div>
+{% endif %}
+
 <div>
     <h3>Nom</h3><p>{{ event.name }}</p>
     <h3>Description</h3><p>{{ event.description }}</p>
@@ -13,13 +22,7 @@
 </div>
 
 
-{% if manager_location %}
-    <div class="sub_nav">
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a></span>
-        </div>
-    </div>
-{% endif %}
+
 
 
 {% endblock %}

@@ -237,5 +237,6 @@ def event_details(request, event_id):
     else:
         manager_location = False
     if event_page:
+        print(manager_location)
         return render(request, 'event_details.html', context={"event": event_page, "manager_location":manager_location})
     return redirect('index')

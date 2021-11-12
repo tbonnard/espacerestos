@@ -3,11 +3,13 @@
 {% block content%}
 
 
-{% if is_edit%}
-<h1>Modifier une location</h1>
-{% else %}
-<h1>Ajouter une location</h1>
-{% endif %}
+    {% if is_edit %}
+    <h1>Modifier une location</h1>
+    {% else %}
+    <h1>Ajouter une location</h1>
+    {% endif %}
+
+
 
     <form  {% if is_edit%} action="{% url 'location_edit' location_id=location_id %}"
            {% else %} action="{% url 'location_create' %}"
