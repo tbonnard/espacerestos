@@ -53,7 +53,8 @@ def users_site(request, location_id):
             else:
                 user_status_update.status = 2
                 user_status_update.save()
-                LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=2, current_status=user_status_update.status).save()
+                logs = LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=2, current_status=user_status_update.status)
+                logs.save()
                 return redirect(reverse('users_site', kwargs={'location_id': location_id}))
         return render(request, 'benevoles_site.html', context={"status_users_location": status_users_location, "form": form})
 
@@ -71,7 +72,8 @@ def user_site_update_status(request, location_id):
             else:
                 user_status_update.status = request.POST['status']
                 user_status_update.save()
-                LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=request.POST['status'], current_status=user_status_update.status).save()
+                logs = LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=request.POST['status'], current_status=user_status_update.status)
+                logs.save()
                 return redirect(reverse('users_site', kwargs={'location_id': location_id}))
 
 

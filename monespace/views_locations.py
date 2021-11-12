@@ -43,28 +43,36 @@ def check_if_new_status_to_create_update(location, user_to_update, from_user, ma
         if status.status != 2 and (manager or location.manager_location == user_to_update):
             status.status = 2
             status.save()
-            LogsStatusUsersLocations(location=location, user=user_to_update, from_user=from_user, status=2,
-                                     current_status=status.status).save()
+            logs = LogsStatusUsersLocations(location=location, user=user_to_update, from_user=from_user, status=2,
+                                     current_status=status.status)
+            logs.save()
         elif status.status == 2:
-            LogsStatusUsersLocations(location=location, user=user_to_update, status=2, from_user=from_user,
-                                         current_status=status.status).save()
+            logs = LogsStatusUsersLocations(location=location, user=user_to_update, status=2, from_user=from_user,
+                                         current_status=status.status)
+            logs.save()
+
         elif status.status == 1 and not (manager or location.manager_location == user_to_update):
-            LogsStatusUsersLocations(location=location, user=user_to_update, status=1, from_user=from_user,
-                                     current_status=status.status).save()
+            logs = LogsStatusUsersLocations(location=location, user=user_to_update, status=1, from_user=from_user,
+                                     current_status=status.status)
+            logs.save()
+
         else:
             status.status = 1
             status.save()
-            LogsStatusUsersLocations(location=location, user=user_to_update, status=1, from_user=from_user,
-                                     current_status=status.status).save()
+            logs = LogsStatusUsersLocations(location=location, user=user_to_update, status=1, from_user=from_user,
+                                     current_status=status.status)
+            logs.save()
     else:
         if manager or location.manager_location == user_to_update:
-            status = StatusUsersLocations(location=location, user=user_to_update, status=2).save()
-            LogsStatusUsersLocations(location=location, user=user_to_update, from_user=from_user, status=2,
-                                     current_status=status.status).save()
+            status = StatusUsersLocations(location=location, user=user_to_update, status=2)
+            status.save()
+            logs = LogsStatusUsersLocations(location=location, user=user_to_update, from_user=from_user, status=2, current_status=status.status)
+            logs.save()
         else:
-            status = StatusUsersLocations(location=location, user=user_to_update).save()
-            LogsStatusUsersLocations(location=location, from_user=from_user, user=user_to_update,
-                                     current_status=status.status).save()
+            status = StatusUsersLocations(location=location, user=user_to_update)
+            status.save()
+            logs = LogsStatusUsersLocations(location=location, from_user=from_user, user=user_to_update, current_status=status.status)
+            logs.save()
     return status
 
 
@@ -159,12 +167,13 @@ def select_locations(request):
                         print('error - email send notif status location manager')
             for j in StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(status=5):
                 if j.location not in locations_form:
-                    LogsStatusUsersLocations(location=j.location, from_user=request.user, user=request.user, status=5,
-                                             current_status=j.status).save()
-                if (j.location not in locations_form and request.user.user_type !=1) and (j.location not in locations_form and j.location.manager_location != request.user):
+                    logs = LogsStatusUsersLocations(location=j.location, from_user=request.user, user=request.user, status=5,
+                                             current_status=j.status)
+                    logs.save()
+                # if (j.location not in locations_form and request.user.user_type != 1) and (j.location not in locations_form and j.location.manager_location != request.user):
+                if j.location not in locations_form and j.location.manager_location != request.user:
                     j.status =5
                     j.save()
-
         return redirect('index')
     return render(request, 'select_locations.html', context={"form": form})
 

@@ -12,6 +12,11 @@
 
 <h1>Vos sites</h1>
 
+{% if request.user.user_type == 1 %}
+<p>En tant qu'administrateur, vous pouvez accéder à tous les sites. Il est cependant pertinent de sélectionner les sites pour lesquels vous êtes bénévoles aussi afin d'avoir un compte exact</p>
+{%endif %}
+
+
 {% for i in locations%}
 <p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a>
     {% for j in manager_locations %}
