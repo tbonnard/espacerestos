@@ -1,6 +1,6 @@
 {% for i in status_users_location %}
     <div>
-    {{i.user}} -- {{i.get_status_display}} ---- {{i.pk}} ---- {{ i.location }}
+    {{i.user}} -- {{i.get_status_display}} ---- {{i.pk}} ---- {{ i.location }} -- {{ i.user.last_login }}
 
     {% if i.status != 2 %}
     <form method="POST" action="{% url 'users_site' location_id=i.location.pk %}?id={{i.pk}}">

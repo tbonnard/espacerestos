@@ -5,14 +5,27 @@
 {%endif %}
 
 {% if events|length == 0 %}
-<p>Pas de résultat avec ces critères de recherche</p>
+    <p>Pas de résultat avec ces critères de recherche</p>
 {% else %}
-{% for i in events %}
+
+
+{% csrf_token %}
+
+    {% for i in events %}
         <h4>{{i.0}}</h4>
-        {% for j in i.1 %}
-    <p><a href="{% url 'event_details' event_id=j.id %}">{{j}}</a> //
-        <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></p>
+            {% for j in i.1 %}
+            <p><a href="{% url 'event_details' event_id=j.id %}">{{j}}</a> //
+            <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></p>
+
+            {%if j.location in pending_location%}
+                a
+                {% else %}
+                <form class="attendees" data-eventid="{{j.id}}" data-date="{{i.0|date:'Y-m-d'}}">
+                </form>
+                {% endif %}
+
+
+            {% endfor %}
     {% endfor %}
-{% endfor %}
 
 {%endif %}

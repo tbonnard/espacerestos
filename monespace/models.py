@@ -78,8 +78,18 @@ class EventExceptionCancelledRescheduled(models.Model):
 class AttendeesEvents(models.Model):
     parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True, related_name="AttendeesEvents_event")
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
-    status = models.IntegerField(blank=False, null=False, default=0)
+    status = models.IntegerField(blank=False, null=False, default=1)
+    event_date = models.DateField( blank=False, null=False, default=utils.timezone.now)
+    plus_other = models.IntegerField(blank=True, null=False, default=0)
     created = models.DateTimeField(auto_now_add=True)
+
+    def serialize(self):
+        return {"id": self.id,
+                "parent_event": self.parent_event.pk,
+                "user": self.user.pk,
+                "event_date": self.event_date,
+                "plus_other": self.plus_other,
+                }
 
 
 class StatusUsersLocations(models.Model):

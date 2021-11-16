@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
 
-from .models import Event, Location, RecurringPattern, StatusUsersLocations
+from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents
 from .forms import EventForm, EventRecurringPatternForm
 from .functions_global import get_date_to
 
@@ -91,7 +91,10 @@ def events_list_date(request):
         if request.user.user_type == 1:
             user_locations = Location.objects.all()
         eligible_events_date = events_list(date_from, date_to, user_locations)
-    return render(request, 'all_events.html', context={"events": eligible_events_date, "date_to":date_to.strftime("%Y-%m-%d")})
+
+        attendees = AttendeesEvents.objects.filter(user=request.user)
+
+    return render(request, 'all_events.html', context={"events": eligible_events_date, "date_to":date_to.strftime("%Y-%m-%d"), "attendees":attendees})
 
 
 def create_event_unit(form):

@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, views_login, views_events, views_locations, views_download
+from . import views, views_login, views_events, views_locations, views_download, views_attend
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -20,6 +20,12 @@ urlpatterns = [
     path('location/<int:location_id>', views_locations.location_details, name='location_details'),
     path('location_edit/<int:location_id>', views_locations.location_edit, name='location_edit'),
     path('download_users_csv/', views_download.download_users_csv, name='download_users_csv'),
+    path('attend_event/', views_attend.attend_event, name='attend_event'),
+    path('decline_event/', views_attend.decline_event, name='decline_event'),
+    path('api_get_attendees/', views_attend.api_get_attendees, name='api_get_attendees'),
+    path('api_get_all_attendees_user/', views_attend.api_get_all_attendees_user, name='api_get_all_attendees_user'),
+    path('api_attend_event/', views_attend.api_attend_event, name='api_attend_event'),
+    path('api_decline_event/', views_attend.api_decline_event, name='api_decline_event'),
 
 
 ]

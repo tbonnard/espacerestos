@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block script %}
+<script src= "{% static 'scripts/scripts_events_attendee.js' %}"></script>
+{% endblock %}
+
+
 {% block content%}
+
+
+{% if pending_location %}
+Vous avez au moins un site en attente de confirmation par le gestionnaire de site:
+    {%for i in pending_location%}
+    {{i}}
+    {% endfor %}
+{% endif %}
 
 {% if request.user.user_type != 2 %}
     <div class="sub_nav">

@@ -7,6 +7,9 @@
 
 {% block content %}
 
+<h4>Télecharger tous les membres</h4>
+<button><a href="{% url 'download_users_csv' %}?site={{location_id}}">Download</a></button>
+
 <p>Total des bénévoles (actif, en attente) pour le site: {{ status_users_location.count }}</p>
 
 {% include "benevoles_loop.html" %}

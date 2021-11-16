@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User, Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, EventExceptionCancelledRescheduled
+from .models import User, Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, \
+    EventExceptionCancelledRescheduled, AttendeesEvents
 
 
 class UserAdminCustom(admin.ModelAdmin):
@@ -32,6 +33,10 @@ class EventExceptionCancelledRescheduledAdmin(admin.ModelAdmin):
     list_display=('location', 'parent_event')
 
 
+class AttendeesEventsAdmin(admin.ModelAdmin):
+    list_display = ('parent_event', 'user', 'status', 'event_date', 'plus_other')
+
+
 admin.site.register(User, UserAdminCustom)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(Event, EventAdmin)
@@ -39,3 +44,5 @@ admin.site.register(RecurringPattern, RecurringPatternAdmin)
 admin.site.register(StatusUsersLocations, StatusUsersLocationsAdmin)
 admin.site.register(LogsStatusUsersLocations, LogsStatusUsersLocationsAdmin)
 admin.site.register(EventExceptionCancelledRescheduled, EventExceptionCancelledRescheduledAdmin)
+admin.site.register(AttendeesEvents, AttendeesEventsAdmin)
+

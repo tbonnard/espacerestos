@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
-from .models import User, Event, Location, RecurringPattern, StatusUsersLocations
+from .models import User, Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents
 
 
 class UserCreateForm(UserCreationForm):
@@ -75,3 +75,9 @@ class StatusUsersLocationsForm(forms.ModelForm):
     class Meta:
         model = StatusUsersLocations
         fields = ('status',)
+
+
+class AttendeesEventsForm(forms.ModelForm):
+    class Meta:
+        model = AttendeesEvents
+        fields= ('parent_event', 'event_date', 'plus_other')

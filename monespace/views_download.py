@@ -1,11 +1,15 @@
 import csv
 from django.http import HttpResponse
-import datetime
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 
-from .models import StatusUsersLocations
+from .models import StatusUsersLocations, Location
 
 
+@login_required(login_url='/login/')
 def download_users_csv(request):
+    if request.user.user_type ==2:
+        return redirect('index')
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(
         content_type='text/csv',
@@ -13,9 +17,21 @@ def download_users_csv(request):
     )
 
     writer = csv.writer(response)
-    all_users = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
-    writer.writerow(['Nom utilisateur', 'Email', 'Prénom', 'Nom', 'Site', 'Status dans ce site'])
-    for i in all_users:
-        writer.writerow([i.user.username, i.user.email, i.user.first_name , i.user.last_name, i.location.name, i.status])
+    all_users=[]
+
+    try:
+        request.GET['site']
+        location = Location.objects.get(pk=request.GET['site'])
+    except:
+        all_users = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
+    else:
+        if location in Location.objects.filter(manager_location=request.user):
+            all_users = StatusUsersLocations.objects.filter(status=1, location=location) | StatusUsersLocations.objects.filter(status=2, location=location)
+        else:
+            return redirect('index')
+    finally:
+        writer.writerow(['Nom utilisateur', 'Email', 'Prénom', 'Nom', 'Site', 'Status dans ce site'])
+        for i in all_users:
+                writer.writerow([i.user.username, i.user.email, i.user.first_name , i.user.last_name, i.location.name, i.status])
 
     return response
