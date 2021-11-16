@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 
-async function api_call(eventid, date, type) {
+function api_call(eventid, date, type) {
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
   const request = new Request(
                     `${window.location.origin}/api_attend_decline_event/`,
                     {headers: {'X-CSRFToken': csrftoken}}
                 );
-  const response = await fetch(request, {
+  const response = fetch(request, {
     method:'POST',
     mode: 'same-origin',
     body: JSON.stringify({

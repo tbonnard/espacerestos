@@ -80,4 +80,4 @@ class StatusUsersLocationsForm(forms.ModelForm):
 class AttendeesEventsForm(forms.ModelForm):
     class Meta:
         model = AttendeesEvents
-        fields= ('parent_event', 'event_date', 'plus_other')
+        fields= ('plus_other',)

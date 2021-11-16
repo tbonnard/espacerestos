@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
 from django.http import JsonResponse
 import json
 
@@ -26,6 +25,11 @@ def api_attend_decline_event(request):
         elif attendee_type == "decline":
             attend_decline = AttendeesEvents.objects.filter(user=request.user, parent_event=event, event_date=date)
             attend_decline.delete()
+            return JsonResponse({"message": 'OK'}, status=201)
+        elif attendee_type == "plus_other":
+            attend_to_update = AttendeesEvents.objects.filter(user=request.user, parent_event=event, event_date=date).first()
+            attend_to_update.plus_other = data.get('plus_other')
+            attend_to_update.save()
             return JsonResponse({"message": 'OK'}, status=201)
         else:
             return JsonResponse({"error": "try again - not a POST"}, status=400)

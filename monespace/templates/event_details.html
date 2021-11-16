@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block script %}
+<script src= "{% static 'scripts/scripts_event_attendee.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 
 {% if manager_location or request.user.user_type == 1 %}
@@ -12,14 +16,59 @@
     </div>
 {% endif %}
 
-<div>
-    <h3>Nom</h3><p>{{ event.name }}</p>
-    <h3>Description</h3><p>{{ event.description }}</p>
-    <h3>Date</h3><p>{{ event.date }}</p>
-    <h3>Debut</h3><p>{{ event.time_from }}</p>
-    <h3>Fin</h3><p>{{ event.time_to }}</p>
-    <h3>Location</h3><p>{{ event.location }}</p>
+<div class="event">
+
+<div class="event_left">
+  <div>
+    <h2>{{ event.name }}</h2>
+    <p>{{ event.description }}</p>
+  </div>
+  <div class="event_left_attendees">
+    {% if attendees %}
+    <form>
+      {% csrf_token %}
+      <button class="button_attendees" data-type="decline" type='submit' data-eventid="{{event.id}}" data-date="{{date}}">Annuler ma venue</button>
+    </form>
+    <form>
+      <label for="plus_other">Venez vous avez d'autres personnes? Entrez le nombre de personnes vous accompagnant</label>
+      <input type="number" id="plus_other" name="plus_other" value="{{attendees.plus_other}}"  min="0" data-eventid="{{event.id}}" data-date="{{date}}">
+    </form>
+    {% else %}
+    <form>
+      {% csrf_token %}
+      <button class="button_attendees" data-type="attend" type='submit' data-eventid="{{event.id}}" data-date="{{date}}">Je suis dipo</button>
+    </form>
+    {% endif %}
+  </div>
 </div>
+
+<div class="event_right">
+  <div class="event_right_subitem">
+    <div class="event_right_subitem_box">
+    <i class="fas fa-calendar-day"></i><span class="name_event_right_subitem">DATE</span>
+    <p>{{ date }}</p>
+    </div>
+  </div>
+
+  <div class="event_right_subitem">
+    <div class="event_right_subitem_box">
+    <i class="fas fa-clock"></i><span class="name_event_right_subitem">HEURE</span>
+    <p>{{ event.time_from }} à {{ event.time_to }}</p>
+    </div>
+  </div>
+
+  <div class="event_right_subitem">
+    <div class="event_right_subitem_box">
+    <i class="fas fa-map-marker-alt"></i><span class="name_event_right_subitem">LIEU</span>
+    <p>{{ event.location }}</p>
+    <p>{{ event.location.address_number }} - {{ event.location.address }} - {{ event.location.zipcode }} - {{ event.location.city }}</p>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
 
 
 

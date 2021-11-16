@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 
 from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents
-from .forms import EventForm, EventRecurringPatternForm
+from .forms import EventForm, EventRecurringPatternForm, AttendeesEventsForm
 from .functions_global import get_date_to
 
 
@@ -105,7 +105,7 @@ def create_event_unit(form):
     else:
         location = Location.objects.get(id=form['location'].value())
     finally:
-        new_event = Event(name=form.cleaned_data['name'],
+        new_event = Event(name=form.cleaned_data['name'].title(),
                           description=form.cleaned_data['description'],
                           start_date=form.cleaned_data['start_date'],
                           time_from=form.cleaned_data['time_from'],
@@ -234,12 +234,17 @@ def event_edit(request, event_id):
 
 @login_required(login_url='/login/')
 def event_details(request, event_id):
-    event_page = Event.objects.get(id=event_id)
-    if event_page.location.manager_location == request.user:
-        manager_location = True
+    try:
+        date = request.GET['date']
+    except:
+        return redirect('index')
     else:
-        manager_location = False
-    if event_page:
-        print(manager_location)
-        return render(request, 'event_details.html', context={"event": event_page, "manager_location":manager_location})
-    return redirect('index')
+        event_page = Event.objects.get(id=event_id)
+        attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id), event_date=date).first()
+        if event_page.location.manager_location == request.user:
+            manager_location = True
+        else:
+            manager_location = False
+        if event_page:
+            return render(request, 'event_details.html', context={"event": event_page, "manager_location":manager_location, 'date':date, "attendees":attendees})
+        return redirect('index')

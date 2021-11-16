@@ -1,4 +1,11 @@
 /* GLOBAL */
+:root {
+	--pink: #e5007d;
+  --orange: #f7a823;
+  --light_grey: #f7f7f7;
+  --dark_grey: #999999;
+}
+
 body {
   font-family: Arial,Helvetica,sans-serif;
   margin: 0;
@@ -16,13 +23,12 @@ a:visited, a:active, a{
 }
 
 a:hover{
-  color: #e5007d;
+  color: var(--pink);
 }
 
 .container_master{
   margin: 3% 5%;
 }
-
 
 
 
@@ -51,7 +57,7 @@ nav::before {
 	left: 0;
 	width: 100%;
 	height: 1.875rem;
-	background-color: #f7a823;
+	background-color: var(--orange);
 }
 
 .items_nav {
@@ -82,4 +88,54 @@ nav a {
   width: 2rem;
   vertical-align: middle;
   margin: 0 5px 0 0;
+}
+
+
+/* EVENTS */
+
+.event {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.event_left{
+  width: 75%;
+  float: left;
+  position: relative;
+  min-height: 350px;
+}
+
+.event_left_attendees{
+    position: absolute;
+    bottom:0;
+    left: 0;
+}
+
+.event_right{
+  width: 25%;
+  float: right;
+}
+.event_right_subitem{
+  padding: 2%;
+  margin-bottom: 10px;
+  height: 100px;
+  background-color: var(--light_grey);
+}
+
+.event_right_subitem i {
+  color: var(--pink);
+}
+
+.event_right_subitem p {
+  color: var(--dark_grey);
+}
+
+.name_event_right_subitem {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.event_right_subitem_box {
+  padding-top: 3%;
+  padding-left: 3%;
 }
