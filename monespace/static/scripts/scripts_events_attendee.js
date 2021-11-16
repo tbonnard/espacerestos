@@ -17,12 +17,15 @@ function api_call(eventid, date, type) {
         }),
   })
   .then(response => response.json())
-  .then(data => console.log(data))
+  .then(data => {
+    console.log(data);
+    document.querySelectorAll(`#div_${eventid}${date}`).forEach(e => e.parentNode.removeChild(e));
+    get_specific_attendees(eventid, date);
+  })
 
   // document.querySelectorAll(".attendees_declines").forEach(e => e.parentNode.removeChild(e));
   // all_attendees_user();
-  document.querySelectorAll(`#div_${eventid}${date}`).forEach(e => e.parentNode.removeChild(e));
-  get_specific_attendees(eventid, date);
+
   }
 
   function create_elements_attendees(parentDiv, eventid, date, pInner, buttonText, type) {
