@@ -241,10 +241,15 @@ def event_details(request, event_id):
     else:
         event_page = Event.objects.get(id=event_id)
         attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id), event_date=date).first()
+        all_attendees = AttendeesEvents.objects.filter(parent_event=Event.objects.get(pk=event_id), event_date=date)
+        count_attendees = all_attendees.count()
+        for i in all_attendees:
+            count_attendees += i.plus_other
+        print(count_attendees)
         if event_page.location.manager_location == request.user:
             manager_location = True
         else:
             manager_location = False
         if event_page:
-            return render(request, 'event_details.html', context={"event": event_page, "manager_location":manager_location, 'date':date, "attendees":attendees})
+            return render(request, 'event_details.html', context={"event": event_page, "manager_location":manager_location, 'date':date, "attendees":attendees, "all_attendees":all_attendees, "count_attendees":count_attendees})
         return redirect('index')

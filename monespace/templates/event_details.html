@@ -7,22 +7,27 @@
 
 {% block content %}
 
-{% if manager_location or request.user.user_type == 1 %}
 
     <div class="sub_nav">
+      {% if manager_location or request.user.user_type == 1 %}
         <div class="sub_nav_item">
             <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a></span>
         </div>
+        {% endif %}
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a id="event_attendees_list"></a>: {{count_attendees}} personnes</span>
+        </div>
     </div>
-{% endif %}
 
-<div class="event">
+<div class="event_details">
 
 <div class="event_left">
+
   <div>
     <h2>{{ event.name }}</h2>
     <p>{{ event.description }}</p>
   </div>
+
   <div class="event_left_attendees">
     {% if attendees %}
     <form>
@@ -40,6 +45,7 @@
     </form>
     {% endif %}
   </div>
+
 </div>
 
 <div class="event_right">
@@ -62,14 +68,19 @@
     <i class="fas fa-map-marker-alt"></i><span class="name_event_right_subitem">LIEU</span>
     <p>{{ event.location }}</p>
     <p>{{ event.location.address_number }} - {{ event.location.address }} - {{ event.location.zipcode }} - {{ event.location.city }}</p>
-
     </div>
   </div>
 
-</div>
+  </div>
+
 </div>
 
-
+<div class="event_attendees_list">
+  {% for i in all_attendees%}
+    <p>{{i.user}}
+    {% if i.plus_other > 0%} --> Vient avec {{i.plus_other}} personnes</p>{% endif %}
+  {% endfor %}
+</div>
 
 
 
