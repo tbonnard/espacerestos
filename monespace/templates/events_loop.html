@@ -18,7 +18,7 @@
             <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></p>
 
             {%if j.location in pending_location%}
-                a
+                en attente de confirmation du site demandé afin de pouvoir rejoindre cet évenement
                 {% else %}
                 <form class="attendees" id="parent_{{j.id}}{{i.0|date:'Y-m-d'}}" data-eventid="{{j.id}}" data-date="{{i.0|date:'Y-m-d'}}">
                 </form>
