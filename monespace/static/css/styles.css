@@ -1,6 +1,7 @@
 /* GLOBAL */
 :root {
 	--pink: #e5007d;
+  --light_pink: #fcebf1;
   --orange: #f7a823;
   --light_grey: #f7f7f7;
   --dark_grey: #999999;
@@ -138,4 +139,40 @@ nav a {
 .event_right_subitem_box {
   padding-top: 3%;
   padding-left: 3%;
+}
+
+
+.events_list_global {
+  width: 70%;
+  margin: 0 auto;
+  height: 300px;
+}
+
+.events_list_left{
+  width: 25%;
+  float: left;
+}
+
+.events_list_right{
+  width: 75%;
+  float: right;
+}
+
+.events_list_date {
+  color: var(--pink);
+}
+
+.events_list_details_time_location{
+  background-color: var(--light_pink);
+  color:var(--pink);
+  width: 25%;
+  padding: 1%;
+  margin: 1% 0;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.events_list_details_time_location span {
+  padding: 2% 2% 2% 4%;
+
 }

@@ -4,6 +4,8 @@
 <p>Voici tous les événements pour lesquels vous êtes directement associé au(x) site(s)</p>
 {%endif %}
 
+
+<div>
 {% if events|length == 0 %}
     <p>Pas de résultat avec ces critères de recherche</p>
 {% else %}
@@ -12,20 +14,35 @@
 {% csrf_token %}
 
     {% for i in events %}
-        <h4>{{i.0}}</h4>
-            {% for j in i.1 %}
-            <p><a href="{% url 'event_details' event_id=j.id %}?date={{i.0|date:'Y-m-d'}}">{{j}}</a> //
-            <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></p>
+    <div class="events_list_global">
 
-            {%if j.location in pending_location%}
-                en attente de confirmation du site demandé afin de pouvoir rejoindre cet évenement
-                {% else %}
-                <form class="attendees" id="parent_{{j.id}}{{i.0|date:'Y-m-d'}}" data-eventid="{{j.id}}" data-date="{{i.0|date:'Y-m-d'}}">
-                </form>
-                {% endif %}
+      <div class="events_list_left">
+        <h4 class="events_list_date">{{i.0}}</h4>
+      </div>
 
+      <div class="events_list_right">
+        {% for j in i.1 %}
+        <h2><a href="{% url 'event_details' event_id=j.id %}?date={{i.0|date:'Y-m-d'}}">{{j}}</a></h2>
+        <p>{{j.description}}</p>
+        <div class="events_list_details_time_location">
+          <i class="fas fa-clock"></i><span>{{j.time_from}} à {{j.time_from}}</span>
+        </div>
+        <div class="events_list_details_time_location">
+          <i class="fas fa-map-marker-alt"></i><span><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></span>
+        </div>
+        {%if j.location in pending_location%}
+            en attente de confirmation du site demandé afin de pouvoir rejoindre cet évenement
+            {% else %}
+            <form class="attendees" id="parent_{{j.id}}{{i.0|date:'Y-m-d'}}" data-eventid="{{j.id}}" data-date="{{i.0|date:'Y-m-d'}}">
+            </form>
+            {% endif %}
 
-            {% endfor %}
+        {% endfor %}
+      </div>
+
+    </div>
     {% endfor %}
 
 {%endif %}
+
+</div>
