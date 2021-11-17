@@ -245,6 +245,24 @@ def event_edit(request, event_id):
                       context={"form": form, "rec_form": rec_form, 'is_edit': True, 'event_id': event_id})
 
 
+def validate_event_date(event, date):
+    event_valid = False
+    year = int(date[0:4])
+    month = int(date[5:7])
+    day = int(date[-2:])
+    date_in_datetime = datetime.datetime(year, month, day)
+    date_in_date = datetime.date(year, month, day)
+    if event.is_recurring:
+        eligible_event_date = events_list(date_in_datetime, date_in_datetime, None)
+        for i in eligible_event_date:
+            if i[0] == date_in_date and i[1][0] == event:
+                event_valid = True
+    else:
+        if event.start_date == date_in_date:
+            event_valid = True
+    return event_valid
+
+
 @login_required(login_url='/login/')
 def event_details(request, event_id):
     try:
@@ -253,18 +271,7 @@ def event_details(request, event_id):
     except:
         return redirect('index')
     else:
-        event_valid = True
-        if event_page.is_recurring:
-            event_valid = False
-            year = int(date[0:4])
-            month = int(date[5:7])
-            day = int(date[-2:])
-            date_in_datetime = datetime.datetime(year, month, day)
-            eligible_event_date = events_list(date_in_datetime, date_in_datetime, None)
-            for i in eligible_event_date:
-                if i[0] == datetime.date(year, month, day) and i[1][0] == event_page:
-                    event_valid = True
-        if event_valid:
+        if validate_event_date(event_page, date):
             attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id),
                                                        event_date=date).first()
             all_attendees = AttendeesEvents.objects.filter(parent_event=Event.objects.get(pk=event_id), event_date=date)
