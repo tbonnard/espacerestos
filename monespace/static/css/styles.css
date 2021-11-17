@@ -1,10 +1,12 @@
 /* GLOBAL */
 :root {
 	--pink: #e5007d;
+	--pink-btn: #e64883;
   --light_pink: #fcebf1;
   --orange: #f7a823;
   --light_grey: #f7f7f7;
   --dark_grey: #999999;
+	--near_black: #444444;
 }
 
 body {
@@ -12,7 +14,6 @@ body {
   margin: 0;
   color: #222;
 }
-
 
 a {
   cursor: pointer;
@@ -29,6 +30,41 @@ a:hover{
 
 .container_master{
   margin: 3% 5%;
+}
+
+button, .input_btn {
+	background-color: var(--pink-btn);
+	border:none;
+	outline: none;
+	color: #fff;
+	font-weight: bold;
+	height: 40px;
+}
+
+.button_inversed {
+		color: var(--pink-btn);
+		background-color: #fff;
+		border: 1px solid #fff;
+}
+
+.button_inversed:hover {
+		color: var(--near_black);
+		background-color: #fff;
+		border: 1px solid #fff;
+}
+
+
+button:hover, .input_btn:hover {
+	background-color: var(--near_black);
+	cursor: pointer;
+}
+
+
+.info_text {
+	color: var(--dark_grey);
+	text-align: center;
+	font-size: 14;
+	padding: 1% 0;
 }
 
 
@@ -116,6 +152,7 @@ nav a {
   width: 25%;
   float: right;
 }
+
 .event_right_subitem{
   padding: 2%;
   margin-bottom: 10px;
@@ -142,30 +179,65 @@ nav a {
 }
 
 
+
+
+/* EVENTS SEARCHES/INDEX */
+
 .events_list_global {
   width: 70%;
   margin: 0 auto;
   height: 300px;
+	margin-bottom: 30px;
+	margin-top: 30px;
 }
 
 .events_list_left{
-  width: 25%;
+	padding: 1% 0 0 1%;
   float: left;
+	width: 20%;
+	position: relative;
 }
 
-.events_list_right{
+.events_list_left i {
+	color: var(--pink);
+}
+
+.vl {
+  border-left: 1px solid var(--light_pink);
+  height: 300px;
+  position: absolute;
+  left: 9%;
+  top: 20px;
+	z-index: -1;
+}
+
+
+.events_list_right {
   width: 75%;
   float: right;
+	border: 1px solid var(--light_grey);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+	border-radius: 15px;
+}
+
+.events_list_right_subitem{
+	padding: 1% 0 0 3%;
+}
+
+.events_list_right button {
+		width: 100%;
+		border-radius: 0 0 15px 15px;
 }
 
 .events_list_date {
   color: var(--pink);
+	margin-left: 10px;
 }
 
 .events_list_details_time_location{
   background-color: var(--light_pink);
   color:var(--pink);
-  width: 25%;
+  width: 200px;
   padding: 1%;
   margin: 1% 0;
   border-radius: 20px;

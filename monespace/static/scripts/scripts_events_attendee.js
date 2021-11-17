@@ -23,8 +23,6 @@ function api_call(eventid, date, type) {
     get_specific_attendees(eventid, date);
   })
 
-  // document.querySelectorAll(".attendees_declines").forEach(e => e.parentNode.removeChild(e));
-  // all_attendees_user();
 
   }
 
@@ -39,8 +37,12 @@ function api_call(eventid, date, type) {
     div.append(button);
     p.innerHTML = pInner;
     button.textContent = buttonText;
-    button.id = `${eventid}_${date}`
-    button.className="button_attendee_decline";
+    button.id = `${eventid}_${date}`;
+    if (type == "decline") {
+      button.className="button_attendee_decline button_inversed";
+    } else {
+      button.className="button_attendee_decline";
+    }
     button.addEventListener('click', (e) => {
       e.preventDefault();
       console.log(div.id);
@@ -55,12 +57,12 @@ function api_call(eventid, date, type) {
       let div_attendees = document.querySelector(`#parent_${eventid}${date}`);
       for (const j in data) {
         if (data[j].parent_event == eventid && data[j].event_date == date) {
-          create_elements_attendees(div_attendees, eventid, date, 'Inscrit', 'Je ne peux plus y aller', 'decline')
+          create_elements_attendees(div_attendees, eventid, date, '', 'Je ne peux plus y aller', 'decline')
         }
       }
 
       if (div_attendees.children.length == 0 ) {
-        create_elements_attendees(div_attendees, eventid, date, 'Non Inscrit', 'Je serai là', 'attend')
+        create_elements_attendees(div_attendees, eventid, date, '', 'Je serai là', 'attend')
       }
 
     })
@@ -81,7 +83,7 @@ function api_call(eventid, date, type) {
         for (const j in data) {
 
           if (data[j].parent_event == eventid && data[j].event_date == date) {
-            create_elements_attendees(i, eventid, date, 'Inscrit', 'Je ne peux plus y aller', 'decline')
+            create_elements_attendees(i, eventid, date, '', 'Je ne peux plus y aller', 'decline')
           }
         }
       })
@@ -90,7 +92,7 @@ function api_call(eventid, date, type) {
         let eventid = i.dataset.eventid;
         let date = i.dataset.date;
         if (i.children.length == 0 ) {
-          create_elements_attendees(i, eventid, date, 'Non Inscrit', 'Je serai là', 'attend')
+          create_elements_attendees(i, eventid, date, '', 'Je serai là', 'attend')
         }
       })
 
