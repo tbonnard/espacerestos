@@ -49,6 +49,21 @@ button:hover, .input_btn:hover {
 }
 
 
+.button_white, .button_attendees{
+	background-color: #fff;
+	border:1px solid var(--pink-btn);
+	outline: none;
+	color: var(--pink-btn);
+}
+
+.button_white:hover, .button_attendees:hover {
+	background-color: var(--pink-btn);
+	border: #fff;
+	color:#fff;
+}
+
+
+
 .info_text {
 	color: var(--dark_grey);
 	text-align: center;
@@ -176,20 +191,6 @@ nav a {
 }
 
 
-.button_attendees {
-	background-color: #fff;
-	border:1px solid var(--pink-btn);
-	outline: none;
-	color: var(--pink-btn);
-}
-
-.button_attendees:hover {
-	background-color: var(--pink-btn);
-	border: #fff
-	outline: none;
-	color:#fff;
-}
-
 
 
 /* EVENTS SEARCHES/INDEX */
@@ -217,7 +218,7 @@ nav a {
 
 .vl {
   border-left: 1px solid var(--light_pink);
-  height: 300px;
+  height: 275px;
   position: absolute;
   left: 14%;
   top: 20px;

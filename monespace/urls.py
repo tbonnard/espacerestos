@@ -14,6 +14,8 @@ urlpatterns = [
     path('event/<int:event_id>', views_events.event_details, name='event_details'),
     path('event_edit/<int:event_id>', views_events.event_edit, name='event_edit'),
     path('events/', views_events.events_list_date, name='events_list_date'),
+    path('event_delete_all/<int:event_id>', views_events.event_delete_all, name='event_delete_all'),
+    path('event_delete_rec/<int:event_id>', views_events.event_delete_rec, name='event_delete_rec'),
     path('location/', views_locations.location_create, name='location_create'),
     path('locations/', views_locations.locations, name='locations'),
     path('select_locations/', views_locations.select_locations, name='select_locations'),
@@ -23,5 +25,6 @@ urlpatterns = [
     path('api_get_specific_attendees/', views_attend.api_get_specific_attendees, name='api_get_specific_attendees'),
     path('api_get_all_attendees_user/', views_attend.api_get_all_attendees_user, name='api_get_all_attendees_user'),
     path('api_attend_decline_event/', views_attend.api_attend_decline_event, name='api_attend_decline_event'),
+
 ]
 

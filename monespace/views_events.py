@@ -2,12 +2,20 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
 
-from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents
-from .forms import EventForm, EventRecurringPatternForm, AttendeesEventsForm
+from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents, \
+    EventExceptionCancelledRescheduled
+from .forms import EventForm, EventRecurringPatternForm
 from .functions_global import get_date_to
 
 
 def events_list(date_from, date_to, location):
+    """
+    Get all events based on parameters
+    :param date_from:
+    :param date_to:
+    :param location:
+    :return: List of events - objects
+    """
     if date_from is None:
         date_from = datetime.datetime.now() - datetime.timedelta(days=1)
     else:
@@ -21,10 +29,12 @@ def events_list(date_from, date_to, location):
         date_to = date_to
 
     if location is not None:
-        #all_events = Event.objects.filter(location=location)
+        # all_events = Event.objects.filter(location=location)
         all_events = [Event.objects.filter(location=i) for i in location]
     else:
         all_events = [Event.objects.all()]
+
+    all_events_cancelled = EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True)
 
     eligible_events_date = {}
     for i in range(len(all_events)):
@@ -34,14 +44,15 @@ def events_list(date_from, date_to, location):
                 rec_pattern = RecurringPattern.objects.filter(event=j).first()
                 for n in range(rec_pattern.max_num_occurrences + 1):
                     if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
-                        try:
-                            # events = eligible_events_date[event_date]['events']
-                            events = eligible_events_date[event_date]
-                            events.append(j)
-                            eligible_events_date[event_date] = events
-                        except KeyError:
-                            eligible_events_date.setdefault(event_date, [j])
-                            # eligible_events_date.setdefault(event_date, {'events':[all_events[0][i]]})
+                        if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j, start_date=event_date):
+                            try:
+                                # events = eligible_events_date[event_date]['events']
+                                events = eligible_events_date[event_date]
+                                events.append(j)
+                                eligible_events_date[event_date] = events
+                            except KeyError:
+                                eligible_events_date.setdefault(event_date, [j])
+                                # eligible_events_date.setdefault(event_date, {'events':[all_events[0][i]]})
                     if rec_pattern.repeat_each_x == 0:
                         event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 7)
                     elif rec_pattern.repeat_each_x == 1:
@@ -83,7 +94,7 @@ def events_list_date(request):
         location = [Location.objects.get(pk=request.GET['location'])]
     except:
         user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
-                         StatusUsersLocations.objects.filter(user=request.user, status=2)
+                             StatusUsersLocations.objects.filter(user=request.user, status=2)
         user_locations = [i.location.pk for i in user_locations_pre]
     else:
         user_locations = [i.pk for i in location]
@@ -94,7 +105,9 @@ def events_list_date(request):
 
         attendees = AttendeesEvents.objects.filter(user=request.user)
 
-    return render(request, 'all_events.html', context={"events": eligible_events_date, "date_to":date_to.strftime("%Y-%m-%d"), "attendees":attendees})
+    return render(request, 'all_events.html',
+                  context={"events": eligible_events_date, "date_to": date_to.strftime("%Y-%m-%d"),
+                           "attendees": attendees})
 
 
 def create_event_unit(form):
@@ -240,16 +253,62 @@ def event_details(request, event_id):
         return redirect('index')
     else:
         event_page = Event.objects.get(id=event_id)
-        attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id), event_date=date).first()
+        attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id),
+                                                   event_date=date).first()
         all_attendees = AttendeesEvents.objects.filter(parent_event=Event.objects.get(pk=event_id), event_date=date)
         count_attendees = all_attendees.count()
         for i in all_attendees:
             count_attendees += i.plus_other
-        print(count_attendees)
         if event_page.location.manager_location == request.user:
             manager_location = True
         else:
             manager_location = False
         if event_page:
-            return render(request, 'event_details.html', context={"event": event_page, "manager_location":manager_location, 'date':date, "attendees":attendees, "all_attendees":all_attendees, "count_attendees":count_attendees})
+            return render(request, 'event_details.html',
+                          context={"event": event_page, "manager_location": manager_location, 'date': date,
+                                   "attendees": attendees, "all_attendees": all_attendees,
+                                   "count_attendees": count_attendees})
+        return redirect('index')
+
+
+@login_required(login_url='/login/')
+def event_delete_all(request, event_id):
+    if request.user.user_type == 2:
+        return redirect('index')
+    else:
+        try:
+            event_to_delete = Event.objects.get(id=event_id)
+        except:
+            return redirect('index')
+        else:
+            event_to_delete.delete()
+            return redirect('index')
+
+
+@login_required(login_url='/login/')
+def event_delete_rec(request, event_id):
+    if request.user.user_type == 2:
+        return redirect('index')
+    try:
+        date = request.GET['date']
+        event_rec_to_delete = Event.objects.get(id=event_id)
+    except:
+        return redirect('index')
+    else:
+        rec_to_delete_exception = EventExceptionCancelledRescheduled(
+            location=event_rec_to_delete.location,
+            name=event_rec_to_delete.name,
+            description=event_rec_to_delete.description,
+            start_date=date,
+            end_date=event_rec_to_delete.end_date,
+            time_from=event_rec_to_delete.time_from,
+            time_to=event_rec_to_delete.time_to,
+            is_cancelled=True,
+            is_rescheduled=False,
+            is_full_day=event_rec_to_delete.is_full_day,
+            parent_event=event_rec_to_delete,
+        )
+        rec_to_delete_exception.save()
+        for i in AttendeesEvents.objects.filter(parent_event=event_rec_to_delete, event_date=date):
+            i.delete()
         return redirect('index')

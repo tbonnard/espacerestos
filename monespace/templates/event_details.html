@@ -11,7 +11,7 @@
     <div class="sub_nav">
       {% if manager_location or request.user.user_type == 1 %}
         <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a></span>
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier pour toutes les dates de l'évenement</a></span>
         </div>
         {% endif %}
         <div class="sub_nav_item">
@@ -90,12 +90,18 @@
 
       {% if manager_location or request.user.user_type == 1 %}
     <div class="sub_nav">
+        {% if event.is_recurring %}
         <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="">Annuler cette date</a></span>
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_rec' event_id=event.pk %}?date={{date}}">Annuler cette date</a></span>
         </div>
         <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="">Annuler toutes les dates</a></span>
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_all' event_id=event.pk %}">Annuler toutes les dates</a></span>
         </div>
+        {% else %}
+        <div class="sub_nav_item">
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_all' event_id=event.pk %}">Annuler cette date</a></span>
+        </div>
+        {% endif %}
     </div>
         {% endif %}
 

@@ -30,7 +30,7 @@ class LogsStatusUsersLocationsAdmin(admin.ModelAdmin):
 
 
 class EventExceptionCancelledRescheduledAdmin(admin.ModelAdmin):
-    list_display=('location', 'parent_event')
+    list_display=('location', 'parent_event', 'start_date', 'is_cancelled', 'is_rescheduled')
 
 
 class AttendeesEventsAdmin(admin.ModelAdmin):
