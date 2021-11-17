@@ -30,7 +30,8 @@
           <i class="far fa-clock"></i><span>{{j.time_from}} à {{j.time_to}}</span>
         </div>
         <div class="events_list_details_time_location">
-          <i class="fas fa-map-marker-alt"></i><span><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></span>
+          <i class="fas fa-map-marker-alt"></i><span><a href="{% url 'location_details' location_id=j.location.id %}">{{j.location}}</a></span>
+<!--          <i class="fas fa-map-marker-alt"></i><span><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></span>-->
         </div>
           </div>
         {%if j.location in pending_location%}

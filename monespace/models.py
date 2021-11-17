@@ -54,7 +54,7 @@ class RecurringPattern(models.Model):
     # week_of_month = models.IntegerField(blank=True, null=True)
     # day_of_month = models.IntegerField(blank=True, null=True)
     # month_of_year = models.IntegerField(blank=True, null=True)
-    max_num_occurrences = models.IntegerField(blank=True, null=True)
+    max_num_occurrences = models.IntegerField(blank=True, null=True, default=1)
     created = models.DateTimeField(auto_now_add=True)
 
 #https://vertabelo.com/blog/again-and-again-managing-recurring-events-in-a-data-model/

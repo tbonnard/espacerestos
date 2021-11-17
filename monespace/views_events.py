@@ -249,25 +249,37 @@ def event_edit(request, event_id):
 def event_details(request, event_id):
     try:
         date = request.GET['date']
+        event_page = Event.objects.get(id=event_id)
     except:
         return redirect('index')
     else:
-        event_page = Event.objects.get(id=event_id)
-        attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id),
-                                                   event_date=date).first()
-        all_attendees = AttendeesEvents.objects.filter(parent_event=Event.objects.get(pk=event_id), event_date=date)
-        count_attendees = all_attendees.count()
-        for i in all_attendees:
-            count_attendees += i.plus_other
-        if event_page.location.manager_location == request.user:
-            manager_location = True
-        else:
-            manager_location = False
-        if event_page:
-            return render(request, 'event_details.html',
-                          context={"event": event_page, "manager_location": manager_location, 'date': date,
-                                   "attendees": attendees, "all_attendees": all_attendees,
-                                   "count_attendees": count_attendees})
+        event_valid = True
+        if event_page.is_recurring:
+            event_valid = False
+            year = int(date[0:4])
+            month = int(date[5:7])
+            day = int(date[-2:])
+            date_in_datetime = datetime.datetime(year, month, day)
+            eligible_event_date = events_list(date_in_datetime, date_in_datetime, None)
+            for i in eligible_event_date:
+                if i[0] == datetime.date(year, month, day) and i[1][0] == event_page:
+                    event_valid = True
+        if event_valid:
+            attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id),
+                                                       event_date=date).first()
+            all_attendees = AttendeesEvents.objects.filter(parent_event=Event.objects.get(pk=event_id), event_date=date)
+            count_attendees = all_attendees.count()
+            for i in all_attendees:
+                count_attendees += i.plus_other
+            if event_page.location.manager_location == request.user:
+                manager_location = True
+            else:
+                manager_location = False
+            if event_page:
+                return render(request, 'event_details.html',
+                              context={"event": event_page, "manager_location": manager_location, 'date': date,
+                                       "attendees": attendees, "all_attendees": all_attendees,
+                                       "count_attendees": count_attendees})
         return redirect('index')
 
 
