@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
 /* GLOBAL */
 :root {
 	--pink: #e5007d;
@@ -10,7 +12,7 @@
 }
 
 body {
-  font-family: Arial,Helvetica,sans-serif;
+  font-family: 'Montserrat',Arial,Helvetica,sans-serif;
   margin: 0;
   color: #222;
 }
@@ -37,22 +39,9 @@ button, .input_btn {
 	border:none;
 	outline: none;
 	color: #fff;
-	font-weight: bold;
-	height: 40px;
+	height: 30px;
+	width: 200px;
 }
-
-.button_inversed {
-		color: var(--pink-btn);
-		background-color: #fff;
-		border: 1px solid #fff;
-}
-
-.button_inversed:hover {
-		color: var(--near_black);
-		background-color: #fff;
-		border: 1px solid #fff;
-}
-
 
 button:hover, .input_btn:hover {
 	background-color: var(--near_black);
@@ -136,7 +125,6 @@ nav a {
 }
 
 .event_left{
-  width: 75%;
   float: left;
   position: relative;
   min-height: 350px;
@@ -149,15 +137,17 @@ nav a {
 }
 
 .event_right{
-  width: 25%;
+  width: 33.33%;
   float: right;
+	border: 1px solid var(--light_grey);
+	padding: 25px;
 }
 
 .event_right_subitem{
-  padding: 2%;
-  margin-bottom: 10px;
-  height: 100px;
+	padding: 12px 14px 8px;
+  margin-bottom: 12px;
   background-color: var(--light_grey);
+	position: relative;
 }
 
 .event_right_subitem i {
@@ -166,11 +156,12 @@ nav a {
 
 .event_right_subitem p {
   color: var(--dark_grey);
+	padding-left: 10%;
 }
 
 .name_event_right_subitem {
   margin-left: 10px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .event_right_subitem_box {
@@ -178,6 +169,20 @@ nav a {
   padding-left: 3%;
 }
 
+
+.button_attendees {
+	background-color: #fff;
+	border:1px solid var(--pink-btn);
+	outline: none;
+	color: var(--pink-btn);
+}
+
+.button_attendees:hover {
+	background-color: var(--pink-btn);
+	border: #fff
+	outline: none;
+	color:#fff;
+}
 
 
 
@@ -227,7 +232,22 @@ nav a {
 .events_list_right button {
 		width: 100%;
 		border-radius: 0 0 15px 15px;
+		height: 40px;
+		font-weight: 600;
 }
+
+.button_inversed {
+		color: var(--pink-btn);
+		background-color: #fff;
+		border: 1px solid #fff;
+}
+
+.button_inversed:hover {
+		color: var(--near_black);
+		background-color: #fff;
+		border: 1px solid #fff;
+}
+
 
 .events_list_date {
   color: var(--pink);
