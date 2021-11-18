@@ -30,7 +30,7 @@
     <p>{{ event.description }}</p>
   </div>
 
-    
+
 {% now "Y-m-d" as todays_date %}
     {% if todays_date <= date %}
   <div class="event_left_attendees">
@@ -73,7 +73,7 @@
   <div class="event_right_subitem">
     <div class="event_right_subitem_box">
     <i class="fas fa-map-marker-alt"></i><span class="name_event_right_subitem">LIEU</span>
-    <p>{{ event.location }}</p>
+    <p><a href="{% url 'location_details' location_id=event.location.id %}">{{ event.location }}</a></p>
     <p>{{ event.location.address_number }} - {{ event.location.address }} - {{ event.location.zipcode }} - {{ event.location.city }}</p>
     </div>
   </div>

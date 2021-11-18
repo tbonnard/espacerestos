@@ -207,7 +207,6 @@ nav a {
 
 .events_list_left{
 	padding: 1% 0 0 1%;
-  float: left; */
 	width: 20%;
 	position: relative;
 }
@@ -238,10 +237,10 @@ nav a {
 }
 
 .events_list_right button {
-		width: 100%;
-		border-radius: 0 0 15px 15px;
-		height: 40px;
-		font-weight: 600;
+	width: 100%;
+	border-radius: 0 0 15px 15px;
+	height: 40px;
+	font-weight: 600;
 }
 
 .button_inversed {
@@ -274,5 +273,23 @@ nav a {
 
 .events_list_details_time_location span {
   padding: 2% 2% 2% 4%;
+}
 
+
+
+
+/* LOCATION */
+
+.location_global{
+	margin: 0 auto;
+	width: 90%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.location_left {}
+
+.location_right {
+	align-self: center;
 }
