@@ -12,13 +12,12 @@
 
 <h1>Vos sites</h1>
 
-{% if request.user.user_type == 1 %}
-<p>En tant qu'administrateur, vous pouvez accéder à tous les sites. Il est cependant pertinent de sélectionner les sites pour lesquels vous êtes bénévoles aussi afin d'avoir un compte exact</p>
-{%endif %}
+
 
 
 {% for i in locations%}
-<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a>
+<!--<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a>-->
+<p><a href="{% url 'location_details' location_id=i.id %}">{{i}}</a>
     {% for j in manager_locations %}
     {% if j == i%}
     <span> --> vous êtes le gestionnaire</span>
@@ -31,6 +30,9 @@
         <div class="sub_nav_item">
             <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'select_locations' %}">Modifier vos sites</a></span>
         </div>
+        {% if request.user.user_type == 1 %}
+        <p>En tant qu'administrateur, vous pouvez accéder à tous les sites <i>(Accueil > Gérer les sites)</i> mais il est cependant pertinent de sélectionner les sites pour lesquels vous êtes bénévoles aussi afin d'avoir un compte exact</p>
+{%endif %}
     </div>
 
 {% endblock %}
