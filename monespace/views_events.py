@@ -8,7 +8,24 @@ from .forms import EventForm, EventRecurringPatternForm
 from .functions_global import get_date_to
 
 
-def events_list(date_from, date_to, location, date_cancelled=None):
+def return_date_based_pattern(rec_pattern, date):
+    event_date = date
+    if rec_pattern.repeat_each_x == 0:
+        event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 7)
+    elif rec_pattern.repeat_each_x == 1:
+        event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 1)
+    elif rec_pattern.repeat_each_x == 2:
+        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 4)
+    elif rec_pattern.repeat_each_x == 3:
+        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 12)
+    elif rec_pattern.repeat_each_x == 4:
+        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 24)
+    elif rec_pattern.repeat_each_x == 5:
+        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 56)
+    return event_date
+
+
+def events_list(date_from, date_to, location):
     """
     Get all events based on parameters
     :param date_from:
@@ -29,7 +46,6 @@ def events_list(date_from, date_to, location, date_cancelled=None):
         date_to = date_to
 
     if location is not None:
-        # all_events = Event.objects.filter(location=location)
         all_events = [Event.objects.filter(location=i) for i in location]
     else:
         all_events = [Event.objects.all()]
@@ -49,18 +65,8 @@ def events_list(date_from, date_to, location, date_cancelled=None):
                                 eligible_events_date[event_date] = events
                             except KeyError:
                                 eligible_events_date.setdefault(event_date, [j])
-                    if rec_pattern.repeat_each_x == 0:
-                        event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 7)
-                    elif rec_pattern.repeat_each_x == 1:
-                        event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 1)
-                    elif rec_pattern.repeat_each_x == 2:
-                        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 4)
-                    elif rec_pattern.repeat_each_x == 3:
-                        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 12)
-                    elif rec_pattern.repeat_each_x == 4:
-                        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 24)
-                    elif rec_pattern.repeat_each_x == 5:
-                        event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 56)
+                    event_date = return_date_based_pattern(rec_pattern, event_date)
+
             else:
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
                     try:
@@ -299,26 +305,16 @@ def event_delete_all(request, event_id):
         else:
             rec_pattern = RecurringPattern.objects.filter(event=event_to_delete).first()
             event_date = event_to_delete.start_date
-            new_number_occurences=0
+            new_number_occurences = 0
             for n in range(rec_pattern.max_num_occurrences + 1):
                 if datetime.datetime(event_to_delete.start_date.year, event_to_delete.start_date.month, event_to_delete.start_date.day) <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= datetime.datetime.now():
                     if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=event_to_delete,
                                                                              start_date=event_date):
-                        new_number_occurences +=1
+                        new_number_occurences += 1
                     else:
                         break
-                if rec_pattern.repeat_each_x == 0:
-                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 7)
-                elif rec_pattern.repeat_each_x == 1:
-                    event_date = event_date + datetime.timedelta(days=rec_pattern.separation_count * 1)
-                elif rec_pattern.repeat_each_x == 2:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 4)
-                elif rec_pattern.repeat_each_x == 3:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 12)
-                elif rec_pattern.repeat_each_x == 4:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 24)
-                elif rec_pattern.repeat_each_x == 5:
-                    event_date = event_date + datetime.timedelta(weeks=rec_pattern.separation_count * 56)
+                event_date = return_date_based_pattern(rec_pattern, event_date)
+
             if new_number_occurences == 0:
                 event_to_delete.delete()
             else:
@@ -353,4 +349,5 @@ def event_delete_rec(request, event_id):
         rec_to_delete_exception.save()
         for i in AttendeesEvents.objects.filter(parent_event=event_rec_to_delete, event_date=date):
             i.delete()
+            # or update status in attendees to 0 if we want to keep history
         return redirect('index')

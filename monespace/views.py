@@ -6,6 +6,13 @@ from .views_events import events_list
 from .forms import StatusUsersLocationsForm
 from .functions_global import get_date_to
 
+from datetime import date
+
+
+@property
+def is_past_due(self):
+    return date.today() > self.date
+
 
 @login_required(login_url='/login/')
 def index(request):
