@@ -35,8 +35,9 @@ class Event(models.Model):
     end_date = models.DateField( blank=True, null=True)
     time_from = models.TimeField(blank=True, default="00:00:00")
     time_to = models.TimeField(blank=True, default="00:00:00")
-    is_recurring = models.BooleanField(default=False)
     is_full_day = models.BooleanField(default=False)
+    is_recurring = models.BooleanField(default=False)
+    was_recurring = models.IntegerField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -81,6 +82,9 @@ class AttendeesEvents(models.Model):
     status = models.IntegerField(blank=False, null=False, default=1)
     event_date = models.DateField( blank=False, null=False, default=utils.timezone.now)
     plus_other = models.IntegerField(blank=True, null=False, default=0)
+    recurring_pattern = models.ForeignKey(RecurringPattern, on_delete=models.CASCADE, blank=True, null=True)
+    time_from = models.TimeField(blank=True, default="00:00:00")
+    time_to = models.TimeField(blank=True, default="00:00:00")
     created = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):

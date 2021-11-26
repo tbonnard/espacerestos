@@ -124,6 +124,7 @@ def create_event_unit(form):
         new_event = Event(name=form.cleaned_data['name'].title(),
                           description=form.cleaned_data['description'],
                           start_date=form.cleaned_data['start_date'],
+                          end_date=form.cleaned_data['end_date'],
                           time_from=form.cleaned_data['time_from'],
                           time_to=form.cleaned_data['time_to'],
                           is_recurring=form.cleaned_data['is_recurring'],
@@ -211,9 +212,10 @@ def event_create(request):
             if new_event.is_recurring:
                 create_recurring_pattern_event_unit(event=new_event, form=rec_form)
             return redirect('index')
-    return render(request, 'event.html', context={"form": form, "rec_form": rec_form})
+    return render(request, 'event_create.html', context={"form": form, "rec_form": rec_form})
 
 
+# ADD VALIDATE DATE POUR ETRE SUR
 @forbidden_to_user
 @login_required(login_url='/login/')
 def event_edit(request, event_id):
@@ -222,30 +224,108 @@ def event_edit(request, event_id):
     except:
         redirect('index')
     else:
-        form = EventForm(instance=event_page)
-        if event_page.is_recurring:
-            event_rec_pattern = RecurringPattern.objects.filter(event=event_page).first()
-            rec_form = EventRecurringPatternForm(instance=event_rec_pattern)
-        else:
-            rec_form = EventRecurringPatternForm()
+        if request.method == "GET":
+            form = EventForm(instance=event_page)
+            if event_page.is_recurring:
+                event_rec_pattern = RecurringPattern.objects.filter(event=event_page).first()
+                form.initial["start_date"] = request.GET.get('date')
+                rec_form = EventRecurringPatternForm(instance=event_rec_pattern)
+                return render(request, 'event_edit_rec.html',
+                              context={"form": form, "rec_form": rec_form, 'event_id': event_id})
+
+            else:
+                return render(request, 'event_edit_non_rec.html',
+                              context={"form": form, 'event_id': event_id})
+
         if request.method == "POST":
             form = EventForm(data=request.POST)
             rec_form = EventRecurringPatternForm(data=request.POST)
             if form.is_valid() and rec_form.is_valid():
-                edit_event_unit(event=event_page, form=form)
+                event_page = edit_event_unit(event=event_page, form=form)
                 if event_page.is_recurring:
                     if RecurringPattern.objects.filter(event=event_page).first():
-                        edit_recurring_pattern_event_unit(
+                        rec_edit = edit_recurring_pattern_event_unit(
                             recurring_pattern=RecurringPattern.objects.filter(event=event_page).first(),
                             form=rec_form)
+
+                        # check to remove attendees if some dates have been removed
+                        dates = [event_page.start_date]
+                        date_new = event_page.start_date
+                        for n in range(rec_edit.max_num_occurrences + 1):
+                            max_date = return_date_based_pattern(rec_edit, date_new)
+                            dates.append(max_date)
+                            date_new = max_date
+
+                        all_attendees = AttendeesEvents.objects.filter(parent_event=event_page,
+                                                                       recurring_pattern=rec_edit)
+
+                        for i in all_attendees:
+                            if i.event_date not in dates or event_page.time_from != i.time_from or event_page.time_to != i.time_to:
+                                i.delete()
+
                     else:
                         create_recurring_pattern_event_unit(event=event_page, form=rec_form)
+
+                    return redirect('index')
+
                 else:
                     if RecurringPattern.objects.filter(event=event_page).first():
                         RecurringPattern.objects.filter(event=event_page).first().delete()
+                        # attendees associated will be deleted (cascade)
+
+                    # remove attendees if date / hour are different
+                    all_attendees_non_rec = AttendeesEvents.objects.filter(parent_event=event_page)
+                    for i in all_attendees_non_rec:
+                        if event_page.start_date != i.event_date or event_page.time_from != i.time_from or event_page.time_to != i.time_to :
+                            i.delete()
+
                 return redirect('index')
-        return render(request, 'event.html',
-                      context={"form": form, "rec_form": rec_form, 'is_edit': True, 'event_id': event_id})
+
+
+# ADD VALIDATE DATE POUR ETRE SUR
+@forbidden_to_user
+@login_required(login_url='/login/')
+def event_edit_specific_rec(request, event_id):
+    try:
+        event = Event.objects.get(pk=event_id)
+    except:
+        return redirect('index')
+    else:
+        if request.method == "POST":
+
+            form = EventForm(data=request.POST)
+
+            if form.is_valid():
+                rec_to_delete_exception = EventExceptionCancelledRescheduled(
+                    location=event.location,
+                    name=event.name,
+                    description=event.description,
+                    start_date=request.GET.get('date'),
+                    end_date=event.end_date,
+                    time_from=event.time_from,
+                    time_to=event.time_to,
+                    is_cancelled=True,
+                    is_rescheduled=True,
+                    is_full_day=event.is_full_day,
+                    parent_event=event,
+                )
+                rec_to_delete_exception.save()
+
+                new_event = create_event_unit(form)
+                new_event.is_recurring = False
+                new_event.was_recurring = event.pk
+                new_event.save()
+
+            all_attendees_non_rec = AttendeesEvents.objects.filter(parent_event=event)
+            for i in all_attendees_non_rec:
+                if new_event.start_date != i.event_date or new_event.time_from != i.time_from or new_event.time_to != i.time_to:
+                    i.delete()
+                else:
+                    i.parent_event = new_event
+                    i.save()
+
+            return redirect('index')
+        return redirect('index')
 
 
 def validate_event_date(event, date):
@@ -303,21 +383,22 @@ def event_delete_all(request, event_id):
     except:
         return redirect('index')
     else:
-        rec_pattern = RecurringPattern.objects.filter(event=event_to_delete).first()
-        event_date = event_to_delete.start_date
         new_number_occurences = 0
-        for n in range(rec_pattern.max_num_occurrences + 1):
-            if datetime.datetime(event_to_delete.start_date.year, event_to_delete.start_date.month, event_to_delete.start_date.day) <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= datetime.datetime.now():
-                if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True,
-                                                                         parent_event=event_to_delete,
-                                                                         start_date=event_date):
-                    new_number_occurences += 1
-                else:
-                    break
-            for i in AttendeesEvents.objects.filter(parent_event=event_to_delete, event_date=event_date):
-                i.delete()
-                # or update status in attendees to 0 if we want to keep history
-            event_date = return_date_based_pattern(rec_pattern, event_date)
+        if event_to_delete.is_recurring:
+            rec_pattern = RecurringPattern.objects.filter(event=event_to_delete).first()
+            event_date = event_to_delete.start_date
+            for n in range(rec_pattern.max_num_occurrences + 1):
+                if datetime.datetime(event_to_delete.start_date.year, event_to_delete.start_date.month, event_to_delete.start_date.day) <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= datetime.datetime.now():
+                    if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True,
+                                                                             parent_event=event_to_delete,
+                                                                             start_date=event_date):
+                        new_number_occurences += 1
+                    else:
+                        break
+                for i in AttendeesEvents.objects.filter(parent_event=event_to_delete, event_date=event_date):
+                    i.delete()
+                    # or update status in attendees to 0 if we want to keep history
+                event_date = return_date_based_pattern(rec_pattern, event_date)
 
         if new_number_occurences == 0:
             event_to_delete.delete()

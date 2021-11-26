@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+<script src= "{% static 'scripts/scripts_event.js' %}"></script>
+<script src= "{% static 'scripts/scripts_event_edit_rec.js' %}"></script>
+{% endblock %}
+
+
+{% block content%}
+
+<h1>Modifier "{{ form.name.value }}"</h1>
+
+<!--<form id="form_rec">-->
+    <form action="" method='POST' id="form_rec" data-eventid={{event_id}}>
+        {% csrf_token %}
+        <label>Nom de l'évenement</label>
+        <p>{{ form.name }}</p>
+        <label>Site de l'évenement</label>
+        <p>{{ form.location }}</p>
+        <label>Description</label>
+        <p>{{ form.description }}</p>
+        <label>Date de début</label>
+        <p>{{ form.start_date }}</p>
+        <label>Date de début</label>
+        <p>{{ form.end_date }}</p>
+        <label>Heure de fin</label>
+        <p>{{ form.time_from }}</p>
+        <label>Heure de fin</label>
+        <p>{{ form.time_to }}</p>
+        <label>Evenement durant toute la journée</label>
+        <p>{{ form.is_full_day }}</p>
+        <label>Evenement récurrent</label>
+        <p>{{ form.is_recurring }}</p>
+
+        <div id="recurring">
+            {{ rec_form }}
+        </div>
+
+        <p>Attention, modifier la date et/ou la recurrence pour tous les évenements peut engendrer des désagrements. En effet, lorsque la date et/ou la recurrence sont modifiées, les personnes ayant deja acceptees devront reaccepter </p>
+
+
+          <fieldset>
+            <legend>Voulez vous modifier tous les évenements de cette récurrence?</legend>
+            <input id="yes" type="radio" name="items" value="yes">
+            <label for="yes">Oui, pour tous</label><br>
+            <input id="no" type="radio" name="items" value="no">
+            <label for="no">Non, seulement pour cette date</label><br>
+          </fieldset>
+
+<!--        <button id="button_display_confirm_buttons_choice" class='input'>Confirmer</button>-->
+
+<!--        <div id="confirm_buttons_choice">-->
+<!--            <input type='submit' id="confirm_solo" value="Modifier pour cet évenement seulement" class='input'/>-->
+<!--            <input type='submit' id="confirm_all" value="Modifier pour tous les évenements" class='input'/>-->
+<!--        </div>-->
+
+        <input type='submit' id="confirm" value="Confirmer" class='input'/>
+
+    </form>
+
+
+
+{% endblock %}

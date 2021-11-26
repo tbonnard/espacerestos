@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+<script src= "{% static 'scripts/scripts_event.js' %}"></script>
+{% endblock %}
+
+
+{% block content%}
+
+<h1>Modifier "{{ form.name.value }}"</h1>
+
+    <form action="{% url 'event_edit' event_id=event_id %}" method='POST'>
+        {% csrf_token %}
+        <label>Nom de l'évenement</label>
+        <p>{{ form.name }}</p>
+        <label>Site de l'évenement</label>
+        <p>{{ form.location }}</p>
+        <label>Description</label>
+        <p>{{ form.description }}</p>
+        <label>Date de début</label>
+        <p>{{ form.start_date }}</p>
+        <label>Date de début</label>
+        <p>{{ form.end_date }}</p>
+        <label>Heure de fin</label>
+        <p>{{ form.time_from }}</p>
+        <label>Heure de fin</label>
+        <p>{{ form.time_to }}</p>
+        <label>Evenement durant toute la journée</label>
+        <p>{{ form.is_full_day }}</p>
+
+        <input type='submit' id="confirm" value="Confirmer" class='input'/>
+
+    </form>
+
+<p class="info_text">Ceci est un événement non recurrent</p>
+
+{% endblock %}

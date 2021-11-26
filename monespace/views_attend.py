@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
 
-from .models import Event, AttendeesEvents
+from .models import Event, AttendeesEvents, RecurringPattern
 
 
 @login_required(login_url='/login/')
@@ -18,8 +18,13 @@ def api_attend_decline_event(request):
         attendee_type = data.get('type')
         event = Event.objects.get(pk=data.get('parent_event'))
         date = data.get('event_date')
+        if event.is_recurring:
+            rec_pattern = RecurringPattern.objects.filter(event=event).first()
+        else:
+            rec_pattern = None
         if attendee_type == "attend":
-            new_attendee = AttendeesEvents(user=request.user, parent_event=event, event_date=date)
+            new_attendee = AttendeesEvents(user=request.user, parent_event=event, event_date=date,
+                                           recurring_pattern=rec_pattern, time_from=event.time_from, time_to=event.time_to)
             new_attendee.save()
             return JsonResponse({"message": 'OK'}, status=201)
         elif attendee_type == "decline":

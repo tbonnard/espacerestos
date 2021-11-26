@@ -11,7 +11,13 @@
     <div class="sub_nav">
       {% if manager_location or request.user.user_type == 1 %}
         <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a></span>
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur">
+                {% if event.is_recurring %}
+                <a href="{% url 'event_edit' event_id=event.id %}?date={{date}}">Modifier l'évenement REC</a>
+                {% else %}
+                <a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a>
+                {% endif %}
+            </span>
         </div>
         {% endif %}
         <div class="sub_nav_item">
@@ -35,14 +41,20 @@
       <div class="event_right_subitem">
         <div class="event_right_subitem_box">
         <i class="far fa-calendar-alt"></i><span class="name_event_right_subitem">DATE</span>
-        <p>{{ date }}</p>
+            {% if event.is_recurring %}
+            <p>{{ date }}</p>
+            {% elif event.start_date != event.end_date and event.end_date is not none %}
+            <p>du {{ event.start_date }} au {{ event.end_date }}</p>
+            {% else %}
+            <p>{{ event.start_date }}</p>
+            {% endif %}
         </div>
       </div>
 
       <div class="event_right_subitem">
         <div class="event_right_subitem_box">
         <i class="far fa-clock"></i><span class="name_event_right_subitem">HEURE</span>
-        <p>{{ event.time_from }} à {{ event.time_to }}</p>
+        <p>de {{ event.time_from }} à {{ event.time_to }}</p>
         </div>
       </div>
 
@@ -84,6 +96,12 @@
       </div>
 
   </div>
+
+    {% if event.was_recurring %}
+        <p class="info_text">Ceci est un événement provenant d'une récurrence mais modifié pour cette date specifiquement</p>
+    {% elif not event.is_recurring %}
+    <p class="info_text">Ceci est un événement non recurrent</p>
+    {% endif %}
 </div>
 
 

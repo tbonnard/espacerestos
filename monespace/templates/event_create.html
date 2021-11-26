@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+<script src= "{% static 'scripts/scripts_event.js' %}"></script>
+{% endblock %}
+
+
+{% block content%}
+
+
+<h1>Créer un nouvel événement</h1>
+
+    <form  action="{% url 'event_create' %}" method='POST'>
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <div id="recurring">
+            {{ rec_form }}
+        </div>
+
+        <input type='submit' id="confirm" value="Confirmer" class='input'/>
+
+    </form>
+
+
+
+{% endblock %}
