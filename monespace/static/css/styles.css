@@ -34,7 +34,7 @@ a:hover{
   margin: 3% 5%;
 }
 
-button, .input_btn {
+button, .input_btn, .button_attendees {
 	background-color: var(--pink-btn);
 	border:none;
 	outline: none;
@@ -43,20 +43,20 @@ button, .input_btn {
 	width: 200px;
 }
 
-button:hover, .input_btn:hover {
+button:hover, .input_btn:hover, .button_attendees:hover  {
 	background-color: var(--near_black);
 	cursor: pointer;
 }
 
 
-.button_white, .button_attendees{
+.button_white {
 	background-color: #fff;
 	border:1px solid var(--pink-btn);
 	outline: none;
 	color: var(--pink-btn);
 }
 
-.button_white:hover, .button_attendees:hover {
+.button_white:hover {
 	background-color: var(--pink-btn);
 	border: #fff;
 	color:#fff;
@@ -149,17 +149,12 @@ nav a {
 }
 
 .event_left{
-	flex: 2 1 auto;
+	flex: 2 1;
 
-}
-
-.event_left_attendees{
-	width: 300px;
-	margin-top: 100px;
 }
 
 .event_right{
-	flex:1 1 auto;
+	flex:1 1;
 	border: 1px solid var(--light_grey);
 	padding: 25px;
 }
@@ -190,7 +185,13 @@ nav a {
   padding-left: 3%;
 }
 
-
+.event_right_subitem_attend {
+	padding: 12px ;
+	/* margin-bottom: 12px;
+	background-color: #fff;
+	position: relative; */
+	text-align: center;
+}
 
 
 /* EVENTS SEARCHES/INDEX */

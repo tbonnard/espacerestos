@@ -4,12 +4,12 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import StatusUsersLocations, Location
+from .functions_global import forbidden_to_user
 
 
+@forbidden_to_user
 @login_required(login_url='/login/')
 def download_users_csv(request):
-    if request.user.user_type ==2:
-        return redirect('index')
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(
         content_type='text/csv',

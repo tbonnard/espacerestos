@@ -5,12 +5,13 @@
 <script src= "{% static 'scripts/scripts_event_attendee.js' %}"></script>
 {% endblock %}
 
+
 {% block content %}
 
     <div class="sub_nav">
       {% if manager_location or request.user.user_type == 1 %}
         <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier pour toutes les dates de l'évenement</a></span>
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a></span>
         </div>
         {% endif %}
         <div class="sub_nav_item">
@@ -29,28 +30,6 @@
     <h2>{{ event.name }}</h2>
     <p>{{ event.description }}</p>
   </div>
-
-
-{% now "Y-m-d" as todays_date %}
-    {% if todays_date <= date %}
-  <div class="event_left_attendees">
-    {% if attendees %}
-    <form>
-      {% csrf_token %}
-      <button class="button_attendees" data-type="decline" type='submit' data-eventid="{{event.id}}" data-date="{{date}}">Annuler ma venue</button>
-    </form>
-    <form>
-      <label for="plus_other">Venez vous avez d'autres personnes? Entrez le nombre de personnes vous accompagnant</label>
-      <input type="number" id="plus_other" name="plus_other" value="{{attendees.plus_other}}"  min="0" data-eventid="{{event.id}}" data-date="{{date}}">
-    </form>
-    {% else %}
-    <form>
-      {% csrf_token %}
-      <button class="button_attendees" data-type="attend" type='submit' data-eventid="{{event.id}}" data-date="{{date}}">Je suis dipo</button>
-    </form>
-    {% endif %}
-  </div>
-    {% endif %}
 
 
 </div>
@@ -78,10 +57,37 @@
     </div>
   </div>
 
+  <div class="event_right_subitem_attend">
+    {% now "Y-m-d" as todays_date %}
+        {% if todays_date <= date %}
+
+        {% if attendees %}
+        <form>
+          {% csrf_token %}
+          <button class="button_attendees button_white" data-type="decline" type='submit' data-eventid="{{event.id}}" data-date="{{date}}">Annuler ma venue</button>
+        </form>
+        {% else %}
+        <form>
+          {% csrf_token %}
+          <button class="button_attendees" data-type="attend" type='submit' data-eventid="{{event.id}}" data-date="{{date}}">Je serai là</button>
+        </form>
+        {% endif %}
+        {% endif %}
+  </div>
+
+    {% if attendees %}
+  <div class="event_right_subitem_attend">
+      <form>
+        <label for="plus_other">Venez vous avez d'autres personnes? Entrez le nombre de personnes vous accompagnant</label>
+        <input type="number" id="plus_other" name="plus_other" value="{{attendees.plus_other}}"  min="0" data-eventid="{{event.id}}" data-date="{{date}}">
+    </form>
+  </div>
+    {% endif %}
+
   </div>
 
 </div>
-  </div>
+
 
 <div class="event_attendees_list">
   {% for i in all_attendees%}

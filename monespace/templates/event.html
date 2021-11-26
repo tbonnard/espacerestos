@@ -27,7 +27,7 @@
         <p>{{ form.description }}</p>
         <label>Date de début</label>
         <p>{{ form.start_date }}</p>
-        <label>Date de fin</label>
+        <label>Date de début</label>
         <p>{{ form.end_date }}</p>
         <label>Heure de fin</label>
         <p>{{ form.time_from }}</p>
@@ -42,7 +42,20 @@
             {{ rec_form }}
         </div>
 
-        <input type='submit' value="Confirmer" class='input'/>
+
+        <!--and is recurring-->
+        {% if is_edit  %}
+        <button id="button_display_confirm_buttons_choice" class='input'>Confirmer</button>
+
+        <div id="confirm_buttons_choice">
+            <input type='submit' id="confirm_solo" value="Modifier pour cet évenement seulement" class='input'/>
+            <input type='submit' id="confirm_all" value="Modifier pour tous les évenements" class='input'/>
+            <p>Attention, modifier pour tous les évenements peux causer des désagrements. En effet, si les dates sont modifiés, chaque évenement </p>
+        </div>
+        {% else %}
+        <input type='submit' id="confirm" value="Confirmer" class='input'/>
+        {% endif %}
+
     </form>
 
 

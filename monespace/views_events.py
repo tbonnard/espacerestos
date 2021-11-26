@@ -5,7 +5,7 @@ import datetime
 from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents, \
     EventExceptionCancelledRescheduled
 from .forms import EventForm, EventRecurringPatternForm
-from .functions_global import get_date_to
+from .functions_global import get_date_to, forbidden_to_user, location_manager_check
 
 
 def return_date_based_pattern(rec_pattern, date):
@@ -58,7 +58,8 @@ def events_list(date_from, date_to, location):
                 rec_pattern = RecurringPattern.objects.filter(event=j).first()
                 for n in range(rec_pattern.max_num_occurrences + 1):
                     if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
-                        if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j, start_date=event_date):
+                        if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
+                                                                                 start_date=event_date):
                             try:
                                 events = eligible_events_date[event_date]
                                 events.append(j)
@@ -189,38 +190,38 @@ def edit_recurring_pattern_event_unit(recurring_pattern, form):
     return recurring_pattern
 
 
+@forbidden_to_user
 @login_required(login_url='/login/')
 def event_create(request):
-    if request.user.user_type == 2:
-        return redirect('index')
+    form = EventForm()
+    if request.user.user_type == 1:
+        form.fields['location'].queryset = Location.objects.all()
+        if Location.objects.all().count() == 1:
+            form.initial["location"] = Location.objects.all().first()
     else:
-        form = EventForm()
-        if request.user.user_type == 1:
-            form.fields['location'].queryset = Location.objects.all()
-            if Location.objects.all().count() == 1:
-                form.initial["location"] = Location.objects.all().first()
-        else:
-            form.fields['location'].queryset = Location.objects.all().filter(manager_location=request.user)
-            if Location.objects.all().filter(manager_location=request.user).count() == 1:
-                form.initial["location"] = Location.objects.all().filter(manager_location=request.user).first()
-        rec_form = EventRecurringPatternForm()
-        if request.method == "POST":
-            form = EventForm(data=request.POST)
-            rec_form = EventRecurringPatternForm(data=request.POST)
-            if form.is_valid() and rec_form.is_valid():
-                new_event = create_event_unit(form)
-                if new_event.is_recurring:
-                    create_recurring_pattern_event_unit(event=new_event, form=rec_form)
-                return redirect('index')
-        return render(request, 'event.html', context={"form": form, "rec_form": rec_form})
+        form.fields['location'].queryset = Location.objects.all().filter(manager_location=request.user)
+        if Location.objects.all().filter(manager_location=request.user).count() == 1:
+            form.initial["location"] = Location.objects.all().filter(manager_location=request.user).first()
+    rec_form = EventRecurringPatternForm()
+    if request.method == "POST":
+        form = EventForm(data=request.POST)
+        rec_form = EventRecurringPatternForm(data=request.POST)
+        if form.is_valid() and rec_form.is_valid():
+            new_event = create_event_unit(form)
+            if new_event.is_recurring:
+                create_recurring_pattern_event_unit(event=new_event, form=rec_form)
+            return redirect('index')
+    return render(request, 'event.html', context={"form": form, "rec_form": rec_form})
 
 
+@forbidden_to_user
 @login_required(login_url='/login/')
 def event_edit(request, event_id):
-    if request.user.user_type == 2:
-        return redirect('index')
-    else:
+    try:
         event_page = Event.objects.get(id=event_id)
+    except:
+        redirect('index')
+    else:
         form = EventForm(instance=event_page)
         if event_page.is_recurring:
             event_rec_pattern = RecurringPattern.objects.filter(event=event_page).first()
@@ -293,61 +294,70 @@ def event_details(request, event_id):
         return redirect('index')
 
 
+@location_manager_check
+@forbidden_to_user
 @login_required(login_url='/login/')
 def event_delete_all(request, event_id):
-    if request.user.user_type == 2:
+    try:
+        event_to_delete = Event.objects.get(id=event_id)
+    except:
         return redirect('index')
     else:
-        try:
-            event_to_delete = Event.objects.get(id=event_id)
-        except:
-            return redirect('index')
+        rec_pattern = RecurringPattern.objects.filter(event=event_to_delete).first()
+        event_date = event_to_delete.start_date
+        new_number_occurences = 0
+        for n in range(rec_pattern.max_num_occurrences + 1):
+            if datetime.datetime(event_to_delete.start_date.year, event_to_delete.start_date.month, event_to_delete.start_date.day) <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= datetime.datetime.now():
+                if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True,
+                                                                         parent_event=event_to_delete,
+                                                                         start_date=event_date):
+                    new_number_occurences += 1
+                else:
+                    break
+            for i in AttendeesEvents.objects.filter(parent_event=event_to_delete, event_date=event_date):
+                i.delete()
+                # or update status in attendees to 0 if we want to keep history
+            event_date = return_date_based_pattern(rec_pattern, event_date)
+
+        if new_number_occurences == 0:
+            event_to_delete.delete()
         else:
-            rec_pattern = RecurringPattern.objects.filter(event=event_to_delete).first()
-            event_date = event_to_delete.start_date
-            new_number_occurences = 0
-            for n in range(rec_pattern.max_num_occurrences + 1):
-                if datetime.datetime(event_to_delete.start_date.year, event_to_delete.start_date.month, event_to_delete.start_date.day) <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= datetime.datetime.now():
-                    if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=event_to_delete,
-                                                                             start_date=event_date):
-                        new_number_occurences += 1
-                    else:
-                        break
-                event_date = return_date_based_pattern(rec_pattern, event_date)
-
-            if new_number_occurences == 0:
-                event_to_delete.delete()
-            else:
-                rec_pattern.max_num_occurrences = new_number_occurences -1
-                rec_pattern.save()
-            return redirect('index')
+            rec_pattern.max_num_occurrences = new_number_occurences -1
+            rec_pattern.save()
+        return redirect('index')
 
 
+@location_manager_check
+@forbidden_to_user
 @login_required(login_url='/login/')
 def event_delete_rec(request, event_id):
-    if request.user.user_type == 2:
-        return redirect('index')
     try:
         date = request.GET['date']
         event_rec_to_delete = Event.objects.get(id=event_id)
     except:
         return redirect('index')
     else:
-        rec_to_delete_exception = EventExceptionCancelledRescheduled(
-            location=event_rec_to_delete.location,
-            name=event_rec_to_delete.name,
-            description=event_rec_to_delete.description,
-            start_date=date,
-            end_date=event_rec_to_delete.end_date,
-            time_from=event_rec_to_delete.time_from,
-            time_to=event_rec_to_delete.time_to,
-            is_cancelled=True,
-            is_rescheduled=False,
-            is_full_day=event_rec_to_delete.is_full_day,
-            parent_event=event_rec_to_delete,
-        )
+        if EventExceptionCancelledRescheduled.objects.filter(parent_event=event_rec_to_delete, start_date=date).first():
+            rec_to_delete_exception = EventExceptionCancelledRescheduled.objects.filter(parent_event=event_rec_to_delete, start_date=date).first()
+        else:
+            rec_to_delete_exception = EventExceptionCancelledRescheduled(
+                location=event_rec_to_delete.location,
+                name=event_rec_to_delete.name,
+                description=event_rec_to_delete.description,
+                start_date=date,
+                end_date=event_rec_to_delete.end_date,
+                time_from=event_rec_to_delete.time_from,
+                time_to=event_rec_to_delete.time_to,
+                is_cancelled=True,
+                is_rescheduled=False,
+                is_full_day=event_rec_to_delete.is_full_day,
+                parent_event=event_rec_to_delete,
+            )
         rec_to_delete_exception.save()
         for i in AttendeesEvents.objects.filter(parent_event=event_rec_to_delete, event_date=date):
             i.delete()
             # or update status in attendees to 0 if we want to keep history
         return redirect('index')
+
+
+

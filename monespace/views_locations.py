@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Location, User, StatusUsersLocations, LogsStatusUsersLocations
 from .forms import LocationForm, SelectLocationsForm
 from .notification_manager import send_email
+from .functions_global import forbidden_to_user, admin_only
 
 
 def edit_user_type_to_manager(user):
@@ -76,67 +77,57 @@ def check_if_new_status_to_create_update(location, user_to_update, from_user, ma
     return status
 
 
+@admin_only
 @login_required(login_url='/login/')
 def location_create(request):
-    if request.user.user_type != 1:
-        return redirect('index')
-    else:
-        form = LocationForm()
-        if request.method == "POST":
-            form = LocationForm(data=request.POST)
-            if form.is_valid():
-                new_location = form.save()
-                edit_user_type_to_manager(new_location.manager_location)
-                check_if_new_status_to_create_update(location=new_location, user_to_update=new_location.manager_location, from_user=request.user, manager=True)
-                return redirect('index')
-        return render(request, 'location.html', context={"form": form})
+    form = LocationForm()
+    if request.method == "POST":
+        form = LocationForm(data=request.POST)
+        if form.is_valid():
+            new_location = form.save()
+            edit_user_type_to_manager(new_location.manager_location)
+            check_if_new_status_to_create_update(location=new_location, user_to_update=new_location.manager_location, from_user=request.user, manager=True)
+            return redirect('index')
+    return render(request, 'location.html', context={"form": form})
 
 
+@forbidden_to_user
 @login_required(login_url='/login/')
 def location_edit(request, location_id):
-    if request.user.user_type == 2:
-        return redirect('index')
-    else:
-        location_page = Location.objects.get(id=location_id)
-        form = LocationForm(instance=location_page)
-        if request.method == "POST":
-            form = LocationForm(data=request.POST)
-            if form.is_valid():
-                location_page.name = form.cleaned_data['name']
-                location_page.address_number = form.cleaned_data['address_number']
-                location_page.address = form.cleaned_data['address']
-                location_page.address_2 = form.cleaned_data['address_2']
-                location_page.city = form.cleaned_data['city']
-                location_page.zip_code = form.cleaned_data['zip_code']
-                location_page.country = form.cleaned_data['country']
-                try:
-                    manager = User.objects.get(id=request.POST['manager_location'])
-                except User.DoesNotExist:
-                    location_page.manager_location = None
-                else:
-                    if location_page.manager_location != manager:
-                        edit_user_type_to_user(location_page.manager_location)
-                        location_page.manager_location = manager
-                        edit_user_type_to_manager(manager)
-                        check_if_new_status_to_create_update(location=location_page, user_to_update=manager, from_user=request.user, manager=True)
-                location_page.save()
-                return redirect('index')
-        return render(request, 'location.html', context={"form": form, 'is_edit': True, 'location_id': location_id})
+    location_page = Location.objects.get(id=location_id)
+    form = LocationForm(instance=location_page)
+    if request.method == "POST":
+        form = LocationForm(data=request.POST)
+        if form.is_valid():
+            location_page.name = form.cleaned_data['name']
+            location_page.address_number = form.cleaned_data['address_number']
+            location_page.address = form.cleaned_data['address']
+            location_page.address_2 = form.cleaned_data['address_2']
+            location_page.city = form.cleaned_data['city']
+            location_page.zip_code = form.cleaned_data['zip_code']
+            location_page.country = form.cleaned_data['country']
+            try:
+                manager = User.objects.get(id=request.POST['manager_location'])
+            except User.DoesNotExist:
+                location_page.manager_location = None
+            else:
+                if location_page.manager_location != manager:
+                    edit_user_type_to_user(location_page.manager_location)
+                    location_page.manager_location = manager
+                    edit_user_type_to_manager(manager)
+                    check_if_new_status_to_create_update(location=location_page, user_to_update=manager, from_user=request.user, manager=True)
+            location_page.save()
+            return redirect('index')
+    return render(request, 'location.html', context={"form": form, 'is_edit': True, 'location_id': location_id})
 
 
 @login_required(login_url='/login/')
 def location_details(request, location_id):
     location_page = Location.objects.get(id=location_id)
     if location_page:
-        manager_of_location = location_page.manager_location
-        print(manager_of_location)
         manager_location = False
-        print(request.user)
         if location_page.manager_location == request.user:
             manager_location = True
-            print(manager_location)
-        print(manager_location)
-
         return render(request, 'location_details.html', context={"location": location_page, "manager_location":manager_location})
     return redirect('index')
 
