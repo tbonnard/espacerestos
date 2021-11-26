@@ -142,19 +142,22 @@ nav a {
 
 .event_details {
 	margin: 0 auto;
-	width: 90%;
+	width: 80%;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
 }
 
-.event_left{
-	flex: 2 1;
+.event_left {
+	flex: 3 2;
+}
 
+.event_left p, .event_left h2  {
+	width: 90%;
 }
 
 .event_right{
-	flex:1 1;
+	flex:2 2;
 	border: 1px solid var(--light_grey);
 	padding: 25px;
 }
