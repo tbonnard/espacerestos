@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function validateRecFields (field) {
-      if (field.value == "" || parseInt(field.value) < 0 || parseInt(field.value) == 0 ) {
+      if (field.value == "" || isNaN(field.value) || parseInt(field.value) < 0 || parseInt(field.value) == 0 ) {
         field.value =1;
       }
     }
