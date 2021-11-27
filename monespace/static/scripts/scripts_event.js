@@ -1,13 +1,52 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 
-  let is_rec = document.querySelector('#id_is_recurring');
-  let is_rec_form = document.querySelector('#recurring');
+//DATES TIME MANAGEMENT
+  let startDateInput = document.querySelector('#id_start_date');
+  let endDateInput = document.querySelector('#id_end_date');
+  let timeFromInput = document.querySelector('#id_time_from');
+  let timeToInput = document.querySelector('#id_time_to');
+  let fullDay = document.querySelector('#id_is_full_day');
+  let timeFromInputInitial = timeFromInput.value;
+  let timeToInputInitial = timeToInput.value;
 
-  toggle_rec_form();
+
+  function updateEndDate() {
+    endDateInput.value = startDateInput.value;
+  }
+
+  function updateToTime() {
+    timeToInput.value = timeFromInput.value;
+  }
+
+  startDateInput.addEventListener('change', () => {
+    updateEndDate();
+  })
+
+  endDateInput.addEventListener('change', () => {
+    if (endDateInput.value == '') { updateEndDate(); }
+  })
+
+  timeFromInput.addEventListener('change', () => {
+    updateToTime();
+  })
+
+  fullDay.addEventListener('click', () => {
+    if (fullDay.checked) {
+      timeFromInput.value = "00:00:00";
+      timeToInput.value = "23:59:59";
+    } else {
+      timeFromInput.value = timeFromInputInitial;
+      timeToInput.value = timeToInputInitial;
+    }
+
+  })
+
+  updateEndDate();
 
 
-  function toggle_rec_form () {
+// RECURRING MANAGEMENT
+  function toggle_rec_form (is_rec, is_rec_form) {
     if (is_rec.checked) {
       is_rec_form.style.display = 'block';
       }
@@ -16,25 +55,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
 
+    function manageEndDateRecurring (is_rec, endDateInput) {
+      if (is_rec.checked) {endDateInput.disabled = true;}
+      else {endDateInput.disabled = false;}
+    }
 
-  is_rec.addEventListener('click', () => {
-      toggle_rec_form()
-  });
+  if ( document.querySelector('#id_is_recurring') && document.querySelector('#recurring') ) {
+    let is_rec = document.querySelector('#id_is_recurring');
+    let is_rec_form = document.querySelector('#recurring');
 
 
-  //document.querySelector('#id_day_of_week').style.display='none';
-  // let id_repeat_each_x = document.querySelector('#id_repeat_each_x');
-  // id_repeat_each_x.addEventListener('change', () => {
-  //   if (id_repeat_each_x.value == "1" ) {
-  //     document.querySelector('#id_day_of_week').style.display='none';
-  //   } else {
-  //     document.querySelector('#id_day_of_week').style.display='block';
-  //   }
-  // });
+    is_rec.addEventListener('click', () => {
+        toggle_rec_form(is_rec, is_rec_form);
+        manageEndDateRecurring(is_rec, endDateInput);
+    });
 
-if (document.querySelector('#id_separation_count').value =='') {
-  document.querySelector('#id_separation_count').value =1;
-}
+    if (document.querySelector('#id_separation_count').value =='') {
+      document.querySelector('#id_separation_count').value =1;
+    }
+
+
+    toggle_rec_form(is_rec, is_rec_form);
+    manageEndDateRecurring(is_rec, endDateInput);
+  }
+
 
 
 });

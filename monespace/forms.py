@@ -17,12 +17,11 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ('location', "name", "description", "start_date", "end_date", "time_from", "time_to", "is_full_day", "is_recurring")
-
         widgets = {
-            "start_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
-            "end_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
-            "time_from": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
-            "time_to": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
+            "start_date":forms.DateInput(attrs={'type': 'date'}),
+            "end_date": forms.DateInput(attrs={'type': 'date'}),
+            "time_from": forms.TimeInput(attrs={'type': 'time'}),
+            "time_to": forms.TimeInput(attrs={'type': 'time'})
         }
 
 
