@@ -8,6 +8,7 @@
 
 {% block content %}
 
+
     <div class="sub_nav">
       {% if manager_location or request.user.user_type == 1 %}
         <div class="sub_nav_item">
@@ -97,7 +98,7 @@
 
   </div>
 
-    {% if event.was_recurring %}
+    {% if event.was_recurring_event_rec %}
         <p class="info_text">Ceci est un événement provenant d'une récurrence mais modifié pour cette date specifiquement</p>
     {% elif not event.is_recurring %}
     <p class="info_text">Ceci est un événement non recurrent</p>

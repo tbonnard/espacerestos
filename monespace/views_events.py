@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 import datetime
 
 from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents, \
@@ -215,7 +216,27 @@ def event_create(request):
     return render(request, 'event_create.html', context={"form": form, "rec_form": rec_form})
 
 
-# ADD VALIDATE DATE POUR ETRE SUR
+def validate_event_date(event, date):
+    event_valid = False
+    year = int(date[0:4])
+    month = int(date[5:7])
+    day = int(date[-2:])
+    date_in_datetime = datetime.datetime(year, month, day)
+    date_in_date = datetime.date(year, month, day)
+    if event.is_recurring:
+        eligible_event_date = events_list(date_in_datetime, date_in_datetime, None)
+        for i in eligible_event_date:
+            for j in i[1]:
+                if i[0] == date_in_date and j == event:
+                    event_valid = True
+    else:
+        if event.start_date == date_in_date:
+            event_valid = True
+    print(event_valid)
+    print('validated')
+    return event_valid
+
+
 @forbidden_to_user
 @login_required(login_url='/login/')
 def event_edit(request, event_id):
@@ -230,8 +251,10 @@ def event_edit(request, event_id):
                 event_rec_pattern = RecurringPattern.objects.filter(event=event_page).first()
                 form.initial["start_date"] = request.GET.get('date')
                 rec_form = EventRecurringPatternForm(instance=event_rec_pattern)
-                return render(request, 'event_edit_rec.html',
-                              context={"form": form, "rec_form": rec_form, 'event_id': event_id})
+                if validate_event_date(event_page, request.GET.get('date')):
+                    return render(request, 'event_edit_rec.html',
+                                  context={"form": form, "rec_form": rec_form, 'event_id': event_id})
+                return redirect('index')
 
             else:
                 return render(request, 'event_edit_non_rec.html',
@@ -296,55 +319,39 @@ def event_edit_specific_rec(request, event_id):
             form = EventForm(data=request.POST)
 
             if form.is_valid():
-                rec_to_delete_exception = EventExceptionCancelledRescheduled(
-                    location=event.location,
-                    name=event.name,
-                    description=event.description,
-                    start_date=request.GET.get('date'),
-                    end_date=event.end_date,
-                    time_from=event.time_from,
-                    time_to=event.time_to,
-                    is_cancelled=True,
-                    is_rescheduled=True,
-                    is_full_day=event.is_full_day,
-                    parent_event=event,
-                )
-                rec_to_delete_exception.save()
+                if validate_event_date(event, request.GET.get('date')):
 
-                new_event = create_event_unit(form)
-                new_event.is_recurring = False
-                new_event.was_recurring = event.pk
-                new_event.save()
+                    rec_to_delete_exception = EventExceptionCancelledRescheduled(
+                        location=event.location,
+                        name=event.name,
+                        description=event.description,
+                        start_date=request.GET.get('date'),
+                        end_date=event.end_date,
+                        time_from=event.time_from,
+                        time_to=event.time_to,
+                        is_cancelled=True,
+                        is_rescheduled=True,
+                        is_full_day=event.is_full_day,
+                        parent_event=event,
+                    )
+                    rec_to_delete_exception.save()
 
-            all_attendees_non_rec = AttendeesEvents.objects.filter(parent_event=event)
-            for i in all_attendees_non_rec:
-                if new_event.start_date != i.event_date or new_event.time_from != i.time_from or new_event.time_to != i.time_to:
-                    i.delete()
-                else:
-                    i.parent_event = new_event
-                    i.save()
+                    new_event = create_event_unit(form)
+                    new_event.is_recurring = False
+                    new_event.was_recurring_event_rec = event
+                    new_event.save()
 
+                all_attendees_non_rec = AttendeesEvents.objects.filter(parent_event=event)
+                for i in all_attendees_non_rec:
+                    if new_event.start_date != i.event_date or new_event.time_from != i.time_from or new_event.time_to != i.time_to:
+                        i.delete()
+                    else:
+                        i.parent_event = new_event
+                        i.save()
+
+                return redirect('index')
             return redirect('index')
         return redirect('index')
-
-
-def validate_event_date(event, date):
-    event_valid = False
-    year = int(date[0:4])
-    month = int(date[5:7])
-    day = int(date[-2:])
-    date_in_datetime = datetime.datetime(year, month, day)
-    date_in_date = datetime.date(year, month, day)
-    if event.is_recurring:
-        eligible_event_date = events_list(date_in_datetime, date_in_datetime, None)
-        for i in eligible_event_date:
-            for j in i[1]:
-                if i[0] == date_in_date and j == event:
-                    event_valid = True
-    else:
-        if event.start_date == date_in_date:
-            event_valid = True
-    return event_valid
 
 
 @login_required(login_url='/login/')

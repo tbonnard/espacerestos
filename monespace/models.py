@@ -37,7 +37,7 @@ class Event(models.Model):
     time_to = models.TimeField(blank=True, default="00:00:00")
     is_full_day = models.BooleanField(default=False)
     is_recurring = models.BooleanField(default=False)
-    was_recurring = models.IntegerField(blank=True, null=True)
+    was_recurring_event_rec = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

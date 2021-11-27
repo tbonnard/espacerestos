@@ -16,25 +16,14 @@ class UserAuthenticationForm(AuthenticationForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = ('location', "name", "description", "start_date", "end_date", "time_from", "time_to", "is_full_day", "is_recurring")
+
         widgets = {
             "start_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
             "end_date": forms.SelectDateWidget(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
             "time_from": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
             "time_to": forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'hh:mm'}),
         }
-
-# class EventForm(forms.Form):
-#     location_choices = Location.objects.all()
-#     location = forms.ModelChoiceField(queryset=location_choices)
-#     name = forms.CharField()
-#     description = forms.CharField(widget=forms.Textarea)
-#     start_date = forms.DateField()
-#     end_date = forms.DateField()
-#     time_from = forms.TimeField()
-#     time_to = forms.TimeField()
-#     is_recurring = forms.BooleanField()
-#     is_full_day = forms.BooleanField()
 
 
 class EventRecurringPatternForm(forms.ModelForm):
@@ -44,8 +33,7 @@ class EventRecurringPatternForm(forms.ModelForm):
                                 (4, 'semestre'), (5, 'année'))
         day_of_week_choices = ((0, 'Lundi'), (1, 'Mardi'), (2, 'Mercredi'), (3, 'Jeudi'), (4, 'Vendredi'),
                                (5, 'Samedi'), (6, 'Dimanche'))
-        # fields = ('separation_count', "repeat_each_x", "max_num_occurrences", "day_of_week", "week_of_month",
-        #           "day_of_month", "month_of_year" )
+
         fields = ('separation_count', "repeat_each_x", "max_num_occurrences")
         widgets = {
             "day_of_week": forms.RadioSelect(choices=day_of_week_choices),
