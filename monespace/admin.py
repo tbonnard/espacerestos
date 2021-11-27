@@ -18,7 +18,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class RecurringPatternAdmin(admin.ModelAdmin):
-    list_display = ('event', "separation_count", 'created')
+    list_display = ('event', "separation_count", "max_num_occurrences", 'created')
 
 
 class StatusUsersLocationsAdmin(admin.ModelAdmin):

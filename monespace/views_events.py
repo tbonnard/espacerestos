@@ -115,6 +115,9 @@ def events_list_date(request):
 
 
 def create_event_unit(form):
+    end_date = form.cleaned_data['end_date']
+    if form.cleaned_data['end_date'] is None :
+        end_date = form.cleaned_data['start_date']
     try:
         Location.objects.get(id=form['location'].value())
     except:
@@ -125,7 +128,7 @@ def create_event_unit(form):
         new_event = Event(name=form.cleaned_data['name'].title(),
                           description=form.cleaned_data['description'],
                           start_date=form.cleaned_data['start_date'],
-                          end_date=form.cleaned_data['end_date'],
+                          end_date=end_date,
                           time_from=form.cleaned_data['time_from'],
                           time_to=form.cleaned_data['time_to'],
                           is_recurring=form.cleaned_data['is_recurring'],
@@ -142,10 +145,13 @@ def edit_event_unit(event, form):
     :param: event: object to edit, form: form valid
     :return: return the event object
     """
+    end_date = form.cleaned_data['end_date']
+    if form.cleaned_data['end_date'] is None :
+        end_date = form.cleaned_data['start_date']
     event.name = form.cleaned_data['name']
     event.description = form.cleaned_data['description']
     event.start_date = form.cleaned_data['start_date']
-    event.end_date = form.cleaned_data['end_date']
+    event.end_date = end_date
     event.time_from = form.cleaned_data['time_from']
     event.time_to = form.cleaned_data['time_to']
     event.is_recurring = form.cleaned_data['is_recurring']
@@ -162,9 +168,15 @@ def edit_event_unit(event, form):
 
 
 def create_recurring_pattern_event_unit(event, form):
+    occur = form.cleaned_data['max_num_occurrences']
+    if form.cleaned_data['max_num_occurrences'] == "":
+        occur = 1
+    count = form.cleaned_data['separation_count']
+    if form.cleaned_data['separation_count'] == "":
+        count = 1
     new_recurring = RecurringPattern(event=event,
-                                     separation_count=form.cleaned_data['separation_count'],
-                                     max_num_occurrences=form.cleaned_data['max_num_occurrences'],
+                                     separation_count=count,
+                                     max_num_occurrences=occur,
                                      # day_of_week=form.cleaned_data['day_of_week'],
                                      # week_of_month=form.cleaned_data['week_of_month'],
                                      # day_of_month=form.cleaned_data['day_of_month'],
@@ -181,8 +193,14 @@ def edit_recurring_pattern_event_unit(recurring_pattern, form):
     :param: recurring_pattern: object to edit, form: form valid
     :return: the object recurring_pattern
     """
-    recurring_pattern.separation_count = form.cleaned_data['separation_count']
-    recurring_pattern.max_num_occurrences = form.cleaned_data['max_num_occurrences']
+    occur = form.cleaned_data['max_num_occurrences']
+    if form.cleaned_data['max_num_occurrences'] == "":
+        occur = 1
+    count = form.cleaned_data['separation_count']
+    if form.cleaned_data['separation_count'] == "":
+        count = 1
+    recurring_pattern.separation_count = count
+    recurring_pattern.max_num_occurrences = occur
     # recurring_pattern.day_of_week = form.cleaned_data['day_of_week']
     # recurring_pattern.week_of_month = form.cleaned_data['week_of_month']
     # recurring_pattern.day_of_month = form.cleaned_data['day_of_month']

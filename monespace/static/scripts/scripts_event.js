@@ -60,20 +60,35 @@ document.addEventListener("DOMContentLoaded", function () {
       else {endDateInput.disabled = false;}
     }
 
+
+    function validateRecFields (field) {
+      if (field.value == "" || parseInt(field.value) < 0 || parseInt(field.value) == 0 ) {
+        field.value =1;
+      }
+    }
+
+
+
   if ( document.querySelector('#id_is_recurring') && document.querySelector('#recurring') ) {
     let is_rec = document.querySelector('#id_is_recurring');
     let is_rec_form = document.querySelector('#recurring');
-
+    let id_separation_count = document.querySelector('#id_separation_count');
+    let id_max_num_occurrences = document.querySelector('#id_max_num_occurrences');
 
     is_rec.addEventListener('click', () => {
         toggle_rec_form(is_rec, is_rec_form);
         manageEndDateRecurring(is_rec, endDateInput);
+        validateRecFields(id_separation_count);
+        validateRecFields(id_max_num_occurrences);
     });
 
-    if (document.querySelector('#id_separation_count').value =='') {
-      document.querySelector('#id_separation_count').value =1;
-    }
+    id_separation_count.addEventListener('change', () => {
+      validateRecFields(id_separation_count);
+    })
 
+    id_max_num_occurrences.addEventListener('change', () => {
+      validateRecFields(id_max_num_occurrences);
+    })
 
     toggle_rec_form(is_rec, is_rec_form);
     manageEndDateRecurring(is_rec, endDateInput);
