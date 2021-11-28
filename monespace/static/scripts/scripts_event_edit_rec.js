@@ -12,14 +12,19 @@ document.addEventListener("DOMContentLoaded", function () {
   let eventid = form_event_rec.dataset.eventid;
   let yes_all = document.querySelector('#yes');
   let no_only = document.querySelector('#no');
+  let recurringDiv = document.querySelector('#recurring');
+  let recurringDivMaster = document.querySelector('#recurringMaster');
 
   yes_all.addEventListener('click', () => {
     form_event_rec.action = `${window.location.origin}/event_edit/${eventid}`;
     confirm_button.style.display = 'block';
+    recurringDivMaster.style.display = 'block';
   });
+
   no_only.addEventListener('click', () => {
     form_event_rec.action = `${window.location.origin}/event_edit_one/${eventid}?date=${param_from_value}`;
     confirm_button.style.display = 'block';
+    recurringDivMaster.style.display = 'none';
   });
 
 

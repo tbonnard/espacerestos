@@ -268,12 +268,12 @@ def event_edit(request, event_id):
                 rec_form = EventRecurringPatternForm(instance=event_rec_pattern)
                 if validate_event_date(event_page, request.GET.get('date')):
                     return render(request, 'event_edit_rec.html',
-                                  context={"form": form, "rec_form": rec_form, 'event_id': event_id})
+                                  context={"form": form, "rec_form": rec_form, "event":event_page})
                 return redirect('index')
 
             else:
                 return render(request, 'event_edit_non_rec.html',
-                              context={"form": form, 'event_id': event_id})
+                              context={"form": form, "event":event_page})
 
         if request.method == "POST":
             form = EventForm(data=request.POST)
