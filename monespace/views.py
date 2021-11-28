@@ -93,15 +93,20 @@ def profile_edit(request):
     if request.method == "POST":
         form = UserProfileForm(data=request.POST)
         if form.is_valid():
-            image = request.FILES['profile_picture']
             updated_user = request.user
-            updated_user.first_name = form.cleaned_data['first_name']
-            updated_user.last_name = form.cleaned_data['last_name']
-            updated_user.address = form.cleaned_data['address']
-            updated_user.city = form.cleaned_data['city']
-            updated_user.zip_code = form.cleaned_data['zip_code']
-            updated_user.tel = form.cleaned_data['tel']
-            updated_user.profile_picture.save(image.name, image)
-            updated_user.save()
-            return redirect('profile')
+            try:
+                image = request.FILES['profile_picture']
+            except:
+                pass
+            else:
+                updated_user.profile_picture.save(image.name, image)
+            finally:
+                updated_user.first_name = form.cleaned_data['first_name']
+                updated_user.last_name = form.cleaned_data['last_name']
+                updated_user.address = form.cleaned_data['address']
+                updated_user.city = form.cleaned_data['city']
+                updated_user.zip_code = form.cleaned_data['zip_code']
+                updated_user.tel = form.cleaned_data['tel']
+                updated_user.save()
+                return redirect('profile')
     return render(request, 'profile_edit.html', context={"form" : form})

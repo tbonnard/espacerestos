@@ -13,6 +13,9 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ("first_name", 'last_name', "address", "city", "zip_code", "tel", "profile_picture")
+        widgets = {
+            "profile_picture": forms.FileInput()
+        }
 
 
 class UserAuthenticationForm(AuthenticationForm):
