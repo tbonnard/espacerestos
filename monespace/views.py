@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, User, AttendeesEvents
 from .views_events import events_list
-from .forms import StatusUsersLocationsForm
+from .forms import StatusUsersLocationsForm, UserProfileForm
 from .functions_global import get_date_to, forbidden_to_user, admin_only
 
 
@@ -85,3 +85,23 @@ def profile(request):
     user_locations = [i.location for i in user_locations_pre]
     user_manager_locations = Location.objects.filter(manager_location=request.user)
     return render(request, 'profile.html', context={'locations': user_locations, "date_to":date_to, 'manager_locations': user_manager_locations})
+
+
+@login_required(login_url='/login/')
+def profile_edit(request):
+    form = UserProfileForm(instance=request.user)
+    if request.method == "POST":
+        form = UserProfileForm(data=request.POST)
+        if form.is_valid():
+            image = request.FILES['profile_picture']
+            updated_user = request.user
+            updated_user.first_name = form.cleaned_data['first_name']
+            updated_user.last_name = form.cleaned_data['last_name']
+            updated_user.address = form.cleaned_data['address']
+            updated_user.city = form.cleaned_data['city']
+            updated_user.zip_code = form.cleaned_data['zip_code']
+            updated_user.tel = form.cleaned_data['tel']
+            updated_user.profile_picture.save(image.name, image)
+            updated_user.save()
+            return redirect('profile')
+    return render(request, 'profile_edit.html', context={"form" : form})

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{%load static%}
+
+{% block content %}
+<h1>Modifier votre profil</h1>
+{% if request.user.profile_picture %}
+<img src="{{request.user.profile_picture.url}}">
+{% endif %}
+<p>{{request.user.username}}</p>
+<p>{{request.user.email}}</p>
+<form method="POST" action=" {% url 'profile_edit' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type='submit' id="confirm" value="Confirmer" class='input'/>
+</form>
+
+{% endblock %}

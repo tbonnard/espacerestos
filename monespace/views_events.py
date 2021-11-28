@@ -84,17 +84,14 @@ def events_list(date_from, date_to, location):
 @login_required(login_url='/login/')
 def events_list_date(request):
     try:
-        request.GET['from']
         date_from = datetime.datetime.strptime(request.GET['from'], '%Y-%m-%d')
     except:
         date_from = None
     try:
-        request.GET['to']
         date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
     except:
         date_to = get_date_to()
     try:
-        request.GET['location']
         location = [Location.objects.get(pk=request.GET['location'])]
     except:
         user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
@@ -424,6 +421,11 @@ def event_delete_all(request, event_id):
                     i.delete()
                     # or update status in attendees to 0 if we want to keep history
                 event_date = return_date_based_pattern(rec_pattern, event_date)
+
+            rec_event_updated_to_specific_date = Event.objects.filter(was_recurring_event_rec=event_to_delete)
+            for i in rec_event_updated_to_specific_date:
+                if datetime.datetime(i.start_date.year, i.start_date.month, i.start_date.day) > datetime.datetime.now():
+                    i.delete()
 
         if new_number_occurences == 0:
             event_to_delete.delete()

@@ -2,11 +2,18 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django import utils
 
+country_list = (("FR", 'France'),)
+
 
 class User(AbstractUser):
     user_type_choices = ((1, 'Admin'), (2, 'User'), (3, 'Manager'))
     user_type = models.IntegerField(choices=user_type_choices, null=False, blank=False, default=2)
-    # location = models.ForeignKey("Location", on_delete=models.SET_NULL, null=True, blank=True, related_name="users_locations")
+    address = models.CharField(blank=True, null=True, max_length=255)
+    city = models.CharField(blank=True, null=True, max_length=255)
+    zip_code = models.CharField(blank=True, null=True, max_length=5)
+    country = models.CharField(choices=country_list, blank=True, null=True, max_length=2, default='FR')
+    tel = models.CharField(blank=True, null=True, max_length=255)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 
 
 class Location(models.Model):
@@ -16,11 +23,8 @@ class Location(models.Model):
     address_number = models.IntegerField(blank=False)
     city = models.CharField(blank=False, max_length=255)
     zip_code = models.CharField( blank=False, max_length=5)
-    country_list = (("FR", 'France'), ("CA", 'Canada'))
-    country = models.CharField(choices=country_list, blank=False, max_length=2)
-    # manager_location = models.ForeignKey(User, limit_choices_to={'user_type':3}, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
+    country = models.CharField(choices=country_list, blank=False, max_length=2, default='FR')
     manager_location = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
-    # users = models.ManyToManyField(User) ==> legacy -- use of a new table: StatusUsersLocations
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

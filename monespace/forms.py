@@ -9,6 +9,12 @@ class UserCreateForm(UserCreationForm):
         fields = ("username", "email", "password1", "password2")
 
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("first_name", 'last_name', "address", "city", "zip_code", "tel", "profile_picture")
+
+
 class UserAuthenticationForm(AuthenticationForm):
     pass
 
@@ -67,4 +73,4 @@ class StatusUsersLocationsForm(forms.ModelForm):
 class AttendeesEventsForm(forms.ModelForm):
     class Meta:
         model = AttendeesEvents
-        fields= ('plus_other',)
+        fields = ('plus_other',)
