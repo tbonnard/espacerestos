@@ -20,19 +20,21 @@
             </div>
         </div>
 
-        <div id="time_event">
-                  <label>Evenement durant toute la journée</label>
-                    {{ form.is_full_day }}
+       <div id="time_event">
             <div id="times_div">
                 <div class='flex_div_form'>
-                    <div class="sub_flex_div_form">
+                    <div class="sub_flex_div_form times_subdiv">
                         <label>Heure de début</label>
-                        <p>{{ form.time_from }}</p>
+                    <p>{{ form.time_from }}</p>
                     </div>
-                     <div class="sub_flex_div_form">
+                     <div class="sub_flex_div_form times_subdiv">
                         <label>Heure de fin</label>
                         <p>{{ form.time_to }}</p>
                     </div>
+                </div>
+                <div class="sub_flex_div_form">
+                    <label>ou dure toute la journée</label>
+            {{ form.is_full_day }}
                 </div>
             </div>
         </div>
@@ -40,7 +42,7 @@
 
         <div id="recurringMaster">
             <label>Evenement récurrent</label>
-            <p>{{ form.is_recurring }}</p>
+            {{ form.is_recurring }}
 
             <div id="recurring">
                 {{ rec_form }}

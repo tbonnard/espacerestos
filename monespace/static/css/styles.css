@@ -43,7 +43,7 @@ a:hover{
 }
 
 
-input {
+input[type=text] {
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
@@ -61,7 +61,7 @@ input {
 	-moz-appearance: none;
 ;}
 
-input:focus {
+input[type=text]:focus {
 	outline: 0;
 	border: 1px solid #e5007d;
 	background-color: #fff;
@@ -111,7 +111,7 @@ input[type=date] {
 		display: inline;
 }
 
-input[type=checkbox]:focus {
+/* input[type=checkbox]:focus {
 	border: none;
 	box-shadow: none;
 }
@@ -146,7 +146,7 @@ input[type=checkbox] {
          position: absolute;
          top: 10px;
          left: 6px;
-}
+} */
 
 
 input[type=radio]{
@@ -254,6 +254,11 @@ select {
   background-position: 110%;
   background-origin: content-box;
   background-repeat: no-repeat;
+	height: auto;
+}
+
+li {
+   list-style-type: none;
 }
 
 button, .input_btn, .button_attendees {
@@ -439,6 +444,9 @@ nav a {
 
 }
 
+
+
+
 /* EVENTS SEARCHES/INDEX */
 
 .events_list_global {
@@ -465,7 +473,7 @@ nav a {
   border-left: 1px solid var(--light_pink);
   height: 275px;
   position: absolute;
-  left: 14%;
+  left: 8%;
   top: 20px;
 	z-index: -1;
 }
@@ -521,7 +529,9 @@ nav a {
   padding: 2% 2% 2% 4%;
 }
 
-
+.events_list_details_time_location a:hover {
+	color:var(--near_black);
+}
 
 
 /* LOCATION */

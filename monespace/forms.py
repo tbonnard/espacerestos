@@ -24,12 +24,12 @@ class UserProfileForm(forms.ModelForm):
         }
         labels = {
             "first_name": "Prénom",
-                'last_name': "Nom",
-                     "address": "Adresse",
-                     "city":"Ville",
-                     "zip_code": "Code Postal",
-                     "tel":"Téléphone pour vous joindre",
-            "profile_picture": "Photo de profile"
+            'last_name': "Nom",
+            "address": "Adresse",
+            "city":"Ville",
+            "zip_code": "Code Postal",
+            "tel":"Téléphone pour vous joindre",
+            "profile_picture": "Photo de profil"
         }
 
 
@@ -45,7 +45,7 @@ class EventForm(forms.ModelForm):
             "start_date":forms.DateInput(attrs={'type': 'date'}),
             "end_date": forms.DateInput(attrs={'type': 'date'}),
             "time_from": forms.TimeInput(attrs={'type': 'time'}),
-            "time_to": forms.TimeInput(attrs={'type': 'time'})
+            "time_to": forms.TimeInput(attrs={'type': 'time'}),
         }
         labels = {
             "location": "Site de l'événement",
@@ -97,8 +97,9 @@ class LocationForm(forms.ModelForm):
             "manager_location": "Gestionnaire du site"
         }
 
+
 class SelectLocationsForm(forms.Form):
-    locations = forms.ModelMultipleChoiceField(queryset=Location.objects.all(), required=True)
+    locations = forms.ModelMultipleChoiceField(Location.objects.all(), required=True, widget=forms.CheckboxSelectMultiple)
 
 
 class StatusUsersLocationsForm(forms.ModelForm):

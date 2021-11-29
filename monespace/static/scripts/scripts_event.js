@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let startDateInput = document.querySelector('#id_start_date');
   let endDateInput = document.querySelector('#id_end_date');
   let timesDiv = document.querySelector('#times_div');
+  let timesSubDiv = document.querySelectorAll('.times_subdiv');
   let timeFromInput = document.querySelector('#id_time_from');
   let timeToInput = document.querySelector('#id_time_to');
   let fullDay = document.querySelector('#id_is_full_day');
@@ -35,16 +36,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function hide_display_timesDiv () {
     if (fullDay.checked) {
-      timesDiv.style.display='none';
+      timesSubDiv.forEach(i => i.style.display='none')
     } else {
-      timesDiv.style.display='block';
+      timesSubDiv.forEach(i => i.style.display='block')
     }
   }
 
   fullDay.addEventListener('click', () => {
     if (fullDay.checked) {
       timeFromInput.value = "00:00:00";
-      timeToInput.value = "23:59:59";
+      timeToInput.value = "23:59:00";
     } else {
       timeFromInput.value = timeFromInputInitial;
       timeToInput.value = timeToInputInitial;
