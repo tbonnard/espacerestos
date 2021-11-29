@@ -30,8 +30,132 @@ a:hover{
   color: var(--pink);
 }
 
+.link_pink {
+	color: var(--pink) !important;
+}
+
+.link_pink:hover {
+	color: var(--dark_grey) !important;
+}
+
 .container_master{
   margin: 3% 5%;
+}
+
+
+input {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	height: 2.3125rem;
+	padding: .5rem;
+	border: 1px solid #cacaca;
+	margin: 0 0 1rem;
+	font-size: .875rem;
+	color: #0a0a0a;
+	background-color: #fff;
+	box-shadow: none;
+	border-radius: .25em;
+	transition: box-shadow .5s,border-color .25s ease-in-out;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+;}
+
+input:focus {
+	outline: 0;
+	border: 1px solid #e5007d;
+	background-color: #fff;
+	outline: none;
+	box-shadow: 0 0 5px #cacaca;
+	transition: box-shadow .5s,border-color .25s ease-in-out;
+}
+
+textarea {
+	font-family: 'Montserrat',Arial,Helvetica,sans-serif;
+	padding: .5rem;
+	display: block;
+	width: 100%;
+	border: 1px solid #cacaca;
+	box-sizing: border-box;
+	box-shadow: none;
+	border-radius: .25em;
+	transition: box-shadow .5s,border-color .25s ease-in-out;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+
+textarea:focus {
+	outline: 0;
+	border: 1px solid #e5007d;
+	background-color: #fff;
+	outline: none;
+	box-shadow: 0 0 5px #cacaca;
+	transition: box-shadow .5s,border-color .25s ease-in-out;
+}
+
+input[type=date], input[type=time] , input[type=number] {
+	font-family: 'Montserrat',Arial,Helvetica,sans-serif;
+	width: auto;
+}
+
+input[type=checkbox]:focus {
+	border: none;
+	box-shadow: none;
+}
+
+input[type=checkbox] {
+         position: relative;
+	       cursor: pointer;
+				 border: none;
+    }
+    input[type=checkbox]:before {
+         content: "";
+         display: block;
+         position: absolute;
+         width: 16px;
+         height: 16px;
+         top: 5;
+         left: 0;
+         border: 2px solid #555555;
+         border-radius: 3px;
+         background-color: white;
+}
+    input[type=checkbox]:checked:after {
+         content: "";
+         display: block;
+         width: 5px;
+         height: 10px;
+         border: solid black;
+         border-width: 0 2px 2px 0;
+         -webkit-transform: rotate(45deg);
+         -ms-transform: rotate(45deg);
+         transform: rotate(45deg);
+         position: absolute;
+         top: 10px;
+         left: 6px;
+}
+
+select {
+	background-image: url(//www.restosducoeur.org/wp-content/themes/restosducoeur/img/pictos/pct-arrowDownBlack.svg);
+	background-size: .9rem .9rem;
+	width: auto;
+  height: 2.3125rem;
+  padding: .5rem 1rem .5rem 1rem;
+  border: 1px solid #cacaca;
+  margin: 0 0 1rem;
+  font-size: .875rem;
+  font-family: inherit;
+  line-height: normal;
+  color: #0a0a0a;
+  background-color: #fff;
+  border-radius: .25em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="24" viewBox="0 0 32 24"><polygon points="0,0 32,0 16,24" style="fill: rgb%28138, 138, 138%29"></polygon></svg>');
+  background-size: 9px 6px;
+  background-position: 110%;
+  background-origin: content-box;
+  background-repeat: no-repeat;
 }
 
 button, .input_btn, .button_attendees {
@@ -39,15 +163,16 @@ button, .input_btn, .button_attendees {
 	border:none;
 	outline: none;
 	color: #fff;
-	height: 30px;
+	height: 35px;
 	width: 200px;
+	border-radius: .25em;
 }
 
-button:hover, .input_btn:hover, .button_attendees:hover  {
+button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_btn:focus, .button_attendees:focus   {
 	background-color: var(--near_black);
 	cursor: pointer;
+	border: none;
 }
-
 
 .button_white {
 	background-color: #fff;
@@ -62,14 +187,18 @@ button:hover, .input_btn:hover, .button_attendees:hover  {
 	color:#fff;
 }
 
-
-
 .info_text {
 	color: var(--dark_grey);
 	text-align: center;
 	font-size: 14;
 	padding: 1% 0;
 }
+
+.form_div_space {
+	width: 50%;
+	margin: 0 auto;
+}
+
 
 
 

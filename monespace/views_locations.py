@@ -100,7 +100,6 @@ def location_edit(request, location_id):
         form = LocationForm(data=request.POST)
         if form.is_valid():
             location_page.name = form.cleaned_data['name']
-            location_page.address_number = form.cleaned_data['address_number']
             location_page.address = form.cleaned_data['address']
             location_page.address_2 = form.cleaned_data['address_2']
             location_page.city = form.cleaned_data['city']

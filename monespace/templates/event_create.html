@@ -8,8 +8,9 @@
 
 {% block content%}
 
+<div class="form_div_space">
 
-<h1>Créer un nouvel événement</h1>
+    <h1>Créer un nouvel événement</h1>
 
     <form  action="{% url 'event_create' %}" method='POST'>
         {% csrf_token %}
@@ -19,10 +20,11 @@
             {{ rec_form }}
         </div>
 
-        <input type='submit' id="confirm" value="Confirmer" class='input'/>
+        <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
 
     </form>
 
+</div>
 
 
 {% endblock %}

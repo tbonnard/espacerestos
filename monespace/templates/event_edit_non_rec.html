@@ -8,6 +8,8 @@
 
 {% block content%}
 
+<div class="form_div_space">
+
 <h1>Modifier "{{ form.name.value }}"</h1>
 
     <form action="{% url 'event_edit' event_id=event.pk %}" method='POST'>
@@ -29,7 +31,7 @@
         <label>Evenement durant toute la journée</label>
         <p>{{ form.is_full_day }}</p>
 
-        <input type='submit' id="confirm" value="Confirmer" class='input'/>
+        <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
 
     </form>
 
@@ -38,5 +40,7 @@
     {% elif not event.is_recurring %}
     <p class="info_text">Ceci est un événement non recurrent</p>
     {% endif %}
+
+</div>
 
 {% endblock %}

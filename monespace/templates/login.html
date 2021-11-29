@@ -2,10 +2,12 @@
 
 {% block content%}
 
+<div class="form_div_space">
     <form action="{% url 'login_view' %}" method='POST'>
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type='submit' value='Se connecter' class='input'/>
+        {{ form.as_p}}
+        <input type='submit' value='Se connecter' class='input_btn'/>
     </form>
-
+    <p class="info_text">Vous n'avez pas encore de compte? <a href="{% url 'register' %}" class="link_pink">Vous inscrire ici</a></p>
+</div>
 {% endblock %}

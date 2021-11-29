@@ -18,20 +18,20 @@
 
 <div class="location_global">
     <div class="location_left">
-        <h3>Nom</h3><p>{{ location.name }}</p>
-        <h3>Address Number</h3><p>{{ location.address_number }}</p>
-        <h3>Address</h3><p>{{ location.address }}</p>
-        <h3>Address 2</h3><p>{{ location.address_2 }}</p>
-        <h3>City</h3><p>{{ location.city }}</p>
-        <h3>Zip Code</h3><p>{{ location.zipcode }}</p>
-        <h3>Country</h3><p>{{ location.country }}</p>
-        <h3>Manager</h3><p>{{ location.manager_location }}</p>
+        <h3>Adresse du site de "{{ location.name }}"</h3>
+        <p>{{ location.address }}</p>
+        <p>{{ location.address_2 }}</p>
+        <p>{{ location.city }}</p>
+        <p>{{ location.zipcode }}</p>
+        <p>{{ location.get_country_display }}</p>
+        Site géré par:
+        <p>{{ location.manager_location }}</p>
     </div>
 
     <div class="location_right">
         <div class="mapouter">
             <div class="gmap_canvas">
-                <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q={{location.address_number}}%20{{location.address}},%20{{location.city}}%20{{location.zipcode}}%20{{location.country}}&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q={{location.address}},%20{{location.city}}%20{{location.zipcode}}%20{{location.country}}&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
                 <a href="https://123movies-to.org"></a>
                 <br>
                 <style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}</style>

@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateToTime();
   })
 
+
   fullDay.addEventListener('click', () => {
     if (fullDay.checked) {
       timeFromInput.value = "00:00:00";

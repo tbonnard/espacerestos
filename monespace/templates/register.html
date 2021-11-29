@@ -2,10 +2,15 @@
 
 {% block content%}
 
+
+
+<div class="form_div_space">
     <form action="{% url 'register' %}" method='POST'>
         {% csrf_token %}
         {{ form.as_p }}
-        <input type='submit' value="S'enregistrer" class='input'/>
+        <input type='submit' value="Créer le compte" class='input_btn'/>
     </form>
+    <p class="info_text">Vous avez déjà un compte? <a href="{% url 'login_view' %}" class="link_pink">Vous connecter ici</a></p>
+</div>
 
 {% endblock %}

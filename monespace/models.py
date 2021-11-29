@@ -15,12 +15,14 @@ class User(AbstractUser):
     tel = models.CharField(blank=True, null=True, max_length=255)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.username})"
+
 
 class Location(models.Model):
     name = models.CharField(blank=False, max_length=255)
     address = models.CharField(blank=False, max_length=255)
     address_2 = models.CharField(blank=True, max_length=255, default="")
-    address_number = models.IntegerField(blank=False)
     city = models.CharField(blank=False, max_length=255)
     zip_code = models.CharField( blank=False, max_length=5)
     country = models.CharField(choices=country_list, blank=False, max_length=2, default='FR')

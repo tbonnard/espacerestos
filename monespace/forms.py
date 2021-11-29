@@ -8,6 +8,12 @@ class UserCreateForm(UserCreationForm):
         model = User
         fields = ("username", "email", "password1", "password2")
 
+    def __init__(self, *args, **kwargs):
+        super(UserCreateForm, self).__init__(*args, **kwargs)
+
+        for fieldname in ["username", "email", 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
+
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
@@ -15,6 +21,15 @@ class UserProfileForm(forms.ModelForm):
         fields = ("first_name", 'last_name', "address", "city", "zip_code", "tel", "profile_picture")
         widgets = {
             "profile_picture": forms.FileInput()
+        }
+        labels = {
+            "first_name": "Prénom",
+                'last_name': "Nom",
+                     "address": "Adresse",
+                     "city":"Ville",
+                     "zip_code": "Code Postal",
+                     "tel":"Téléphone pour vous joindre",
+            "profile_picture": "Photo de profile"
         }
 
 
@@ -25,12 +40,23 @@ class UserAuthenticationForm(AuthenticationForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ('location', "name", "description", "start_date", "end_date", "time_from", "time_to", "is_full_day", "is_recurring")
+        fields = ('location', "name", "description", "start_date", "end_date", "is_full_day", "time_from", "time_to", "is_recurring")
         widgets = {
             "start_date":forms.DateInput(attrs={'type': 'date'}),
             "end_date": forms.DateInput(attrs={'type': 'date'}),
             "time_from": forms.TimeInput(attrs={'type': 'time'}),
             "time_to": forms.TimeInput(attrs={'type': 'time'})
+        }
+        labels = {
+            "location": "Site de l'événement",
+            "name": "Nom de l'événement",
+            "description": "Description",
+            "start_date": "Date de début",
+            "end_date": "Date de fin",
+                "time_from": "Heure de début",
+                    "time_to": "Heure de fin",
+                    "is_full_day": "L'événement dure toute la journée",
+            "is_recurring": "L'événement se répète"
         }
 
 
@@ -52,7 +78,7 @@ class EventRecurringPatternForm(forms.ModelForm):
             "day_of_week": "le",
             'separation_count': 'répéter tous/toutes les',
             'repeat_each_x': '',
-            "max_num_occurrences": "le répéter en plus du celui ci pendant... fois"
+            "max_num_occurrences": "pendant... fois (en plus de celui ci)"
         }
 
 
@@ -60,8 +86,16 @@ class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
         # fields = '__all__'
-        fields = ("name", "address", "address_2", "address_number", "city", "zip_code", "country", "manager_location")
-
+        fields = ("name", "address", "address_2", "city", "zip_code", "country", "manager_location")
+        labels = {
+            "name":"Nom du site",
+            "address": "Adresse",
+            "address_2": "Complément d'adresse",
+            "city": "Ville",
+            "zip_code": "Code postal",
+                    "country": "Pays",
+            "manager_location": "Gestionnaire du site"
+        }
 
 class SelectLocationsForm(forms.Form):
     locations = forms.ModelMultipleChoiceField(queryset=Location.objects.all(), required=True)

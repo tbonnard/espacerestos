@@ -6,11 +6,11 @@ from .models import User, Location, Event, RecurringPattern, StatusUsersLocation
 
 
 class UserAdminCustom(admin.ModelAdmin):
-    list_display = ('username', 'user_type', 'email', 'date_joined')
+    list_display = ("username", 'email', 'user_type', 'date_joined')
 
 
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ("name", "address", "address_2", "address_number", "city", "zip_code", "country", "manager_location", 'created')
+    list_display = ("name", "address", "address_2", "city", "zip_code", "country", "manager_location", 'created')
 
 
 class EventAdmin(admin.ModelAdmin):
