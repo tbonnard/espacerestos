@@ -3,6 +3,7 @@
 {% block content%}
 
 <div class="form_div_space">
+    
     <form action="{% url 'login_view' %}" method='POST'>
         {% csrf_token %}
         {{ form.as_p}}

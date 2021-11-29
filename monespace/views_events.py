@@ -247,8 +247,6 @@ def validate_event_date(event, date):
     else:
         if event.start_date == date_in_date:
             event_valid = True
-    print(event_valid)
-    print('validated')
     return event_valid
 
 
@@ -262,9 +260,12 @@ def event_edit(request, event_id):
     else:
         if request.method == "GET":
             form = EventForm(instance=event_page)
+            form.initial["start_date"] = event_page.start_date.strftime("%Y-%m-%d")
+            form.initial["end_date"] = event_page.end_date.strftime("%Y-%m-%d")
             if event_page.is_recurring:
                 event_rec_pattern = RecurringPattern.objects.filter(event=event_page).first()
                 form.initial["start_date"] = request.GET.get('date')
+                form.initial["end_date"] = request.GET.get('date')
                 rec_form = EventRecurringPatternForm(instance=event_rec_pattern)
                 if validate_event_date(event_page, request.GET.get('date')):
                     return render(request, 'event_edit_rec.html',

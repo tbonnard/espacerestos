@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //DATES TIME MANAGEMENT
   let startDateInput = document.querySelector('#id_start_date');
   let endDateInput = document.querySelector('#id_end_date');
+  let timesDiv = document.querySelector('#times_div');
   let timeFromInput = document.querySelector('#id_time_from');
   let timeToInput = document.querySelector('#id_time_to');
   let fullDay = document.querySelector('#id_is_full_day');
@@ -32,6 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
 
+  function hide_display_timesDiv () {
+    if (fullDay.checked) {
+      timesDiv.style.display='none';
+    } else {
+      timesDiv.style.display='block';
+    }
+  }
+
   fullDay.addEventListener('click', () => {
     if (fullDay.checked) {
       timeFromInput.value = "00:00:00";
@@ -40,10 +49,11 @@ document.addEventListener("DOMContentLoaded", function () {
       timeFromInput.value = timeFromInputInitial;
       timeToInput.value = timeToInputInitial;
     }
-
+    hide_display_timesDiv();
   })
 
-  updateEndDate();
+
+  hide_display_timesDiv();
 
 
 // RECURRING MANAGEMENT

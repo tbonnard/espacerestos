@@ -13,48 +13,23 @@
 
 <h1>Modifier "{{ form.name.value }}"</h1>
 
-      <fieldset>
-            <legend>Voulez vous modifier tous les évenements de cette récurrence?</legend>
-            <input id="yes" type="radio" name="items" value="yes">
-            <label for="yes">Oui, pour tous</label><br>
-            <input id="no" type="radio" name="items" value="no">
-            <label for="no">Non, seulement pour cette date</label><br>
-          </fieldset>
+   <fieldset>
+       <legend>Voulez vous modifier tous les évenements de cette récurrence?</legend>
+       <label for="no" class="container_radio_button">Non, changer seulement pour cette date
+           <input id="no" type="radio" name="radio">
+            <span class="checkmark"></span>
+        </label>
+
+       <label for='yes' class="container_radio_button">Oui, changer pour toutes les dates
+           <input id="yes" type="radio" name="radio">
+           <span class="checkmark"></span>
+        </label>
+   </fieldset>
 
 
     <form action="" method='POST' id="form_rec" data-eventid={{event.pk}}>
         {% csrf_token %}
-        <label>Nom de l'évenement</label>
-        <p>{{ form.name }}</p>
-        <label>Site de l'évenement</label>
-        <p>{{ form.location }}</p>
-        <label>Description</label>
-        <p>{{ form.description }}</p>
-        <label>Date de début</label>
-        <p>{{ form.start_date }}</p>
-        <label>Date de début</label>
-        <p>{{ form.end_date }}</p>
-        <label>Heure de fin</label>
-        <p>{{ form.time_from }}</p>
-        <label>Heure de fin</label>
-        <p>{{ form.time_to }}</p>
-        <label>Evenement durant toute la journée</label>
-        <p>{{ form.is_full_day }}</p>
-
-        <div id="recurringMaster">
-
-            <label>Evenement récurrent</label>
-            <p>{{ form.is_recurring }}</p>
-
-            <div id="recurring">
-                {{ rec_form }}
-            <p>Attention, modifier la date et/ou la recurrence pour tous les évenements peut engendrer des désagrements. En effet, lorsque la date et/ou la recurrence sont modifiées, les personnes ayant deja acceptees devront reaccepter </p>
-            </div>
-
-        </div>
-
-        <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
-
+         {% include "event_form.html" %}
     </form>
 
 </div>

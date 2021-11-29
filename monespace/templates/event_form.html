@@ -1,0 +1,52 @@
+
+
+        <label>Nom de l'évenement</label>
+        <p>{{ form.name }}</p>
+        <label>Site de l'évenement</label>
+        <p>{{ form.location }}</p>
+        <label>Description</label>
+        <p>{{ form.description }}</p>
+
+        <div id="dates_event" data-original_start_date={{event.start_date|date:'Y-m-d'}}>
+           <div class='flex_div_form'>
+                <div class="sub_flex_div_form">
+                    <label>Date de début</label>
+                    <p>{{ form.start_date }}</p>
+                </div>
+                <div class="sub_flex_div_form">
+                    <label>Date de fin</label>
+                    <p>{{ form.end_date }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="time_event">
+                  <label>Evenement durant toute la journée</label>
+                    {{ form.is_full_day }}
+            <div id="times_div">
+                <div class='flex_div_form'>
+                    <div class="sub_flex_div_form">
+                        <label>Heure de début</label>
+                        <p>{{ form.time_from }}</p>
+                    </div>
+                     <div class="sub_flex_div_form">
+                        <label>Heure de fin</label>
+                        <p>{{ form.time_to }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="recurringMaster">
+            <label>Evenement récurrent</label>
+            <p>{{ form.is_recurring }}</p>
+
+            <div id="recurring">
+                {{ rec_form }}
+            <p>Attention, modifier la date et/ou la recurrence pour tous les évenements peut engendrer des désagrements. En effet, lorsque la date et/ou la recurrence sont modifiées, les personnes ayant deja acceptees devront reaccepter </p>
+            </div>
+        </div>
+
+        <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
+

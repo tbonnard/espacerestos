@@ -14,22 +14,43 @@
 
     <form action="{% url 'event_edit' event_id=event.pk %}" method='POST'>
         {% csrf_token %}
-        <label>Nom de l'évenement</label>
+
+                <label>Nom de l'évenement</label>
         <p>{{ form.name }}</p>
         <label>Site de l'évenement</label>
         <p>{{ form.location }}</p>
         <label>Description</label>
         <p>{{ form.description }}</p>
-        <label>Date de début</label>
-        <p>{{ form.start_date }}</p>
-        <label>Date de début</label>
-        <p>{{ form.end_date }}</p>
-        <label>Heure de fin</label>
-        <p>{{ form.time_from }}</p>
-        <label>Heure de fin</label>
-        <p>{{ form.time_to }}</p>
-        <label>Evenement durant toute la journée</label>
-        <p>{{ form.is_full_day }}</p>
+
+        <div id="dates_event" data-original_start_date={{event.start_date|date:'Y-m-d'}}>
+           <div class='flex_div_form'>
+                <div class="sub_flex_div_form">
+                    <label>Date de début</label>
+                    <p>{{ form.start_date }}</p>
+                </div>
+                <div class="sub_flex_div_form">
+                    <label>Date de fin</label>
+                    <p>{{ form.end_date }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="time_event">
+                  <label>Evenement durant toute la journée</label>
+                    {{ form.is_full_day }}
+            <div class='flex_div_form' id="times_div">
+                <div class="sub_flex_div_form">
+                    <label>Heure de début</label>
+                <p>{{ form.time_from }}</p>
+                </div>
+                 <div class="sub_flex_div_form">
+                    <label>Heure de fin</label>
+                    <p>{{ form.time_to }}</p>
+                </div>
+            </div>
+        </div>
+
+
 
         <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
 

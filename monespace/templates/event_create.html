@@ -14,13 +14,8 @@
 
     <form  action="{% url 'event_create' %}" method='POST'>
         {% csrf_token %}
-        {{form.as_p}}
 
-        <div id="recurring">
-            {{ rec_form }}
-        </div>
-
-        <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
+        {% include "event_form.html" %}
 
     </form>
 
