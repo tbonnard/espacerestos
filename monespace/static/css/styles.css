@@ -111,43 +111,6 @@ input[type=date] {
 		display: inline;
 }
 
-/* input[type=checkbox]:focus {
-	border: none;
-	box-shadow: none;
-}
-
-input[type=checkbox] {
-         position: relative;
-	       cursor: pointer;
-				 border: none;
-    }
-    input[type=checkbox]::before {
-         content: "";
-         display: block;
-         position: absolute;
-         width: 16px;
-         height: 16px;
-         top: 5;
-         left: 0;
-         border: 2px solid #555555;
-         border-radius: 3px;
-         background-color: white;
-}
-    input[type=checkbox]:checked::after {
-         content: "";
-         display: block;
-         width: 5px;
-         height: 10px;
-         border: solid black;
-         border-width: 0 2px 2px 0;
-         -webkit-transform: rotate(45deg);
-         -ms-transform: rotate(45deg);
-         transform: rotate(45deg);
-         position: absolute;
-         top: 10px;
-         left: 6px;
-} */
-
 
 input[type=radio]{
 	height: 25px;
@@ -271,7 +234,7 @@ button, .input_btn, .button_attendees {
 	border-radius: .25em;
 }
 
-button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_btn:focus, .button_attendees:focus   {
+button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_btn:focus, .button_attendees:focus  {
 	background-color: var(--near_black);
 	cursor: pointer;
 	border: none;
@@ -548,4 +511,102 @@ nav a {
 
 .location_right {
 	align-self: center;
+}
+
+
+
+
+/* TABLE USERS */
+table{
+    margin: 30px 0 30px 0;
+    overflow: auto;
+		border-spacing:0;
+}
+
+.table1{
+    margin: 30px 0 30px 0;
+    overflow-x: auto;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.table_heading {
+    padding: 0 0 6px 5px;
+    font-weight: 600;
+    font-size: .64286rem;
+    color: #6a6a6a;
+    border-bottom: 1px solid #e1e1e1;
+    letter-spacing: .025em;
+    text-transform: uppercase;
+    vertical-align: bottom;
+    text-align: center;
+    min-width: 90px;
+}
+
+.table_heading1 {
+    padding: 0 0 6px 5px;
+    font-weight: 600;
+    font-size: .64286rem;
+    color: #6a6a6a;
+    border-bottom: 1px solid #e1e1e1;
+    letter-spacing: .025em;
+    text-transform: uppercase;
+    vertical-align: bottom;
+    width: 220px;
+    text-align: center;
+}
+
+.table_cell {
+    font-size: 14px;
+    padding: 5px 10px;
+    text-align: center;
+}
+
+tr {
+}
+
+td {
+	background-color :var(--light_grey);
+}
+
+td img {
+	width: 40px;
+}
+
+td form {
+		display: inline-block;
+	}
+
+.validate_user_status, .validate_user_status:hover, .validate_user_status:focus {
+	background-color :var(--light_grey);
+	width: auto;
+	cursor: normal;
+}
+
+.validate_user_status  i {
+	color:var(--pink);
+}
+
+.validate_user_status  i:hover {
+	color:var(--near_black);
+	cursor: pointer;
+}
+
+form #id_status {
+	background-color :var(--light_grey);
+	border: none;
+	width: auto;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	background-image: url(//www.restosducoeur.org/wp-content/themes/restosducoeur/img/pictos/pct-arrowDownBlack.svg);
+	background-size: .9rem .9rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="24" viewBox="0 0 32 24"><polygon points="0,0 32,0 16,24" style="fill: rgb%28138, 138, 138%29"></polygon></svg>');
+  background-size: 9px 6px;
+  background-position: 100%;
+  background-origin: content-box;
+  background-repeat: no-repeat;
 }

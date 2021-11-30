@@ -48,6 +48,7 @@ def users_site(request, location_id):
                                                                     status=1) | StatusUsersLocations.objects.filter(
             location=Location.objects.get(pk=location_id), status=2)
         form = StatusUsersLocationsForm()
+
         if request.method == "POST":
             try:
                 user_status_update = StatusUsersLocations.objects.get(pk=request.GET['id'])
@@ -76,6 +77,7 @@ def user_site_update_status(request, location_id):
             logs = LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=request.POST['status'], current_status=user_status_update.status)
             logs.save()
             return redirect(reverse('users_site', kwargs={'location_id': location_id}))
+    return redirect('index')
 
 
 @login_required(login_url='/login/')
