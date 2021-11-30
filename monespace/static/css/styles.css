@@ -563,15 +563,13 @@ table{
     text-align: center;
 }
 
-tr {
-}
-
 td {
 	background-color :var(--light_grey);
 }
 
 td img {
 	width: 40px;
+	border-radius: 50%;
 }
 
 td form {

@@ -33,13 +33,13 @@
                     <td class='table_cell'>{% if j.user.profile_picture %}
                         <img src="{{j.user.profile_picture.url}}">
                         {% endif %}</td>
-                    <td class='table_cell'>{{j.user.first_name}}</td>
-                    <td class='table_cell'>{{j.user.last_name}}</td>
+                    <td class='table_cell'>{{j.user.first_name|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.user.last_name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.username}}</td>
-                    <td class='table_cell'>{{j.user.email}}</td>
-                    <td class='table_cell'>{{j.user.tel}}</td>
-                    <td class='table_cell'>{{j.user.last_login}}</td>
-                    <td class='table_cell'><span class="user_status" data-user="{{j.user.pk}}{{j.location.pk}}" >{{j.get_status_display}}</span>
+                    <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.user.tel|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.user.last_login|date:'Y-m-d H:i:s'}}</td>
+                    <td class='table_cell'><span class="user_status" data-user="{{j.user.pk}}{{j.location.pk}}" >{{j.get_status_display|default_if_none:""}}</span>
 
                     <div class="form_status" data-user="{{j.user.pk}}{{j.location.pk}}" >
                             <form method="POST" action="{% url 'user_site_update_status' location_id=j.location.pk %}?id={{j.pk}}">

@@ -32,16 +32,16 @@
                     <td class='table_cell'>{% if j.profile_picture %}
                         <img src="{{j.profile_picture.url}}">
                         {% endif %}</td>
-                    <td class='table_cell'>{{j.first_name}}</td>
-                    <td class='table_cell'>{{j.last_name}}</td>
+                    <td class='table_cell'>{{j.first_name|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.last_name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.username}}</td>
-                    <td class='table_cell'>{{j.email}}</td>
-                    <td class='table_cell'>{{j.tel}}</td>
-                    <td class='table_cell'>{{j.last_login}}</td>
+                    <td class='table_cell'>{{j.email|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.tel|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.last_login|date:'Y-m-d H:i:s'}}</td>
                     <td class='table_cell'>
                         {% for i in status_users_location %}
                             {% if i.user == j%}
-                        <p><a href="{% url 'users_site' location_id=i.location.pk %}">{{i.location}}</a> ({{i.get_status_display}})</p>
+                        <p><a href="{% url 'users_site' location_id=i.location.pk %}">{{i.location}}</a> ({{i.get_status_display|default_if_none:""}})</p>
                             {% endif %}
                         {% endfor %}
                     </td>
