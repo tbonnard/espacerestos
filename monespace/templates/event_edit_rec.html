@@ -29,8 +29,11 @@
 
     <form action="" method='POST' id="form_rec" data-eventid={{event.pk}}>
         {% csrf_token %}
-         {% include "event_form.html" %}
+        {% include "event_form.html" %}
+        {% include "event_form_only_rec.html" %}
+        <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
     </form>
+
 
 </div>
 

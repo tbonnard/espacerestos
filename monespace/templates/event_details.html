@@ -14,7 +14,7 @@
         <div class="sub_nav_item">
             <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur">
                 {% if event.is_recurring %}
-                <a href="{% url 'event_edit' event_id=event.id %}?date={{date}}">Modifier l'évenement REC</a>
+                <a href="{% url 'event_edit' event_id=event.id %}?date={{date}}">Modifier l'évenement</a>
                 {% else %}
                 <a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a>
                 {% endif %}
@@ -102,6 +102,8 @@
         <p class="info_text">Ceci est un événement provenant d'une récurrence mais modifié pour cette date specifiquement</p>
     {% elif not event.is_recurring %}
     <p class="info_text">Ceci est un événement non recurrent</p>
+    {% else %}
+    <p class="info_text">Cette date fait partie d'un événement recurrent</p>
     {% endif %}
 </div>
 

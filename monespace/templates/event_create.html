@@ -14,8 +14,9 @@
 
     <form  action="{% url 'event_create' %}" method='POST'>
         {% csrf_token %}
-
         {% include "event_form.html" %}
+        {% include "event_form_only_rec.html" %}
+        <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
 
     </form>
 
