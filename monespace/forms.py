@@ -18,13 +18,15 @@ class UserCreateForm(UserCreationForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ("first_name", 'last_name', "address", "city", "zip_code", "tel", "profile_picture")
+        fields = ("first_name", 'last_name', "email", "address", "city", "zip_code", "tel", "profile_picture")
         widgets = {
-            "profile_picture": forms.FileInput()
+            "profile_picture": forms.FileInput(),
+            "email":forms.EmailInput(),
         }
         labels = {
             "first_name": "Prénom",
             'last_name': "Nom",
+            "email": "Email",
             "address": "Adresse",
             "city":"Ville",
             "zip_code": "Code Postal",

@@ -105,6 +105,7 @@ def profile_edit(request):
             finally:
                 updated_user.first_name = form.cleaned_data['first_name']
                 updated_user.last_name = form.cleaned_data['last_name']
+                updated_user.email = form.cleaned_data['email']
                 updated_user.address = form.cleaned_data['address']
                 updated_user.city = form.cleaned_data['city']
                 updated_user.zip_code = form.cleaned_data['zip_code']

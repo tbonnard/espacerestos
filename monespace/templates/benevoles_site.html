@@ -50,6 +50,7 @@
                         </div>
 
                     </td>
+
                     <td class='table_cell'>
                         {% if j.status != 2 %}
                         <form method="POST" action="{% url 'users_site' location_id=j.location.pk %}?id={{j.pk}}">

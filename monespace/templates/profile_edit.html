@@ -8,8 +8,7 @@
     {% if request.user.profile_picture %}
     <img src="{{request.user.profile_picture.url}}">
     {% endif %}
-    <p>{{request.user.username}}</p>
-    <p>{{request.user.email}}</p>
+    <p><label for="id_username">Nom d'utilisateur&nbsp;:</label> <p id="id_username">{{request.user.username}}</p>
     <form method="POST" action=" {% url 'profile_edit' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}

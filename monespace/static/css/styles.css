@@ -50,7 +50,6 @@ input[type=text], input[type=email], input[type=password] {
 	height: 2.3125rem;
 	padding: .5rem;
 	border: 1px solid #cacaca;
-	margin: 0 0 1rem;
 	font-size: .875rem;
 	color: #0a0a0a;
 	background-color: #fff;
@@ -76,6 +75,18 @@ input:disabled {
 
 input:disabled:focus {
 	border: 1px solid #cacaca;
+}
+
+label {
+	font-weight: bold;
+}
+
+input{
+	margin: 5px 0 1rem;
+}
+
+form p {
+	margin-bottom: 30px;
 }
 
 textarea {
@@ -238,6 +249,10 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	background-color: var(--near_black);
 	cursor: pointer;
 	border: none;
+}
+
+button a:hover{
+  color: #fff;
 }
 
 .button_white {
@@ -576,6 +591,7 @@ td img {
 
 td form {
 		display: inline-block;
+		padding: 0 10px;
 	}
 
 .validate_user_status, .validate_user_status:hover, .validate_user_status:focus {

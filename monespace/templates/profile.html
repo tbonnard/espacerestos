@@ -7,7 +7,6 @@
 <img src="{{request.user.profile_picture.url}}">
 {% endif %}
 <p>{{request.user.username}}</p>
-<p>{{request.user.email}}</p>
 <p>{{request.user.first_name|default_if_none:"" }}</p>
 <p>{{request.user.last_name|default_if_none:"" }}</p>
 <p>{{request.user.address|default_if_none:"" }}</p>
@@ -15,8 +14,10 @@
 <p>{{request.user.zip_code|default_if_none:"" }}</p>
 <p>{{request.user.tel|default_if_none:"" }}</p>
 
-<p>Type d'utilisateur: {{request.user.get_user_type_display}}</p>
 
+{% if request.user.user_type != 2 %}
+    <p>Type d'utilisateur: {{request.user.get_user_type_display}}</p>
+{% endif %}
 
     <div class="sub_nav">
         <div class="sub_nav_item">
