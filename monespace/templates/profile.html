@@ -14,6 +14,8 @@
 <p>{{request.user.zip_code|default_if_none:"" }}</p>
 <p>{{request.user.tel|default_if_none:"" }}</p>
 
+<a href="{% url 'change_password' %}">Changer son mot de passe</a>
+
 
 {% if request.user.user_type != 2 %}
     <p>Type d'utilisateur: {{request.user.get_user_type_display}}</p>
@@ -32,9 +34,9 @@
 
 {% for i in locations%}
 <!--<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a>-->
-<p><a href="{% url 'location_details' location_id=i.id %}">{{i}}</a>
+<p><a href="{% url 'location_details' location_id=i.location.pk %}">{{i.location}}</a> - <span>{{i.get_status_display}}</span>
     {% for j in manager_locations %}
-    {% if j == i%}
+    {% if j == i.location %}
     <span> --> vous êtes le gestionnaire</span>
     {%endif%}
     {%endfor%}

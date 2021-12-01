@@ -84,9 +84,9 @@ def user_site_update_status(request, location_id):
 def profile(request):
     date_to = get_date_to()
     user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
-    user_locations = [i.location for i in user_locations_pre]
+    # user_locations = [i.location for i in user_locations_pre]
     user_manager_locations = Location.objects.filter(manager_location=request.user)
-    return render(request, 'profile.html', context={'locations': user_locations, "date_to":date_to, 'manager_locations': user_manager_locations})
+    return render(request, 'profile.html', context={'locations': user_locations_pre, "date_to":date_to, 'manager_locations': user_manager_locations})
 
 
 @login_required(login_url='/login/')

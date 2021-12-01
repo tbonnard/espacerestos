@@ -1,11 +1,16 @@
 from django.urls import path
 from . import views, views_login, views_events, views_locations, views_download, views_attend
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('login/', views_login.login_view, name='login_view'),
     path('register/', views_login.register, name='register'),
     path('logout/', views_login.logout_view, name='logout_view'),
+    # path('reset_password_email/', views_login.password_reset_email, name='password_reset_email'),
+    # path('reset_password_email_sent/', views_login.reset_password_email_sent, name='reset_password_email_sent'),
+    # path('reset_password/', views_login.reset_password, name='reset_password'),
+    # path('reset_password_success/', views_login.reset_password_success, name='reset_password_success'),
     path('profil/', views.profile, name='profile'),
     path('profil_edit/', views.profile_edit, name='profile_edit'),
     path('benevoles_site/<int:location_id>', views.users_site, name='users_site'),
@@ -27,6 +32,29 @@ urlpatterns = [
     path('api_get_specific_attendees/', views_attend.api_get_specific_attendees, name='api_get_specific_attendees'),
     path('api_get_all_attendees_user/', views_attend.api_get_all_attendees_user, name='api_get_all_attendees_user'),
     path('api_attend_decline_event/', views_attend.api_attend_decline_event, name='api_attend_decline_event'),
+
+    # Change Password
+    path('change-password/', auth_views.PasswordChangeView.as_view(
+            template_name='commons/change_password.html',
+            success_url='/'
+        ), name='change_password'),
+
+    # Forget Password
+    path('password-reset/', auth_views.PasswordResetView.as_view(
+             template_name='commons/password_reset/password_reset.html',
+             subject_template_name='commons/password_reset/password_reset_subject.txt',
+             email_template_name='commons/password_reset/password_reset_email.html',
+             # success_url='/login/'
+         ), name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(
+             template_name='commons/password_reset/password_reset_done.html'
+         ), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+             template_name='commons/password_reset/password_reset_confirm.html'
+         ), name='password_reset_confirm'),
+    path('password-reset-complete/',  auth_views.PasswordResetCompleteView.as_view(
+             template_name='commons/password_reset/password_reset_complete.html'
+         ), name='password_reset_complete'),
 
 ]
 

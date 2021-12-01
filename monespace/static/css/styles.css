@@ -251,9 +251,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	border: none;
 }
 
-button a:hover{
-  color: #fff;
-}
+
 
 .button_white {
 	background-color: #fff;
