@@ -297,9 +297,9 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 }
 
 .menu_icon {
-  position: absolute;
-  left: 30px;
-  top: 30px;
+  position: fixed;
+	top:30px;
+	left:30px;
 	z-index: 2;
 }
 
@@ -359,6 +359,21 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 }
 
 
+.sub_nav {
+  margin: 2% 0 5% 0;
+}
+
+.sub_nav_item {
+  display:inline;
+  margin-right: 20px;
+}
+
+.sub_nav_item img {
+  width: 2rem;
+  vertical-align: middle;
+  margin: 0 5px 0 0;
+}
+
 
 /* NAVIGATION */
 /* nav{
@@ -388,23 +403,6 @@ nav::before {
 	background-color: var(--orange);
 }
 */
-
-
-.sub_nav {
-  margin: 2% 0 5% 0;
-}
-
-.sub_nav_item {
-  display:inline;
-  margin-right: 20px;
-}
-
-.sub_nav_item img {
-  width: 2rem;
-  vertical-align: middle;
-  margin: 0 5px 0 0;
-}
-
 
 
 
@@ -553,10 +551,11 @@ nav::before {
 }
 
 .events_list_details_time_location{
+	text-align: left;
   background-color: var(--light_pink);
   color:var(--pink);
-  width: 200px;
-  padding: 1%;
+  width: 250px;
+  padding: 1% 1% 1% 2%;
   margin: 1% 0;
   border-radius: 20px;
   margin-bottom: 20px;
