@@ -49,4 +49,21 @@ def api_get_specific_attendees(request):
     return JsonResponse([i.serialize() for i in attendees], safe=False)
 
 
-
+@login_required(login_url='/login/')
+def api_get_count_specific_attendees(request):
+    data = json.loads(request.body)
+    parent_event = data.get('parent_event')
+    date = data.get('event_date')
+    print(date)
+    try:
+        event = Event.objects.get(pk=parent_event)
+    except:
+        return JsonResponse({"error": "try again - not a POST"}, status=400)
+    else:
+        all_attendees = AttendeesEvents.objects.filter(parent_event=event, event_date=date)
+        count_attendees = 0
+        if len(all_attendees) > 0:
+            count_attendees = all_attendees.count()
+            for i in all_attendees:
+                count_attendees += i.plus_other
+        return JsonResponse([count_attendees], safe=False)

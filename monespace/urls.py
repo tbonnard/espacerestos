@@ -30,6 +30,7 @@ urlpatterns = [
     path('location_edit/<int:location_id>', views_locations.location_edit, name='location_edit'),
     path('download_users_csv/', views_download.download_users_csv, name='download_users_csv'),
     path('api_get_specific_attendees/', views_attend.api_get_specific_attendees, name='api_get_specific_attendees'),
+    path('api_get_count_specific_attendees/', views_attend.api_get_count_specific_attendees, name='api_get_count_specific_attendees'),
     path('api_get_all_attendees_user/', views_attend.api_get_all_attendees_user, name='api_get_all_attendees_user'),
     path('api_attend_decline_event/', views_attend.api_attend_decline_event, name='api_attend_decline_event'),
 
