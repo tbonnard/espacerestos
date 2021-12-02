@@ -69,6 +69,15 @@
                 </a>
             </div>
             {% else %}
+
+            {% if request.user.user_type != 2 %}
+            <div class="menu_button">
+                <a href="{% url 'event_create' %}" >
+                    <button class="button_attendees"><i class="fas fa-plus"></i>Evenement</button>
+                </a>
+            </div>
+            {% endif %}
+
             <div>
                 <a href="{% url 'index' %}" >
                     <div class="item_nav" data-path="/">

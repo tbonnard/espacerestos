@@ -338,7 +338,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	color: var(--pink);
 } */
 
-.item_nav i {
+.item_nav i, .menu_button i  {
 	margin-right: 10px;
 }
 
@@ -348,6 +348,16 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	color: var(--pink);
 	border-left: solid 4px var(--pink);
 }
+
+.menu_button {
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+.menu_button  button {
+	width: 150px;
+}
+
 
 
 /* NAVIGATION */
