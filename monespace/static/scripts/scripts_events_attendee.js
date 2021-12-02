@@ -36,7 +36,7 @@ function api_call(eventid, date, type) {
     let button = document.createElement('button');
     div.append(button);
     p.innerHTML = pInner;
-    button.textContent = buttonText;
+    button.innerHTML = buttonText;
     button.id = `${eventid}_${date}`;
     if (type == "decline") {
       button.className="button_attendee_decline button_inversed";
@@ -57,12 +57,12 @@ function api_call(eventid, date, type) {
       let div_attendees = document.querySelector(`#parent_${eventid}${date}`);
       for (const j in data) {
         if (data[j].parent_event == eventid && data[j].event_date == date) {
-          create_elements_attendees(div_attendees, eventid, date, '', 'Je ne peux plus y aller', 'decline')
+          create_elements_attendees(div_attendees, eventid, date, '', '<i class="fas fa-check-square icon_attend"></i>Annuler ma présence', 'decline')
         }
       }
 
       if (div_attendees.children.length == 0 ) {
-        create_elements_attendees(div_attendees, eventid, date, '', 'Je serai là', 'attend')
+        create_elements_attendees(div_attendees, eventid, date, '', '<i class="far fa-square icon_attend"></i>Confirmer ma présence', 'attend')
       }
 
     })
@@ -83,7 +83,7 @@ function api_call(eventid, date, type) {
         for (const j in data) {
 
           if (data[j].parent_event == eventid && data[j].event_date == date) {
-            create_elements_attendees(i, eventid, date, '', 'Je ne peux plus y aller', 'decline')
+            create_elements_attendees(i, eventid, date, '', '<i class="fas fa-check-square icon_attend"></i>Annuler ma présence', 'decline')
           }
         }
       })
@@ -92,7 +92,7 @@ function api_call(eventid, date, type) {
         let eventid = i.dataset.eventid;
         let date = i.dataset.date;
         if (i.children.length == 0 ) {
-          create_elements_attendees(i, eventid, date, '', 'Je serai là', 'attend')
+          create_elements_attendees(i, eventid, date, '', '<i class="far fa-square icon_attend"></i>Confirmer ma présence', 'attend')
         }
       })
 
