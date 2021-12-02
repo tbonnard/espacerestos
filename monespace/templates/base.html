@@ -10,6 +10,7 @@
     <link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet">
 
     <script src="https://kit.fontawesome.com/6ef435d88f.js" crossorigin="anonymous"></script>
+    <script src= "{% static 'scripts/nav.js' %}"></script>
 
     {% block script %}
     {% endblock %}
@@ -19,31 +20,109 @@
 <body>
 
 
+<!--<nav>-->
+<!--    <div class="items_nav">-->
+<!--        <div class="item_nav">-->
+<!--            <a href="{% url 'index' %}"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="items_nav">-->
+<!--    {% if request.user.is_authenticated %}-->
+<!--        <div class="item_nav">-->
+<!--            <span>Bonjour <a href="{% url 'profile' %}">{{user.username}}</a></span>-->
+<!--        </div>-->
+<!--        <div class="item_nav">-->
+<!--            <a href="{% url 'logout_view' %}">Se déconnecter</a>-->
+<!--        </div>-->
+<!--    {% else%}-->
+<!--        <div class="item_nav">-->
+<!--            <a href="{% url 'login_view' %}">Se connecter</a>-->
+<!--        </div>-->
+<!--        <div class="item_nav">-->
+<!--            <a href="{% url 'register' %}">S'inscrire</a>-->
+<!--        </div>-->
+<!--    {% endif%}-->
+<!--    </div>-->
+<!--</nav>-->
+
+
 <nav>
-    <div class="items_nav">
-        <div class="item_nav">
+    <div class='sidebar'>
+        <div class="logo_img">
             <a href="{% url 'index' %}"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>
         </div>
-    </div>
+        <div class="items_nav">
+            {% if not request.user.is_authenticated %}
+            <div>
+                <a href="{% url 'login_view' %}" >
+                    <div class="item_nav">
+                        <i class="fas fa-home"></i>Se connecter
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'register' %}" >
+                    <div class="item_nav">
+                        <i class="fas fa-home"></i>S'inscrire
+                    </div>
+                </a>
+            </div>
+            {% else %}
+            <div>
+                <a href="{% url 'index' %}" >
+                    <div class="item_nav">
+                        <i class="fas fa-home"></i>Accueil
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to=" id="event_link_date">
+                    <div class="item_nav">
+                        <i class="fas fa-calendar-week"></i>Événements
+                    </div>
+                </a>
+            </div>
+            {% if request.user.user_type != 2 %}
+            <div>
+                <a href="{% url 'locations' %}">
+                    <div class="item_nav">
+                    <i class="fas fa-map-marker-alt"></i>Sites
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'all_users_site' %}">
+                    <div class="item_nav">
+                    <i class="fas fa-users"></i>Bénévoles
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            <div>
+                <a href="{% url 'profile' %}">
+                    <div class="item_nav">
+                        <i class="fas fa-user-circle"></i>Profil
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'logout_view' %}" >
+                    <div class="item_nav">
+                        <i class="fas fa-home"></i>Se déconnecter
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endif %}
 
-    <div class="items_nav">
-    {% if request.user.is_authenticated %}
-        <div class="item_nav">
-            <span>Bonjour <a href="{% url 'profile' %}">{{user.username}}</a></span>
-        </div>
-        <div class="item_nav">
-            <a href="{% url 'logout_view' %}">Se déconnecter</a>
-        </div>
-    {% else%}
-        <div class="item_nav">
-            <a href="{% url 'login_view' %}">Se connecter</a>
-        </div>
-        <div class="item_nav">
-            <a href="{% url 'register' %}">S'inscrire</a>
-        </div>
-    {% endif%}
     </div>
 </nav>
+
+<div class=menu_icon>
+    <i id='menu' class="fas fa-bars"></i>
+</div>
+
 
 <div class="container_master">
 {% block content%}

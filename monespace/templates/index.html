@@ -26,11 +26,11 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
             <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_create' %}">Créer un évenement</a></span>
         </div>
 
-        {% if request.user.user_type == 1 %}
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'all_users_site' %}">Voir tous les bénévoles</a></span>
-        </div>
-        {% endif %}
+<!--        {% if request.user.user_type == 1 %}-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'all_users_site' %}">Voir tous les bénévoles</a></span>-->
+<!--        </div>-->
+<!--        {% endif %}-->
 
     </div>
 {% endif %}
@@ -42,7 +42,7 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 
     <div class="sub_nav">
         <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}">Voir plus d'évenements</a></span>
+            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}" >Voir plus d'évenements</a></span>
         </div>
     </div>
 
