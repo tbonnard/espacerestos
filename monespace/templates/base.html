@@ -56,14 +56,14 @@
             {% if not request.user.is_authenticated %}
             <div>
                 <a href="{% url 'login_view' %}" >
-                    <div class="item_nav">
+                    <div class="item_nav" data-path="/login/">
                         <i class="fas fa-home"></i>Se connecter
                     </div>
                 </a>
             </div>
             <div>
                 <a href="{% url 'register' %}" >
-                    <div class="item_nav">
+                    <div class="item_nav" data-path="/register/">
                         <i class="fas fa-home"></i>S'inscrire
                     </div>
                 </a>
@@ -71,14 +71,14 @@
             {% else %}
             <div>
                 <a href="{% url 'index' %}" >
-                    <div class="item_nav">
+                    <div class="item_nav" data-path="/">
                         <i class="fas fa-home"></i>Accueil
                     </div>
                 </a>
             </div>
             <div>
                 <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to=" id="event_link_date">
-                    <div class="item_nav">
+                    <div class="item_nav" data-path="/events/">
                         <i class="fas fa-calendar-week"></i>Événements
                     </div>
                 </a>
@@ -86,14 +86,14 @@
             {% if request.user.user_type != 2 %}
             <div>
                 <a href="{% url 'locations' %}">
-                    <div class="item_nav">
+                    <div class="item_nav" data-path="/locations/">
                     <i class="fas fa-map-marker-alt"></i>Sites
                     </div>
                 </a>
             </div>
             <div>
                 <a href="{% url 'all_users_site' %}">
-                    <div class="item_nav">
+                    <div class="item_nav" data-path="/benevoles/">
                     <i class="fas fa-users"></i>Bénévoles
                     </div>
                 </a>
@@ -101,14 +101,14 @@
             {% endif %}
             <div>
                 <a href="{% url 'profile' %}">
-                    <div class="item_nav">
+                    <div class="item_nav" data-path="/profil/">
                         <i class="fas fa-user-circle"></i>Profil
                     </div>
                 </a>
             </div>
             <div>
                 <a href="{% url 'logout_view' %}" >
-                    <div class="item_nav">
+                    <div class="item_nav" data-path="/logout/">
                         <i class="fas fa-home"></i>Se déconnecter
                     </div>
                 </a>
