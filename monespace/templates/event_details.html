@@ -74,12 +74,12 @@
             {% if attendees %}
             <form>
               {% csrf_token %}
-              <button class="button_attendees button_white" data-type="decline" type='submit' data-eventid="{{event.id}}" data-date="{{date}}">Annuler ma venue</button>
+              <button class="button_attendees button_white" data-type="decline" type='submit' data-eventid="{{event.id}}" data-date="{{date}}"><i class="fas fa-check-square icon_attend"></i>Annuler ma présence</button>
             </form>
             {% else %}
             <form>
               {% csrf_token %}
-              <button class="button_attendees" data-type="attend" type='submit' data-eventid="{{event.id}}" data-date="{{date}}">Je serai là</button>
+              <button class="button_attendees" data-type="attend" type='submit' data-eventid="{{event.id}}" data-date="{{date}}"><i class="far fa-square icon_attend"></i>Confirmer ma présence</button>
             </form>
             {% endif %}
             {% endif %}
