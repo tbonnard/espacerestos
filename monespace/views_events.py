@@ -113,7 +113,7 @@ def events_list_date(request):
 
 def create_event_unit(form):
     end_date = form.cleaned_data['end_date']
-    if form.cleaned_data['end_date'] is None :
+    if form.cleaned_data['end_date'] is None or form.cleaned_data['is_recurring']:
         end_date = form.cleaned_data['start_date']
     try:
         Location.objects.get(id=form['location'].value())

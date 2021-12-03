@@ -11,6 +11,7 @@ urlpatterns = [
     # path('reset_password_email_sent/', views_login.reset_password_email_sent, name='reset_password_email_sent'),
     # path('reset_password/', views_login.reset_password, name='reset_password'),
     # path('reset_password_success/', views_login.reset_password_success, name='reset_password_success'),
+    path('faq/', views.faq_view, name='faq'),
     path('profil/', views.profile, name='profile'),
     path('profil_edit/', views.profile_edit, name='profile_edit'),
     path('benevoles_site/<int:location_id>', views.users_site, name='users_site'),

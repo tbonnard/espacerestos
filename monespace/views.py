@@ -52,6 +52,10 @@ def index(request):
     return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final, "date_to": date_to, "pending_location":pending_location, "attendees":attendees})
 
 
+def faq_view(request):
+    return render(request, 'faq.html')
+
+
 @admin_only
 @login_required(login_url='/login/')
 def all_users_site(request):

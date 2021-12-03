@@ -73,6 +73,13 @@
                     </div>
                 </a>
             </div>
+            <div>
+                <a href="{% url 'faq' %}" >
+                    <div class="item_nav" data-path="/faq/">
+                        <i class="fas fa-question-circle"></i>FAQ
+                    </div>
+                </a>
+            </div>
             {% else %}
 
             {% if request.user.user_type != 2 %}
@@ -125,6 +132,13 @@
                         </div>
                     </a>
                 </div>
+            <div>
+                <a href="{% url 'faq' %}" >
+                    <div class="item_nav" data-path="/faq/">
+                        <i class="fas fa-question-circle"></i>FAQ
+                    </div>
+                </a>
+            </div>
                 <div>
                     <a href="{% url 'logout_view' %}" >
                         <div class="item_nav" data-path="/logout/">
