@@ -19,14 +19,20 @@ def index(request):
         user_locations = [i.location for i in user_locations_pre]
 
     eligible_events_date_locations = events_list(date_from=None, date_to=None, location=user_locations)
-
+    print(eligible_events_date_locations)
     pending_location = []
     if StatusUsersLocations.objects.filter(user=request.user, status=1):
         pending_location = [i.location for i in StatusUsersLocations.objects.filter(user=request.user, status=1)]
-
+    eligible_events_date_locations_attendees = []
     attendees = AttendeesEvents.objects.filter(user=request.user)
-
-    return render(request, 'index.html', context={"events": eligible_events_date_locations, "date_to": date_to, "pending_location":pending_location, "attendees":attendees})
+    for i in eligible_events_date_locations:
+        for j in i[1]:
+            for z in attendees:
+                if j == z.parent_event:
+                    eligible_events_date_locations_attendees.append(i[0])
+                    eligible_events_date_locations_attendees[eligible_events_date_locations_attendees.index(i[0])]=(i[0],[j])
+    print(eligible_events_date_locations_attendees)
+    return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees, "date_to": date_to, "pending_location":pending_location, "attendees":attendees})
 
 
 @admin_only
