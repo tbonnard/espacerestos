@@ -334,7 +334,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 
 .item_nav {
 	padding: 20px 0px 20px 20px;
-	color: var(--dark_grey);
+	color: var(--near_black);
 	border-left: solid 4px #fff;
 }
 

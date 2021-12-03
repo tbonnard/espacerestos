@@ -37,9 +37,16 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 {% endif %}
 
 
+
+{% if events|length == 0 %}
+    <p>Aucune présence prévue pour vous dans les 14 prochains jours</p>
+{% else %}
+
 <h1>Vos présences des 14 prochains jours</h1>
 
 {% include "events_loop.html" %}
+
+{% endif %}
 
             <div class="">
                 <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}" >

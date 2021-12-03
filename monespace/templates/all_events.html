@@ -29,7 +29,11 @@
 
 <!--<h1>Tous les évenements</h1>-->
 
+{% if events|length == 0 %}
+    <p>Pas de résultat avec ces critères de recherche</p>
+{% else %}
 {% include "events_loop.html" %}
+{% endif %}
 
 
 {% endblock %}

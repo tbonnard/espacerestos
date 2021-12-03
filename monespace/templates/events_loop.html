@@ -7,9 +7,10 @@
 
 
 <div>
-{% if events|length == 0 %}
-    <p>Pas de résultat avec ces critères de recherche</p>
-{% else %}
+<!--{% if events|length == 0 %}-->
+<!--    <p>Pas de résultat avec ces critères de recherche</p>-->
+<!--{% else %}-->
+<!--{% endif %}-->
 
 
 {% csrf_token %}
@@ -64,6 +65,5 @@
     </div>
     {% endfor %}
 
-{%endif %}
 
 </div>
