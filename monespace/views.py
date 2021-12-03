@@ -19,7 +19,6 @@ def index(request):
         user_locations = [i.location for i in user_locations_pre]
 
     eligible_events_date_locations = events_list(date_from=None, date_to=None, location=user_locations)
-    print(eligible_events_date_locations)
     pending_location = []
     if StatusUsersLocations.objects.filter(user=request.user, status=1):
         pending_location = [i.location for i in StatusUsersLocations.objects.filter(user=request.user, status=1)]
@@ -28,11 +27,29 @@ def index(request):
     for i in eligible_events_date_locations:
         for j in i[1]:
             for z in attendees:
-                if j == z.parent_event:
-                    eligible_events_date_locations_attendees.append(i[0])
+                if j == z.parent_event and i[0] == z.event_date:
+                    for y in eligible_events_date_locations_attendees:
+                        if y[0] == i[0]:
+                            for x in eligible_events_date_locations_attendees:
+                                if x[0] == i[0]:
+                                    events_that_date_index = eligible_events_date_locations_attendees.index(x)
+                                    break
+                            events_that_date = eligible_events_date_locations_attendees[events_that_date_index][1]
+                            events_that_date.append(j)
+                            for a in eligible_events_date_locations_attendees:
+                                if a[0] == i[0]:
+                                    eligible_events_date_locations_attendees[eligible_events_date_locations_attendees.index(a)] = (i[0], events_that_date)
+                                    break
+                    if i[0] not in eligible_events_date_locations_attendees:
+                        eligible_events_date_locations_attendees.append(i[0])
                     eligible_events_date_locations_attendees[eligible_events_date_locations_attendees.index(i[0])]=(i[0],[j])
-    print(eligible_events_date_locations_attendees)
-    return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees, "date_to": date_to, "pending_location":pending_location, "attendees":attendees})
+    eligible_events_date_locations_attendees_final = []
+    dates_event = []
+    for b in eligible_events_date_locations_attendees:
+        if b[0] not in dates_event:
+            dates_event.append(b[0])
+            eligible_events_date_locations_attendees_final.append(b)
+    return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final, "date_to": date_to, "pending_location":pending_location, "attendees":attendees})
 
 
 @admin_only
