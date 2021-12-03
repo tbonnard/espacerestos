@@ -7,7 +7,7 @@
 
 {% block content %}
 
-<h4>Liste des bénévoles du site</h4>
+<h4>Liste des bénévoles</h4>
 
 <p>Total des bénévoles (actif, en attente) : {{ users.count }}</p>
 
@@ -22,6 +22,7 @@
                     <th class='table_heading'>Nom d'utilisateur</th>
                     <th class='table_heading'>Email</th>
                     <th class='table_heading'>Téléphone</th>
+                    <th class='table_heading'>Type d'utilisateur</th>
                     <th class='table_heading'>Dernière connexion</th>
                     <th class='table_heading'>Site(s)</th>
                 </tr>
@@ -37,6 +38,7 @@
                     <td class='table_cell'>{{j.username}}</td>
                     <td class='table_cell'>{{j.email|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.tel|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.get_user_type_display}}</td>
                     <td class='table_cell'>{{j.last_login|date:'Y-m-d H:i:s'}}</td>
                     <td class='table_cell'>
                         {% for i in status_users_location %}
