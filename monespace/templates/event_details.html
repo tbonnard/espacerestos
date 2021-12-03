@@ -74,7 +74,7 @@
             {% if attendees %}
             <form>
               {% csrf_token %}
-              <button class="button_attendees button_white" data-type="decline" type='submit' data-eventid="{{event.id}}" data-date="{{date}}"><i class="fas fa-check-square icon_attend"></i>Annuler ma présence</button>
+              <button class="button_attendees button_white" data-type="decline" type='submit' data-eventid="{{event.id}}" data-date="{{date}}"><i class="fas fa-check-square icon_attend"></i>Je serai là</button>
             </form>
             {% else %}
             <form>

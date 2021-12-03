@@ -69,11 +69,11 @@ function api_call_attend_decline(eventid, date, type) {
       console.log(data[0])
       let span_number_attendees = document.querySelector(`#attend_event_number_${eventid}${date}`);
       if (data[0] > 1 ) {
-        text_attendees_number = `${data} présences confirmées`
+        text_attendees_number = `${data} personnes confirmées`
       } else if (data[0] > 0 ) {
-        text_attendees_number = `${data} présence confirmée`
+        text_attendees_number = `${data} personne confirmée`
       } else {
-        text_attendees_number = "0 présence confirmée"
+        text_attendees_number = "0 personne confirmée"
       }
       span_number_attendees.innerHTML = text_attendees_number;
     })
@@ -95,7 +95,7 @@ function api_call_attend_decline(eventid, date, type) {
       let div_attendees = document.querySelector(`#parent_${eventid}${date}`);
       for (const j in data) {
         if (data[j].parent_event == eventid && data[j].event_date == date) {
-          create_elements_attendees(div_attendees, eventid, date, '', '<i class="fas fa-check-square icon_attend"></i>Annuler ma présence', 'decline');
+          create_elements_attendees(div_attendees, eventid, date, '', '<i class="fas fa-check-square icon_attend"></i>Je serai là', 'decline');
           get_number_attendees(eventid, date);
         }
       }
@@ -123,7 +123,7 @@ function api_call_attend_decline(eventid, date, type) {
         for (const j in data) {
 
           if (data[j].parent_event == eventid && data[j].event_date == date) {
-            create_elements_attendees(i, eventid, date, '', '<i class="fas fa-check-square icon_attend"></i>Annuler ma présence', 'decline');
+            create_elements_attendees(i, eventid, date, '', '<i class="fas fa-check-square icon_attend"></i>Je serai là', 'decline');
           }
         }
       })
