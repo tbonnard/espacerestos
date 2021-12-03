@@ -358,6 +358,12 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	width: 150px;
 }
 
+.menu_end {
+	width: 100%;
+	position: absolute;
+	left:0;
+	bottom: 0;
+}
 
 .sub_nav {
   margin: 2% 0 5% 0;
@@ -511,7 +517,7 @@ nav::before {
   border-left: 1px solid var(--light_pink);
   height: 275px;
   position: absolute;
-  left: 21%;
+  left: 18%;
   top: 20px;
 	z-index: -1;
 }

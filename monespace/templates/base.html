@@ -113,21 +113,28 @@
                 </a>
             </div>
             {% endif %}
-            <div>
-                <a href="{% url 'profile' %}">
-                    <div class="item_nav" data-path="/profil/">
-                        <i class="fas fa-user-circle"></i>Profil
-                    </div>
-                </a>
-            </div>
-            <div>
-                <a href="{% url 'logout_view' %}" >
-                    <div class="item_nav" data-path="/logout/">
-                        <i class="fas fa-home"></i>Se déconnecter
-                    </div>
-                </a>
-            </div>
+
+
         </div>
+
+        <div class="menu_end">
+                <div>
+                    <a href="{% url 'profile' %}">
+                        <div class="item_nav" data-path="/profil/">
+                            <i class="fas fa-user-circle"></i>Profil
+                        </div>
+                    </a>
+                </div>
+                <div>
+                    <a href="{% url 'logout_view' %}" >
+                        <div class="item_nav" data-path="/logout/">
+                            <i class="fas fa-home"></i>Se déconnecter
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
         {% endif %}
 
     </div>
