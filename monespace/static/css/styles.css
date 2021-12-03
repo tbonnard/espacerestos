@@ -512,6 +512,7 @@ nav::before {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
+	align-items: center;
 }
 
 .events_list_left {
