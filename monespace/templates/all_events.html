@@ -10,19 +10,24 @@
 
 {% block content%}
 
-{% if request.GET.location %}
-<h1>Rechercher les évenements pour le site {{ request.GET.location }}</h1>
+<div class="top_bar">
+    {% if request.GET.location %}
+<span>Rechercher les évenements pour le site {{ request.GET.location }}</span>
 {%else%}
-<h1>Rechercher les évenements</h1>
+<span>Rechercher les évenements</span>
 {% endif %}
 
-    <label for="date_from">Entre</label>
+<!--    <label for="date_from">entre</label>-->
+    entre le
     <input id="date_from" type="date">
-    <label for="date_to">et</label>
+    et le
+<!--    <label for="date_to">et</label>-->
     <input id="date_to" type="date">
     <span class="sub_nav_item"><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="" id="form_search_dates">Search</a></span>
 
-<h1>Tous les évenements</h1>
+</div>
+
+<!--<h1>Tous les évenements</h1>-->
 
 {% include "events_loop.html" %}
 

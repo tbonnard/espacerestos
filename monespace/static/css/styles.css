@@ -283,7 +283,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
     height: 100%;
     width: 200px;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     top: 0;
     left: 0;
     background-color: #fff;
@@ -296,11 +296,22 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	transform: translateX(-200px);
 }
 
+.top_bar {
+	padding: 20px 0;
+	width: 100%;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	border-bottom:1px solid #f3f3f3;
+	background-color: #fff;
+}
+
 .menu_icon {
   position: fixed;
 	top:30px;
 	left:30px;
-	z-index: 2;
+	z-index: 3;
 }
 
 #menu {
@@ -576,6 +587,7 @@ margin: 0;
 .events_list_date {
   color: var(--pink);
 	margin-left: 10px;
+	width: 100px !important;
 }
 
 .events_list_details_time_location{
