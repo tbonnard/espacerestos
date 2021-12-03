@@ -26,7 +26,6 @@ class Location(models.Model):
     city = models.CharField(blank=False, max_length=255)
     zip_code = models.CharField( blank=False, max_length=5)
     country = models.CharField(choices=country_list, blank=False, max_length=2, default='FR')
-    manager_location = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
     created = models.DateTimeField(auto_now_add=True)
     location_managers = models.ManyToManyField(User, blank=False)
 
