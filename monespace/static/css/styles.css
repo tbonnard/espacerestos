@@ -434,7 +434,8 @@ nav::before {
 }
 
 .event_right_subitem {
-	padding: 12px 14px 8px;
+	text-align: left;
+	padding: 12px 0px 12px 5px;
   margin-bottom: 12px;
   background-color: var(--light_grey);
 	position: relative;
@@ -446,7 +447,7 @@ nav::before {
 
 .event_right_subitem p {
   color: var(--dark_grey);
-	padding-left: 10%;
+	padding-left: 7%;
 }
 
 .name_event_right_subitem {
