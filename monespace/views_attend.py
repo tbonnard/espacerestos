@@ -54,7 +54,6 @@ def api_get_count_specific_attendees(request):
     data = json.loads(request.body)
     parent_event = data.get('parent_event')
     date = data.get('event_date')
-    print(date)
     try:
         event = Event.objects.get(pk=parent_event)
     except:
