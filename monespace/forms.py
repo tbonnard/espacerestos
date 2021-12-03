@@ -88,7 +88,7 @@ class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
         # fields = '__all__'
-        fields = ("name", "address", "address_2", "city", "zip_code", "country", "manager_location")
+        fields = ("name", "address", "address_2", "city", "zip_code", "country", "manager_location", "location_managers")
         labels = {
             "name":"Nom du site",
             "address": "Adresse",
@@ -96,7 +96,8 @@ class LocationForm(forms.ModelForm):
             "city": "Ville",
             "zip_code": "Code postal",
                     "country": "Pays",
-            "manager_location": "Gestionnaire du site"
+            "manager_location": "Gestionnaire du site",
+            "location_managers": "Gestionnaires du site"
         }
 
 

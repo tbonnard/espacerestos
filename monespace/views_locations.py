@@ -105,11 +105,20 @@ def location_edit(request, location_id):
             location_page.city = form.cleaned_data['city']
             location_page.zip_code = form.cleaned_data['zip_code']
             location_page.country = form.cleaned_data['country']
+            managers = form.cleaned_data['location_managers']
             try:
                 manager = User.objects.get(id=request.POST['manager_location'])
             except User.DoesNotExist:
                 location_page.manager_location = None
+                location_page.location_managers = None
             else:
+                current_managers = location_page.location_managers.all()
+                for i in managers:
+                    if i not in current_managers:
+                        location_page.location_managers.add(i)
+                for i in current_managers:
+                    if i not in managers:
+                        location_page.location_managers.remove(i)
                 if location_page.manager_location != manager:
                     edit_user_type_to_user(location_page.manager_location)
                     location_page.manager_location = manager

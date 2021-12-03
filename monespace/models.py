@@ -28,6 +28,7 @@ class Location(models.Model):
     country = models.CharField(choices=country_list, blank=False, max_length=2, default='FR')
     manager_location = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=False, related_name="location_manager")
     created = models.DateTimeField(auto_now_add=True)
+    location_managers = models.ManyToManyField(User, blank=False, null=True)
 
     def __str__(self):
         return self.name
