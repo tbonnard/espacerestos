@@ -115,6 +115,8 @@
                     </div>
                 </a>
             </div>
+            {% if request.user.user_type == 1 %}
+
             <div>
                 <a href="{% url 'all_users_site' %}">
                     <div class="item_nav" data-path="/benevoles/">
@@ -122,6 +124,7 @@
                     </div>
                 </a>
             </div>
+            {% endif %}
             {% endif %}
 
 
@@ -131,7 +134,7 @@
                 <div>
                     <a href="{% url 'profile' %}">
                         <div class="item_nav" data-path="/profil/">
-                            <i class="fas fa-user-circle"></i>Profil
+                            <i class="fas fa-user-circle" title="{{request.user.username}}"></i>Profil
                         </div>
                     </a>
                 </div>

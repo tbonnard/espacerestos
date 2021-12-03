@@ -216,9 +216,9 @@ def event_create(request):
         if Location.objects.all().count() == 1:
             form.initial["location"] = Location.objects.all().first()
     else:
-        form.fields['location'].queryset = Location.objects.all().filter(manager_location=request.user)
-        if Location.objects.all().filter(manager_location=request.user).count() == 1:
-            form.initial["location"] = Location.objects.all().filter(manager_location=request.user).first()
+        form.fields['location'].queryset = Location.objects.all().filter(location_managers=request.user)
+        if Location.objects.all().filter(location_managers=request.user).count() == 1:
+            form.initial["location"] = Location.objects.all().filter(location_managers=request.user).first()
     rec_form = EventRecurringPatternForm()
     if request.method == "POST":
         form = EventForm(data=request.POST)
@@ -385,10 +385,10 @@ def event_details(request, event_id):
             count_attendees = all_attendees.count()
             for i in all_attendees:
                 count_attendees += i.plus_other
-            if event_page.location.manager_location == request.user:
-                manager_location = True
-            else:
-                manager_location = False
+            manager_location = False
+            for i in event_page.location.location_managers.all():
+                if i == request.user:
+                    manager_location = True
             if event_page:
                 return render(request, 'event_details.html',
                               context={"event": event_page, "manager_location": manager_location, 'date': date,

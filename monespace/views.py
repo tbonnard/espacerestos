@@ -68,7 +68,7 @@ def all_users_site(request):
 @forbidden_to_user
 @login_required(login_url='/login/')
 def users_site(request, location_id):
-    if request.user.user_type == 3 and Location.objects.get(pk=location_id) not in Location.objects.filter(manager_location=request.user):
+    if request.user.user_type == 3 and Location.objects.get(pk=location_id) not in Location.objects.filter(location_managers=request.user):
         return redirect('index')
     else:
         status_users_location = StatusUsersLocations.objects.filter(location=Location.objects.get(pk=location_id),
@@ -112,7 +112,7 @@ def profile(request):
     date_to = get_date_to()
     user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
     # user_locations = [i.location for i in user_locations_pre]
-    user_manager_locations = Location.objects.filter(manager_location=request.user)
+    user_manager_locations = Location.objects.filter(location_managers=request.user)
     return render(request, 'profile.html', context={'locations': user_locations_pre, "date_to":date_to, 'manager_locations': user_manager_locations})
 
 

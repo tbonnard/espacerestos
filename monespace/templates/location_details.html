@@ -25,7 +25,9 @@
         <p>{{ location.zipcode }}</p>
         <p>{{ location.get_country_display }}</p>
         Site géré par:
-        <p>{{ location.manager_location }}</p>
+        {% for i in location.location_managers.all %}
+        <p>{{i}}</p>
+        {% endfor %}
     </div>
 
     <div class="location_right">

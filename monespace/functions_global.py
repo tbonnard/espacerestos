@@ -45,7 +45,11 @@ def location_manager_check(f):
             print("event not found")
             return redirect('index')
         else:
-            if event.location.manager_location != args[0].user and args[0].user.user_type !=1:
+            manager_location_check = False
+            for i in event.location.location_managers.all():
+                if i == args[0].user:
+                    manager_location_check = True
+            if not manager_location_check and args[0].user.user_type !=1:
                 print("no access - not manager")
                 return redirect('index')
         #Otherwise continue with the route function

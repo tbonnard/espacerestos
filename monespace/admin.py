@@ -10,7 +10,7 @@ class UserAdminCustom(admin.ModelAdmin):
 
 
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ("name", "address", "address_2", "city", "zip_code", "country", "manager_location", 'created')
+    list_display = ("name", "address", "address_2", "city", "zip_code", "country", 'created')
 
 
 class EventAdmin(admin.ModelAdmin):

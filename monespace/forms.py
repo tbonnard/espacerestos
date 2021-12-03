@@ -88,16 +88,18 @@ class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
         # fields = '__all__'
-        fields = ("name", "address", "address_2", "city", "zip_code", "country", "manager_location", "location_managers")
+        fields = ("name", "address", "address_2", "city", "zip_code", "country", "location_managers")
         labels = {
-            "name":"Nom du site",
+            "name": "Nom du site",
             "address": "Adresse",
             "address_2": "Complément d'adresse",
             "city": "Ville",
             "zip_code": "Code postal",
                     "country": "Pays",
-            "manager_location": "Gestionnaire du site",
             "location_managers": "Gestionnaires du site"
+        }
+        widgets = {
+            "location_managers": forms.CheckboxSelectMultiple(),
         }
 
 

@@ -25,7 +25,7 @@ def download_users_csv(request):
     except:
         all_users = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
     else:
-        if location in Location.objects.filter(manager_location=request.user):
+        if location in Location.objects.filter(location_managers=request.user):
             all_users = StatusUsersLocations.objects.filter(status=1, location=location) | StatusUsersLocations.objects.filter(status=2, location=location)
         else:
             return redirect('index')
