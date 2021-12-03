@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
     // click on the menu icon toggle the sidebar-menu
-  document.querySelector('.menu_icon').addEventListener('click', function () {
+  document.querySelector('#menu').addEventListener('click', function () {
       ToggleMenu();
   });
 

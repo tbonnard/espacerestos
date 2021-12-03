@@ -49,14 +49,17 @@
 
 <div class=menu_icon>
     <i id='menu' class="fas fa-bars"></i>
+<!--    <span class="logo_img">-->
+        <a href="{% url 'index' %}"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>
+<!--    </span>-->
 </div>
 
 
 <nav>
     <div class='sidebar'>
-        <div class="logo_img">
-            <a href="{% url 'index' %}"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>
-        </div>
+<!--        <div class="logo_img">-->
+<!--            <a href="{% url 'index' %}"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>-->
+<!--        </div>-->
         <div class="items_nav">
             {% if not request.user.is_authenticated %}
             <div>
