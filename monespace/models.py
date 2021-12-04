@@ -64,8 +64,6 @@ class RecurringPattern(models.Model):
     max_num_occurrences = models.IntegerField(blank=True, null=True, default=1)
     created = models.DateTimeField(auto_now_add=True)
 
-#https://vertabelo.com/blog/again-and-again-managing-recurring-events-in-a-data-model/
-
 
 class EventExceptionCancelledRescheduled(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=False, related_name="events_exceptions_locations")
