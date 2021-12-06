@@ -675,7 +675,7 @@ margin: 0;
 	width: 90%;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: space-around;
 }
 
 .location_left {
