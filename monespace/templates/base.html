@@ -65,14 +65,14 @@
             <div>
                 <a href="{% url 'login_view' %}" >
                     <div class="item_nav" data-path="/login/">
-                        <i class="fas fa-home"></i>Se connecter
+                        <i class="fas fa-sign-in-alt"></i>Se connecter
                     </div>
                 </a>
             </div>
             <div>
                 <a href="{% url 'register' %}" >
                     <div class="item_nav" data-path="/register/">
-                        <i class="fas fa-home"></i>S'inscrire
+                        <i class="fas fa-plus-circle"></i>S'inscrire
                     </div>
                 </a>
             </div>
@@ -103,7 +103,7 @@
             <div>
                 <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to=" id="event_link_date">
                     <div class="item_nav" data-path="/events/">
-                        <i class="fas fa-calendar-week"></i>Événements
+                        <i class="fas fa-calendar-alt"></i>Événements
                     </div>
                 </a>
             </div>
@@ -148,7 +148,7 @@
                 <div>
                     <a href="{% url 'logout_view' %}" >
                         <div class="item_nav" data-path="/logout/">
-                            <i class="fas fa-home"></i>Se déconnecter
+                            <i class="fas fa-sign-out-alt"></i>Se déconnecter
                         </div>
                     </a>
                 </div>

@@ -44,6 +44,7 @@ class Event(models.Model):
     is_full_day = models.BooleanField(default=False)
     is_recurring = models.BooleanField(default=False)
     was_recurring_event_rec = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    event_manager = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, related_name="events_manager")
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

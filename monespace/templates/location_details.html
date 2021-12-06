@@ -4,15 +4,35 @@
 {% block content %}
 
 {% if manager_location or request.user.user_type == 1 %}
+<div class="top_bar_menu">
 
-    <div class="sub_nav">
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_edit' location_id=location.pk %}">Modifier le site</a></span>
-        </div>
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'users_site' location_id=location.pk %}">Voir les bénévoles du site</a></span>
-        </div>
+    <div class="sub_nav_hor active">
+        <i class="fas fa-map-marker-alt"></i>Détails du site
     </div>
+
+    <a href="{% url 'location_edit' location_id=location.pk %}">
+        <div class="sub_nav_hor">
+        <i class="fas fa-edit"></i>Modifier le site
+        </div>
+    </a>
+
+       <a href="{% url 'users_site' location_id=location.pk %}">
+        <div class="sub_nav_hor">
+        <i class="fas fa-users"></i>Bénévoles du site
+        </div>
+    </a>
+
+</div>
+
+
+<!--    <div class="sub_nav">-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_edit' location_id=location.pk %}">Modifier le site</a></span>-->
+<!--        </div>-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'users_site' location_id=location.pk %}">Voir les bénévoles du site</a></span>-->
+<!--        </div>-->
+<!--    </div>-->
 
 {% endif %}
 

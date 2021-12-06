@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 import datetime
 
 from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents, \
-    EventExceptionCancelledRescheduled
+    EventExceptionCancelledRescheduled, User
 from .forms import EventForm, EventRecurringPatternForm
 from .functions_global import get_date_to, forbidden_to_user, location_manager_check
 
@@ -130,7 +130,8 @@ def create_event_unit(form):
                           time_to=form.cleaned_data['time_to'],
                           is_recurring=form.cleaned_data['is_recurring'],
                           is_full_day=form.cleaned_data['is_full_day'],
-                          location=location
+                          location=location,
+                          event_manager=form.cleaned_data['event_manager']
                           )
         new_event.save()
         return new_event
@@ -153,6 +154,7 @@ def edit_event_unit(event, form):
     event.time_to = form.cleaned_data['time_to']
     event.is_recurring = form.cleaned_data['is_recurring']
     event.is_full_day = form.cleaned_data['is_full_day']
+    event.event_manager = form.cleaned_data['event_manager']
     try:
         Location.objects.get(id=form['location'].value())
     except:
@@ -207,18 +209,33 @@ def edit_recurring_pattern_event_unit(recurring_pattern, form):
     return recurring_pattern
 
 
-@forbidden_to_user
-@login_required(login_url='/login/')
-def event_create(request):
-    form = EventForm()
+def default_initial_event_form(request, form, edit=False):
     if request.user.user_type == 1:
         form.fields['location'].queryset = Location.objects.all()
+        user_from_location = Location.objects.all()
         if Location.objects.all().count() == 1:
             form.initial["location"] = Location.objects.all().first()
     else:
         form.fields['location'].queryset = Location.objects.all().filter(location_managers=request.user)
+        user_from_location = Location.objects.all().filter(location_managers=request.user)
         if Location.objects.all().filter(location_managers=request.user).count() == 1:
             form.initial["location"] = Location.objects.all().filter(location_managers=request.user).first()
+    users_loc = []
+    for i in user_from_location:
+        for y in i.location_managers.all():
+            users_loc.append(y.pk)
+    form.fields['event_manager'].queryset = User.objects.filter(id__in=users_loc)
+    if not edit:
+        if request.user.pk in users_loc:
+            form.initial["event_manager"] = request.user
+    return form
+
+
+@forbidden_to_user
+@login_required(login_url='/login/')
+def event_create(request):
+    pre_form = EventForm()
+    form = default_initial_event_form(request, pre_form)
     rec_form = EventRecurringPatternForm()
     if request.method == "POST":
         form = EventForm(data=request.POST)
@@ -259,7 +276,8 @@ def event_edit(request, event_id):
         redirect('index')
     else:
         if request.method == "GET":
-            form = EventForm(instance=event_page)
+            pre_form = EventForm(instance=event_page)
+            form = default_initial_event_form(request, pre_form, True)
             form.initial["start_date"] = event_page.start_date.strftime("%Y-%m-%d")
             form.initial["end_date"] = event_page.end_date.strftime("%Y-%m-%d")
             if event_page.is_recurring:

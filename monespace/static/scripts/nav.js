@@ -28,11 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   function check_active_url(i) {
-    console.log(i);
+    // console.log(i);
     let path = window.location.pathname;
-    console.log(path);
+    // console.log(path);
     let menu_path = i.dataset.path;
-    console.log(menu_path);
+    // console.log(menu_path);
 
     if ( path.toLowerCase() == menu_path.toLowerCase()) {
       i.className = "item_nav item_nav_active";

@@ -7,8 +7,21 @@
 
 {% block content %}
 
+<div class="top_bar_menu">
 
-<h4>Liste des bénévoles du site</h4>
+    <div class="sub_nav_hor active">
+        <i class="fas fa-users"></i>Bénévoles actifs
+    </div>
+
+    <a href="{% url 'download_users_csv' %}?site={{location_id}}">
+        <div class="sub_nav_hor">
+            <i class="fas fa-cloud-download-alt"></i>Exporter
+        </div>
+    </a>
+
+</div>
+
+<!--<h4>Liste des bénévoles du site</h4>-->
 
 <p>Total des bénévoles (actif, en attente) pour le site: {{ status_users_location.count }}</p>
 
@@ -68,8 +81,8 @@
         </table>
 
 
-<h4>Télecharger tous les membres du site</h4>
-<a href="{% url 'download_users_csv' %}?site={{location_id}}"><button class="">Download</button></a>
+<!--<h4>Télecharger tous les membres du site</h4>-->
+<!--<a href="{% url 'download_users_csv' %}?site={{location_id}}"><button class="">Download</button></a>-->
 
 
 {% endblock %}

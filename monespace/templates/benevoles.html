@@ -7,7 +7,21 @@
 
 {% block content %}
 
-<h4>Liste des bénévoles</h4>
+<div class="top_bar_menu">
+
+    <div class="sub_nav_hor active">
+        <i class="fas fa-users"></i>Bénévoles actifs
+    </div>
+
+    <a href="{% url 'download_users_csv' %}">
+        <div class="sub_nav_hor">
+        <i class="fas fa-cloud-download-alt"></i>Exporter
+        </div>
+    </a>
+
+</div>
+
+<!--<h4>Liste des bénévoles</h4>-->
 
 <p>Total des bénévoles (actif, en attente) : {{ users.count }}</p>
 
@@ -54,8 +68,8 @@
 
 
 
-<h4>Télecharger tous les membres</h4>
-<a href="{% url 'download_users_csv' %}"><button class="">Download</button></a>
+<!--<h4>Télecharger tous les membres</h4>-->
+<!--<a href="{% url 'download_users_csv' %}"><button class="">Download</button></a>-->
 
 <!--{% for j in users%}-->
 <!--<h4>{{j}} &#45;&#45; {{ j.user_type }}</h4>-->

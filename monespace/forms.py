@@ -42,7 +42,7 @@ class UserAuthenticationForm(AuthenticationForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ('location', "name", "description", "start_date", "end_date", "is_full_day", "time_from", "time_to", "is_recurring")
+        fields = ('location', "name", "description", "start_date", "end_date", "is_full_day", "time_from", "time_to", "is_recurring", "event_manager")
         widgets = {
             "start_date":forms.DateInput(attrs={'type': 'date'}),
             "end_date": forms.DateInput(attrs={'type': 'date'}),
@@ -58,7 +58,8 @@ class EventForm(forms.ModelForm):
                 "time_from": "Heure de début",
                     "time_to": "Heure de fin",
                     "is_full_day": "L'événement dure toute la journée",
-            "is_recurring": "L'événement se répète"
+            "is_recurring": "L'événement se répète",
+            "event_manager": "Responsable de l'événement"
         }
 
 

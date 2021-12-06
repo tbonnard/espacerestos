@@ -4,24 +4,60 @@
 
 {% block content %}
 
-{%if admin %}
-    <div class="sub_nav">
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_create' %}">Créer un site</a></span>
+
+<div class="top_bar_menu">
+
+    <div class="sub_nav_hor active">
+        <i class="fas fa-map-marker-alt"></i>Sites actuels
+    </div>
+
+    {%if admin %}
+    <a href="{% url 'location_create' %}">
+        <div class="sub_nav_hor">
+        <i class="fas fa-plus-circle"></i>Créer un site
         </div>
-    </div>
-{% endif %}
+    </a>
+    {% endif %}
 
-{% if request.user.user_type == 1 %}
-<p>En tant qu'administrateur, vous pouvez gérer tous les sites, même ceux pour lesquels vous n'êtes pas directement associé au site</p>
-{%else%}
-<p>Voici tous les sites pour lesquels vous êtes le gestionnaire</p>
-{%endif %}
+</div>
 
-{% for i in all_locations %}
-    <div>
-        <a href="{% url 'location_details' location_id=i.id %}">{{i}}</a> // <span>{{ i.id }}</span>
-    </div>
-    {% endfor %}
+
+<!--{%if admin %}-->
+<!--    <div class="sub_nav">-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'location_create' %}">Créer un site</a></span>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--{% endif %}-->
+
+
+<!--{% if request.user.user_type == 1 %}-->
+<!--<p>En tant qu'administrateur, vous pouvez gérer tous les sites, même ceux pour lesquels vous n'êtes pas directement associé au site</p>-->
+<!--{%else%}-->
+<!--<p>Voici tous les sites pour lesquels vous êtes le gestionnaire</p>-->
+<!--{%endif %}-->
+
+
+<table class='table1'>
+            <thead>
+                <tr>
+                    <th class='table_heading'>Nom</th>
+                    <th class='table_heading'>Adresse</th>
+                    <th class='table_heading'>Ville</th>
+                    <th class='table_heading'>Gestionnaire</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for j in all_locations%}
+                <tr>
+                    <td class='table_cell'><a href="{% url 'location_details' location_id=j.id %}">{{j.name|default_if_none:""}}</a></td>
+                    <td class='table_cell'>{{j.address|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.city}}</td>
+                    <td class='table_cell'>{% for i in j.location_managers.all %}<p>{{i}}</p>{% endfor %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
 
 {% endblock %}

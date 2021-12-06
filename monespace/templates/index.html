@@ -3,10 +3,29 @@
 
 {% block script %}
 <script src= "{% static 'scripts/scripts_events_attendee.js' %}"></script>
+<script src= "{% static 'scripts/sub_nav.js' %}"></script>
 {% endblock %}
 
 
 {% block content%}
+
+<div class="top_bar_menu">
+
+    <div class="sub_nav_hor active">
+        <i class="fas fa-user-check"></i>Présences
+    </div>
+
+    <div class="sub_nav_hor">
+        <i class="fas fa-envelope"></i>Messages
+    </div>
+
+    {% if request.user.user_type != 2 %}
+    <div class="sub_nav_hor">
+        <i class="fas fa-calendar-alt"></i>Responsable
+    </div>
+    {% endif %}
+
+</div>
 
 
 {% if pending_location %}
