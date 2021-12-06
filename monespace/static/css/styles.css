@@ -297,7 +297,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 }
 
 .top_bar {
-	padding: 20px 0;
+	padding: 19px 0;
 	width: 100%;
 	position: fixed;
 	z-index: 1;
@@ -305,6 +305,10 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	left: 0;
 	border-bottom:1px solid #f3f3f3;
 	background-color: var(--light_grey);
+}
+
+.top_bar input {
+	margin: 0;
 }
 
 .top_bar_menu {
@@ -376,6 +380,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 }
 
 .item_nav {
+	position: relative;
 	padding: 20px 0px 20px 20px;
 	color: var(--near_black);
 	border-left: solid 4px #fff;
@@ -388,13 +393,18 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	border-left: solid 4px var(--pink);
 }
 
-/* .item_nav:hover i {
-	color: var(--pink);
-} */
-
 .item_nav i, .menu_button i  {
 	margin-right: 10px;
 }
+
+.item_nav span {
+	position: absolute;
+	bottom:0px;
+	left:50px;
+	color: var(--dark_grey);
+	font-size: 14px;
+}
+
 
 .item_nav_active {
 	background-color: var(--light_pink);
@@ -695,6 +705,7 @@ table {
     width: fit-content;
     max-width: 100%;
 		margin: 0 auto;
+		padding-bottom: 30px;
 }
 
 .table_heading {
@@ -727,6 +738,10 @@ table {
     font-size: 14px;
     padding: 5px 10px;
     text-align: center;
+}
+
+.table_cell i {
+		margin-left: 5px;
 }
 
 td {

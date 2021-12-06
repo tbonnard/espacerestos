@@ -1,7 +1,39 @@
 {% extends "base.html" %}
 {%load static%}
 
+{% block script %}
+<script src= "{% static 'scripts/profile.js' %}"></script>
+{% endblock %}
+
 {% block content %}
+
+<div class="top_bar_menu">
+
+    <div class="sub_nav_hor active" id="profile_menu">
+        <i class="fas fa-user-circle"></i>Détails du profil
+    </div>
+
+    <a href="{% url 'profile_edit' %}">
+        <div class="sub_nav_hor" >
+        <i class="fas fa-edit"></i>Modifier mon profil
+        </div>
+    </a>
+
+    <a href="{% url 'change_password' %}">
+        <div class="sub_nav_hor">
+        <i class="fas fa-unlock-alt"></i>Modifier mon mot de passe
+        </div>
+    </a>
+
+    <div class="sub_nav_hor" id="locations_menu">
+        <i class="fas fa-map-marker-alt"></i>Mes sites
+    </div>
+
+</div>
+
+
+<div id="profile">
+
 <h1>Votre profil</h1>
 {% if request.user.profile_picture %}
 <img src="{{request.user.profile_picture.url}}">
@@ -14,42 +46,83 @@
 <p>{{request.user.zip_code|default_if_none:"" }}</p>
 <p>{{request.user.tel|default_if_none:"" }}</p>
 
-<a href="{% url 'change_password' %}">Changer son mot de passe</a>
+<!--<a href="{% url 'change_password' %}">Changer son mot de passe</a>-->
 
 
 {% if request.user.user_type != 2 %}
     <p>Type d'utilisateur: {{request.user.get_user_type_display}}</p>
 {% endif %}
 
-    <div class="sub_nav">
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'profile_edit' %}">Modifier votre profil</a></span>
-        </div>
-    </div>
+<!--    <div class="sub_nav">-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'profile_edit' %}">Modifier votre profil</a></span>-->
+<!--        </div>-->
+<!--    </div>-->
+
+</div>
+
+<div id="locations">
 
 <h1>Vos sites</h1>
 
 
+<table class='table1'>
+            <thead>
+                <tr>
+                    <th class='table_heading'>Nom</th>
+                    <th class='table_heading'>Adresse</th>
+                    <th class='table_heading'>Ville</th>
+                    <th class='table_heading'>Code postal</th>
+                    <th class='table_heading'>Gestionnaire</th>
+                    <th class='table_heading'>Voir sur la carte</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for j in locations %}
+                <tr>
+                    <td class='table_cell'><a href="{% url 'location_details' location_id=j.location.id %}">{{j.location.name|default_if_none:""}}</a></td>
+                    <td class='table_cell'>{{j.location.address|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.location.city}}</td>
+                    <td class='table_cell'>{{j.location.zip_code}}</td>
+                    <td class='table_cell'>{% for i in j.location.location_managers.all %}<p>{{i.first_name}} {{i.last_name}}
+                    {% if i == request.user %}
+                        <i class="fas fa-check" title="Vous êtes le responsable"></i>
+                        {% endif %}
+                    </p>{% endfor %}</td>
+                    <td class='table_cell'><a href="https://maps.google.com/maps?q={{j.location.address}},%20{{j.location.city}}%20{{j.location.zip_code}}%20{{j.location.country}}" target="_blank"><i class="fas fa-globe"></i></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
 
-{% for i in locations%}
-<!--<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a>-->
-<p><a href="{% url 'location_details' location_id=i.location.pk %}">{{i.location}}</a> - <span>{{i.get_status_display}}</span>
-    {% for j in manager_locations %}
-    {% if j == i.location %}
-    <span> --> vous êtes le gestionnaire</span>
-    {%endif%}
-    {%endfor%}
-</p>
-{%endfor%}
+<!--{% for i in locations %}-->
+<!--&lt;!&ndash;<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a>&ndash;&gt;-->
+<!--<p><a href="{% url 'location_details' location_id=i.location.pk %}">{{i.location}}</a> - <span>{{i.get_status_display}}</span>-->
+<!--    {% for j in manager_locations %}-->
+<!--    {% if j == i.location %}-->
+<!--    <span> &ndash;&gt; vous êtes le gestionnaire</span>-->
+<!--    {%endif%}-->
+<!--    {%endfor%}-->
+<!--</p>-->
+<!--{%endfor%}-->
 
-    <div class="sub_nav">
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'select_locations' %}">Modifier vos sites</a></span>
+<!--    <div class="sub_nav">-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'select_locations' %}">Modifier vos sites</a></span>-->
+<!--        </div>-->
+<!--&lt;!&ndash;        {% if request.user.user_type == 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;        <p>En tant qu'administrateur, vous pouvez accéder à tous les sites <i>(Accueil > Gérer les sites)</i> mais il est cependant pertinent de sélectionner les sites pour lesquels vous êtes bénévoles aussi afin d'avoir un compte exact</p>&ndash;&gt;-->
+<!--&lt;!&ndash;{%endif %}&ndash;&gt;-->
+<!--    </div>-->
+
+       <div class="">
+            <a href="{% url 'select_locations' %}">
+                <button class="button_white">Modifier vos sites</button>
+            </a>
         </div>
-        {% if request.user.user_type == 1 %}
-        <p>En tant qu'administrateur, vous pouvez accéder à tous les sites <i>(Accueil > Gérer les sites)</i> mais il est cependant pertinent de sélectionner les sites pour lesquels vous êtes bénévoles aussi afin d'avoir un compte exact</p>
-{%endif %}
-    </div>
+
+
+</div>
 
 {% endblock %}

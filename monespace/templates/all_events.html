@@ -25,12 +25,14 @@
     <input id="date_to" type="date">
     <span class="sub_nav_item"><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="" id="form_search_dates">Search</a></span>
 
+
+
 </div>
 
 <!--<h1>Tous les évenements</h1>-->
 
 {% if events|length == 0 %}
-    <p>Pas de résultat avec ces critères de recherche</p>
+    <p class="info_text">Aucun résultat avec ces critères de recherche</p>
 {% else %}
 {% include "events_loop.html" %}
 {% endif %}

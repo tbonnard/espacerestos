@@ -3,7 +3,7 @@
 
 {% block script %}
 <script src= "{% static 'scripts/scripts_events_attendee.js' %}"></script>
-<script src= "{% static 'scripts/sub_nav.js' %}"></script>
+<script src= "{% static 'scripts/index.js' %}"></script>
 {% endblock %}
 
 
@@ -11,22 +11,24 @@
 
 <div class="top_bar_menu">
 
-    <div class="sub_nav_hor active">
+    <div class="sub_nav_hor active" id="events_14_days_menu">
         <i class="fas fa-user-check"></i>Présences
     </div>
 
-    <div class="sub_nav_hor">
+    <div class="sub_nav_hor" id="messages_menu">
         <i class="fas fa-envelope"></i>Messages
     </div>
 
     {% if request.user.user_type != 2 %}
-    <div class="sub_nav_hor">
-        <i class="fas fa-calendar-alt"></i>Responsable
+    <div class="sub_nav_hor" id="events_manager_menu">
+        <i class="fas fa-calendar-alt"></i>Événements à charge
     </div>
     {% endif %}
 
 </div>
 
+
+<div id="events_14_days">
 
 {% if pending_location %}
 Vous avez au moins un site en attente de confirmation par le gestionnaire de site:
@@ -35,8 +37,8 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
     {% endfor %}
 {% endif %}
 
-{% if request.user.user_type != 2 %}
-    <div class="sub_nav">
+<!--{% if request.user.user_type != 2 %}-->
+<!--    <div class="sub_nav">-->
 
 <!--        <div class="sub_nav_item">-->
 <!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'locations' %}">Gérer le(s) site(s)</a></span>-->
@@ -52,13 +54,13 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 <!--        </div>-->
 <!--        {% endif %}-->
 
-    </div>
-{% endif %}
+<!--    </div>-->
+<!--{% endif %}-->
 
 
 
 {% if events|length == 0 %}
-    <p>Aucune présence prévue pour vous dans les 14 prochains jours</p>
+    <p class="info_text">Aucune présence prévue pour vous dans les 14 prochains jours</p>
 {% else %}
 
 <h1>Vos présences des 14 prochains jours</h1>
@@ -79,4 +81,19 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 <!--        </div>-->
 <!--    </div>-->
 
+</div>
+
+
+<div id="messages">
+    <p class="info_text">Aucun message</p>
+
+</div>
+
+
+
+<div id="events_manager">
+
+    {% include "events_loop_event_manager.html" %}
+
+</div>
 {% endblock %}

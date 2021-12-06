@@ -44,7 +44,9 @@
                     <th class='table_heading'>Nom</th>
                     <th class='table_heading'>Adresse</th>
                     <th class='table_heading'>Ville</th>
+                    <th class='table_heading'>Code postal</th>
                     <th class='table_heading'>Gestionnaire</th>
+                    <th class='table_heading'>Voir sur la carte</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,11 +55,13 @@
                     <td class='table_cell'><a href="{% url 'location_details' location_id=j.id %}">{{j.name|default_if_none:""}}</a></td>
                     <td class='table_cell'>{{j.address|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.city}}</td>
-                    <td class='table_cell'>{% for i in j.location_managers.all %}<p>{{i}}</p>{% endfor %}</td>
+                    <td class='table_cell'>{{j.zip_code}}</td>
+                    <td class='table_cell'>{% for i in j.location_managers.all %}<p>{{i.first_name}} {{i.last_name}}</p>{% endfor %}</td>
+                    <td class='table_cell'><a href="https://maps.google.com/maps?q={{j.address}},%20{{j.city}}%20{{j.zip_code}}%20{{j.country}}" target="_blank"><i class="fas fa-globe"></i></a></td>
+
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-
 
 {% endblock %}

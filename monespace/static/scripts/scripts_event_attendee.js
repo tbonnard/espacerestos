@@ -57,11 +57,9 @@ function api_call(eventid, date, type, plus_other=null) {
   function display_hide_attendees () {
     if (event_attendees_list.style.display == "none") {
       event_attendees_list.style.display = 'block';
-      event_attendees_list_link.textContent = "Voir les détails de l'événement";
       event_details.style.display = 'none';
     } else {
       event_attendees_list.style.display = 'none';
-      event_attendees_list_link.textContent = "Voir tous les acceptés";
       event_details.style.display = 'block';
     }
   }
@@ -70,6 +68,6 @@ function api_call(eventid, date, type, plus_other=null) {
       display_hide_attendees();
   })
 
-  display_hide_attendees()
+  // display_hide_attendees()
 
 });

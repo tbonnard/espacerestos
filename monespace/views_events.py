@@ -26,7 +26,7 @@ def return_date_based_pattern(rec_pattern, date):
     return event_date
 
 
-def events_list(date_from, date_to, location):
+def events_list(date_from, date_to, location, event_manager=None):
     """
     Get all events based on parameters
     :param date_from:
@@ -46,8 +46,12 @@ def events_list(date_from, date_to, location):
     else:
         date_to = date_to
 
-    if location is not None:
+    if location is not None and event_manager is None:
         all_events = [Event.objects.filter(location=i) for i in location]
+    elif location is None and event_manager is not None:
+        all_events = [Event.objects.filter(event_manager=event_manager)]
+    elif location is not None and event_manager is not None:
+        all_events = [Event.objects.filter(location=i, event_manager=event_manager) for i in location]
     else:
         all_events = [Event.objects.all()]
 

@@ -9,22 +9,46 @@
 {% block content %}
 
 
-    <div class="sub_nav">
-      {% if manager_location or request.user.user_type == 1 %}
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur">
-                {% if event.is_recurring %}
-                <a href="{% url 'event_edit' event_id=event.id %}?date={{date}}">Modifier l'évenement</a>
-                {% else %}
-                <a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a>
-                {% endif %}
-            </span>
-        </div>
-        {% endif %}
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a id="event_attendees_list"></a>: {{count_attendees}} personnes</span>
-        </div>
+<div class="top_bar_menu">
+
+    <div class="sub_nav_hor active">
+        <i class="fas fa-calendar-alt"></i>Détails de l'événement
     </div>
+
+    <div class="sub_nav_hor" id="event_attendees_list">
+        <i class="fas fa-users"></i>Présences
+    </div>
+
+    {% if manager_location or request.user.user_type == 1 %}
+        {% if event.is_recurring %}
+            <a href="{% url 'event_edit' event_id=event.id %}?date={{date}}">
+            {% else %}
+            <a href="{% url 'event_edit' event_id=event.id %}">
+        {% endif %}
+        <div class="sub_nav_hor">
+        <i class="fas fa-edit"></i>Modifier l'évenement
+        </div>
+    </a>
+    {% endif %}
+
+</div>
+
+<!--    <div class="sub_nav">-->
+<!--      {% if manager_location or request.user.user_type == 1 %}-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur">-->
+<!--                {% if event.is_recurring %}-->
+<!--                <a href="{% url 'event_edit' event_id=event.id %}?date={{date}}">Modifier l'évenement</a>-->
+<!--                {% else %}-->
+<!--                <a href="{% url 'event_edit' event_id=event.id %}">Modifier l'évenement</a>-->
+<!--                {% endif %}-->
+<!--            </span>-->
+<!--        </div>-->
+<!--        {% endif %}-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a id="_event_attendees_list"></a>: {{count_attendees}} personnes</span>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
 <div class="event_details_master">

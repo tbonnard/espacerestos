@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+if (document.querySelectorAll('.sub_nav_hor')) {
+
   let subMenus = document.querySelectorAll('.sub_nav_hor');
 
   subMenus.forEach( i => {
@@ -9,5 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       currentActive[0].className = "sub_nav_hor";
     })
   })
+}
+
 
 });

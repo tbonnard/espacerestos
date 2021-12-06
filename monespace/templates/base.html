@@ -11,6 +11,7 @@
 
     <script src="https://kit.fontawesome.com/6ef435d88f.js" crossorigin="anonymous"></script>
     <script src= "{% static 'scripts/nav.js' %}"></script>
+    <script src= "{% static 'scripts/sub_nav.js' %}"></script>
 
     {% block script %}
     {% endblock %}
@@ -127,7 +128,6 @@
             {% endif %}
             {% endif %}
 
-
         </div>
 
         <div class="menu_end">
@@ -135,6 +135,7 @@
                     <a href="{% url 'profile' %}">
                         <div class="item_nav" data-path="/profil/">
                             <i class="fas fa-user-circle" title="{{request.user.username}}"></i>Profil
+                            <span>{{request.user.first_name}}</span>
                         </div>
                     </a>
                 </div>

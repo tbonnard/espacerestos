@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, User, AttendeesEvents
+from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, User, AttendeesEvents, Event
 from .views_events import events_list
 from .forms import StatusUsersLocationsForm, UserProfileForm
 from .functions_global import get_date_to, forbidden_to_user, admin_only
@@ -49,7 +49,10 @@ def index(request):
         if b[0] not in dates_event:
             dates_event.append(b[0])
             eligible_events_date_locations_attendees_final.append(b)
-    return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final, "date_to": date_to, "pending_location":pending_location, "attendees":attendees})
+    events_manager = events_list(date_from=None, date_to=None, location=None, event_manager=request.user)
+    return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final,
+                                                  "date_to": date_to, "pending_location":pending_location,
+                                                  "attendees":attendees, "events_manager":events_manager })
 
 
 def faq_view(request):
