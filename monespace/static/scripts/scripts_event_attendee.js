@@ -50,24 +50,4 @@ function api_call(eventid, date, type, plus_other=null) {
 
 
 
-  let event_attendees_list_link = document.querySelector('#event_attendees_list');
-  let event_attendees_list = document.querySelector('.event_attendees_list');
-  let event_details = document.querySelector('.event_details_master');
-
-  function display_hide_attendees () {
-    if (event_attendees_list.style.display == "none") {
-      event_attendees_list.style.display = 'block';
-      event_details.style.display = 'none';
-    } else {
-      event_attendees_list.style.display = 'none';
-      event_details.style.display = 'block';
-    }
-  }
-
-  event_attendees_list_link.addEventListener('click', () => {
-      display_hide_attendees();
-  })
-
-  // display_hide_attendees()
-
 });

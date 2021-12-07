@@ -65,6 +65,9 @@
 
 <h1>Vos sites</h1>
 
+    {% if locations|length == 0 %}
+    <p class="info_text">Vous n'êtes actuellement associé à aucun site</p>
+{% endif  %}
 
 <table class='table1'>
             <thead>
