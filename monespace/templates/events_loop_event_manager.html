@@ -17,7 +17,7 @@
 
     {% if events_manager|length == 0 %}
     <p class="info_text">Aucun événement pour lequel vous êtes reponsable</p>
-    {% endif %}
+    {% else %}
 
     {% for i in events_manager %}
     <div class="events_list_global">
@@ -69,5 +69,6 @@
     </div>
     {% endfor %}
 
+    {% endif %}
 
 </div>

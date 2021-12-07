@@ -17,7 +17,7 @@
     </div>
 
     <div class="sub_nav_hor" id="attendance_menu">
-        <i class="fas fa-users"></i>Présences
+        <i class="fas fa-users"></i>Présences ({{count_attendees}})
     </div>
 
     {% if manager_location or request.user.user_type == 1 %}
@@ -151,13 +151,42 @@
 
     {% if all_attendees|length == 0 %}
     <p class="info_text">Aucune personne présente pour le moment</p>
+    {% else %}
+
+            <table class='table1'>
+            <thead>
+                <tr>
+                    <th class='table_heading'>Prénom</th>
+                    <th class='table_heading'>Nom</th>
+                    <th class='table_heading'>Accompagné de</th>
+                    {% if request.user.user_type != 2 %}
+                    <th class='table_heading'>Nom d'utilisateur</th>
+                    <th class='table_heading'>Email</th>
+                    <th class='table_heading'>Téléphone</th>
+                    <th class='table_heading'>Dernière connexion</th>
+                    {% endif %}
+
+                </tr>
+            </thead>
+            <tbody>
+            {% for j in all_attendees %}
+                <tr>
+                    <td class='table_cell'>{{j.user.first_name|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.user.last_name|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.plus_other|default_if_none:""}} personne(s)</td>
+                    {% if request.user.user_type != 2 %}
+                    <td class='table_cell'>{{j.user.username}}</td>
+                    <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.user.tel|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.user.last_login|date:'Y-m-d H:i:s'}}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
     {% endif %}
 
-
-  {% for i in all_attendees%}
-    <p>{{i.user}}
-    {% if i.plus_other > 0%} --> Vient avec {{i.plus_other}} personnes</p>{% endif %}
-  {% endfor %}
 </div>
 
 

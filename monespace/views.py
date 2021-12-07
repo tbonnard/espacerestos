@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
+import datetime
 
 from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, User, AttendeesEvents, Event
 from .views_events import events_list
@@ -49,7 +50,8 @@ def index(request):
         if b[0] not in dates_event:
             dates_event.append(b[0])
             eligible_events_date_locations_attendees_final.append(b)
-    events_manager = events_list(date_from=None, date_to=None, location=None, event_manager=request.user)
+    date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=365)
+    events_manager = events_list(date_from=None, date_to=date_to, location=None, event_manager=request.user)
     return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final,
                                                   "date_to": date_to, "pending_location":pending_location,
                                                   "attendees":attendees, "events_manager":events_manager })

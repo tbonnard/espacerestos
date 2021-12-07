@@ -135,3 +135,12 @@ class LogsStatusUsersLocations(models.Model):
 
     def __repr__(self):
         return f"Log: {self.user} - {self.location} - {self.status}"
+
+#
+# class Messages(models.Model):
+#     subject = models.CharField( blank=False, max_length=255)
+#     description = models.TextField(blank=True, default="")
+#     location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True, related_name="Messages_location")
+#     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True, related_name="Messages_event")
+#     users = models.ManyToManyField(User, blank=True)
+# est-ce que si par exemple je send au "attendees", est-ce que si je attend apres le message vnevoye je vois quand meme le message ?

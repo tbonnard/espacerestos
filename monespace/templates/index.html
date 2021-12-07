@@ -11,6 +11,12 @@
 
 <div class="top_bar_menu">
 
+    {% if request.user.user_type != 2 %}
+    <div class="sub_nav_hor" id="events_manager_menu">
+        <i class="fas fa-calendar-alt"></i>Événements à charge
+    </div>
+    {% endif %}
+
     <div class="sub_nav_hor active" id="events_14_days_menu">
         <i class="fas fa-user-check"></i>Présences
     </div>
@@ -18,12 +24,6 @@
     <div class="sub_nav_hor" id="messages_menu">
         <i class="fas fa-envelope"></i>Messages
     </div>
-
-    {% if request.user.user_type != 2 %}
-    <div class="sub_nav_hor" id="events_manager_menu">
-        <i class="fas fa-calendar-alt"></i>Événements à charge
-    </div>
-    {% endif %}
 
 </div>
 
@@ -86,14 +86,13 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 
 <div id="messages">
     <p class="info_text">Aucun message</p>
-
 </div>
 
 
-
+{% if request.user.user_type != 2 %}
 <div id="events_manager">
-
     {% include "events_loop_event_manager.html" %}
-
 </div>
+{% endif %}
+
 {% endblock %}
