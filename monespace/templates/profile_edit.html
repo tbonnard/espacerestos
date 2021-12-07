@@ -16,7 +16,7 @@
 
     <h1>Modifier votre profil</h1>
     {% if request.user.profile_picture %}
-    <img src="{{request.user.profile_picture.url}}">
+    <img src="{{request.user.profile_picture.url}}" class="profile_img">
     {% endif %}
     <p><label for="id_username">Nom d'utilisateur&nbsp;:</label> <p id="id_username">{{request.user.username}}</p>
     <form method="POST" action=" {% url 'profile_edit' %}" enctype="multipart/form-data">

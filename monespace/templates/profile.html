@@ -36,7 +36,7 @@
 
 <h1>Votre profil</h1>
 {% if request.user.profile_picture %}
-<img src="{{request.user.profile_picture.url}}">
+<img src="{{request.user.profile_picture.url}}" class="profile_img">
 {% endif %}
 <p>{{request.user.username}}</p>
 <p>{{request.user.first_name|default_if_none:"" }}</p>

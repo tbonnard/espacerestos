@@ -296,6 +296,10 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	transform: translateX(-200px);
 }
 
+.logo_img_menu {
+	visibility: hidden;
+}
+
 .top_bar {
 	padding: 19px 0;
 	width: 100%;
@@ -325,6 +329,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	justify-content: flex-start;
 
 }
+
 
 .sub_nav_hor {
 	margin: 0 10px;
@@ -557,6 +562,8 @@ nav::before {
 
 
 /* EVENTS SEARCHES/INDEX */
+
+
 .events_list_global {
 	margin: 0 auto;
 	padding-bottom: 30px;
@@ -792,6 +799,14 @@ form #id_status {
 }
 
 
+
+/* PROFILE */
+
+.profile_img {
+	max-width: 25px;
+}
+
+
 /* FAQ */
 summary {
   font-size: 1.25rem;
@@ -827,4 +842,64 @@ details[open] summary ~ * {
 @keyframes sweep {
   0%    {opacity: 0; margin-top: -10px}
   100%  {opacity: 1; margin-top: 0px}
+}
+
+
+
+
+
+@media (max-width: 990px) {
+  .menu_end {
+    position: relative;
+  }
+	.top_bar_menu{
+		padding: 75px 0 0px 0px;
+		width: 100px;
+		height: 100%;
+		position: fixed;
+		z-index: 1;
+		top: 0;
+		left: 0;
+		border-bottom:1px solid #f3f3f3;
+		background-color: var(--light_grey);
+		display: flex;
+		flex-direction: column;
+		/* justify-content: flex-start; */
+	}
+	.sub_nav_hor {
+		margin: 10px 0;
+		padding: 10px 0;
+		border-bottom:5px solid var(--light_grey);
+		cursor: pointer;
+	}
+	.container_master{
+		margin-left: 100px;
+	}
+	.container_master_revert{
+		margin-top: 100px;
+		margin-left: -100px;
+	}
+	.events_list_global{
+		max-width: 100%;
+	}
+	.events_list_details_time_location{
+		width: auto;
+		padding: 5% 5% 5% 10%;
+	}
+	.events_list_left{
+		width: 100%;
+		padding-bottom: 20px;
+	}
+	.events_list_right_subitem_flex{
+	flex-direction: column;
+	}
+	.search_events{
+		margin-left: 40px;
+	}
+	.search_events input{
+		width: 30%;
+	}
+	.container-fluid{
+		margin-left: -100px;
+	}
 }

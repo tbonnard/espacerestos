@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // function to hide/unhide the menu-sidebar
       function ToggleMenu() {
           document.querySelector('.sidebar').classList.toggle("sidebarTransform");
+          document.querySelector('#menu_icon_image').classList.toggle("logo_img_menu");
       }
 
     // click on the menu icon toggle the sidebar-menu
