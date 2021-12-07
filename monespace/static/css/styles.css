@@ -40,7 +40,12 @@ a:hover{
 
 .container_master {
 	text-align: center;
- margin: 10% 5%;
+ 	margin: 10% 5%;
+}
+
+.container_fluid{
+	text-align: center;
+	margin: 10% 5%;
 }
 
 
@@ -872,15 +877,21 @@ details[open] summary ~ * {
 		border-bottom:5px solid var(--light_grey);
 		cursor: pointer;
 	}
-	.container_master{
+	.container_master_mobile{
 		margin-left: 100px;
 	}
 	.container_master_revert{
 		margin-top: 100px;
-		margin-left: -100px;
+	}
+	.form_div_space{
+		width: 80%;
 	}
 	.events_list_global{
 		max-width: 100%;
+	}
+	.event_details{
+		flex-direction: column;
+		width: 100%;
 	}
 	.events_list_details_time_location{
 		width: auto;
@@ -899,7 +910,5 @@ details[open] summary ~ * {
 	.search_events input{
 		width: 30%;
 	}
-	.container-fluid{
-		margin-left: -100px;
-	}
+
 }

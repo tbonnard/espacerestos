@@ -28,6 +28,7 @@
 
 </div>
 
+<div class="container_master_mobile">
 
 <div id="events_14_days">
 
@@ -71,7 +72,7 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 {% endif %}
 
             <div class="">
-                <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}" >
+                <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to|date:'Y-m-d'}}" >
                     <button class="button_white">Voir plus d'événements</button>
                 </a>
             </div>
@@ -96,4 +97,6 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 </div>
 {% endif %}
 
+
+</div>
 {% endblock %}
