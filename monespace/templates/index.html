@@ -13,7 +13,7 @@
 
     {% if request.user.user_type != 2 %}
     <div class="sub_nav_hor" id="events_manager_menu">
-        <i class="fas fa-calendar-alt"></i>Événements à charge
+        <i class="fas fa-calendar-alt"></i>Distributions à charge
     </div>
     {% endif %}
 
@@ -30,6 +30,37 @@
 
 <div class="container_master_mobile">
 
+    {% if request.user.user_type != 2 %}
+    <div id="events_manager">
+
+        <table class='table1'>
+            <thead>
+                <tr>
+                    <th class='table_heading'>Date</th>
+                    <th class='table_heading'>Nom</th>
+                    <th class='table_heading'>Heure</th>
+                    <th class='table_heading'>Bénévoles présents</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for j in events_manager %}
+            {% for z in j.1 %}
+                <tr>
+                    <td class='table_cell'><a href="{% url 'event_details' event_id=z.id %}?date={{j.0|date:'Y-m-d'}}">{{j.0}}</a></td>
+                    <td class='table_cell'>{{z.name}}</td>
+                    <td class='table_cell'>{{z.time_from}} - {{z.time_to}}</td>
+                    <td class='table_cell'></td>
+                </tr>
+            {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+    {% endif %}
+
+
 <div id="events_14_days">
 
 {% if pending_location %}
@@ -38,27 +69,6 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
     {{i}}
     {% endfor %}
 {% endif %}
-
-<!--{% if request.user.user_type != 2 %}-->
-<!--    <div class="sub_nav">-->
-
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'locations' %}">Gérer le(s) site(s)</a></span>-->
-<!--        </div>-->
-
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_create' %}">Créer un évenement</a></span>-->
-<!--        </div>-->
-
-<!--        {% if request.user.user_type == 1 %}-->
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'all_users_site' %}">Voir tous les bénévoles</a></span>-->
-<!--        </div>-->
-<!--        {% endif %}-->
-
-<!--    </div>-->
-<!--{% endif %}-->
-
 
 
 {% if events|length == 0 %}
@@ -73,15 +83,10 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 
             <div class="">
                 <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to|date:'Y-m-d'}}" >
-                    <button class="button_white">Voir plus d'événements</button>
+                    <button class="button_white">Voir plus de distributions</button>
                 </a>
             </div>
 
-<!--    <div class="sub_nav">-->
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}" >Voir plus d'évenements</a></span>-->
-<!--        </div>-->
-<!--    </div>-->
 
 </div>
 
@@ -91,11 +96,7 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
 </div>
 
 
-{% if request.user.user_type != 2 %}
-<div id="events_manager">
-    {% include "events_loop_event_manager.html" %}
-</div>
-{% endif %}
+
 
 
 </div>

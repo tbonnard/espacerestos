@@ -20,15 +20,17 @@ def index(request):
         user_locations = [i.location for i in user_locations_pre]
 
     eligible_events_date_locations = events_list(date_from=None, date_to=None, location=user_locations)
+
     pending_location = []
     if StatusUsersLocations.objects.filter(user=request.user, status=1):
         pending_location = [i.location for i in StatusUsersLocations.objects.filter(user=request.user, status=1)]
+
     eligible_events_date_locations_attendees = []
     attendees = AttendeesEvents.objects.filter(user=request.user)
     for i in eligible_events_date_locations:
         for j in i[1]:
             for z in attendees:
-                if j == z.parent_event and i[0] == z.event_date:
+                if j['id'] == z.parent_event.id and i[0] == z.event_date:
                     for y in eligible_events_date_locations_attendees:
                         if y[0] == i[0]:
                             for x in eligible_events_date_locations_attendees:
@@ -50,11 +52,11 @@ def index(request):
         if b[0] not in dates_event:
             dates_event.append(b[0])
             eligible_events_date_locations_attendees_final.append(b)
-    date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=365)
+    date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
     events_manager = events_list(date_from=None, date_to=date_to, location=None, event_manager=request.user)
     return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final,
                                                   "date_to": date_to, "pending_location":pending_location,
-                                                  "attendees":attendees, "events_manager":events_manager })
+                                                  "attendees": attendees, "events_manager": events_manager })
 
 
 def faq_view(request):

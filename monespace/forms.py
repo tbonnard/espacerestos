@@ -63,6 +63,24 @@ class EventForm(forms.ModelForm):
         }
 
 
+class DistributionForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ("name", "start_date", "time_from", "time_to", "event_manager")
+        widgets = {
+            "start_date": forms.DateInput(attrs={'type': 'date'}),
+            "time_from": forms.TimeInput(attrs={'type': 'time'}),
+            "time_to": forms.TimeInput(attrs={'type': 'time'}),
+        }
+        labels = {
+            "name": "Nom de la soirée de distribution",
+            "start_date": "Date de début",
+            "time_from": "Heure de début",
+            "time_to": "Heure de fin",
+            "event_manager": "Responsable de la soirée distribution"
+        }
+
+
 class EventRecurringPatternForm(forms.ModelForm):
     class Meta:
         model = RecurringPattern

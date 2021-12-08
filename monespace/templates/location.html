@@ -5,11 +5,19 @@
 
 <div class="top_bar_menu">
 
-    <a href="{% url 'index' %}">
+    {% if is_edit %}
+    <a href="{% url 'location_details' location_id=location_id %}">
         <div class="sub_nav_hor">
         <i class="fas fa-ban"></i>Annuler
-    </div>
+        </div>
     </a>
+    {% else %}
+    <a href="{% url 'locations' %}">
+        <div class="sub_nav_hor">
+        <i class="fas fa-ban"></i>Annuler
+        </div>
+    </a>
+    {% endif %}
 
 </div>
 

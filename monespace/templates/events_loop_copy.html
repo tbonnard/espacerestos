@@ -1,5 +1,4 @@
 
-
 <div>
 
 
@@ -17,14 +16,14 @@
         {% for j in i.1 %}
           <div class="event_item">
           <div class="events_list_right_subitem">
-            <h2><a href="{% url 'event_details' event_id=j.id %}?date={{i.0|date:'Y-m-d'}}">{{j.name}}</a></h2>
+            <h2><a href="{% url 'event_details' event_id=j.id %}?date={{i.0|date:'Y-m-d'}}">{{j}}</a></h2>
               <div class="events_list_right_subitem_flex">
                   <div class="events_list_right_subitem_flex_subitems">
                     <div class="events_list_details_time_location">
                         <i class="far fa-clock"></i><span>{{j.time_from}} à {{j.time_to}}</span>
                     </div>
                       <div class="events_list_details_time_location">
-                          <i class="fas fa-map-marker-alt"></i><span><a href="{% url 'location_details' location_id=j.location.id %}">{{j.location.name}}</a></span>
+                          <i class="fas fa-map-marker-alt"></i><span><a href="{% url 'location_details' location_id=j.location.id %}">{{j.location}}</a></span>
     <!--          <i class="fas fa-map-marker-alt"></i><span><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{j.location.pk}}">{{j.location}}</a></span>-->
                       </div>
                       <div class="events_list_details_time_location">

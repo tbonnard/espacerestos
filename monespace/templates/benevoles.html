@@ -21,10 +21,8 @@
 
 </div>
 
-<!--<h4>Liste des bénévoles</h4>-->
 
 <div class="container_master_mobile">
-
 
 <p>Total des bénévoles (actif, en attente) : {{ users.count }}</p>
 
@@ -69,43 +67,6 @@
             </tbody>
         </table>
 
-
-
-<!--<h4>Télecharger tous les membres</h4>-->
-<!--<a href="{% url 'download_users_csv' %}"><button class="">Download</button></a>-->
-
-<!--{% for j in users%}-->
-<!--<h4>{{j}} &#45;&#45; {{ j.user_type }}</h4>-->
-
-<!--{% for i in status_users_location %}-->
-<!--{% if i.user == j%}-->
-<!--    <div>-->
-<!--    {{i.user}} &#45;&#45; {{i.get_status_display}} &#45;&#45;&#45;&#45; {{i.pk}} &#45;&#45;&#45;&#45; {{ i.location }} &#45;&#45; {{ i.user.last_login }}-->
-
-<!--    {% if i.status != 2 %}-->
-<!--    <form method="POST" action="{% url 'users_site' location_id=i.location.pk %}?id={{i.pk}}">-->
-<!--        {% csrf_token %}-->
-<!--        <button class="button_active_status">Activer</button>-->
-<!--    </form>-->
-<!--    {% endif %}-->
-
-<!--    <button class="button_form_status" data-user="{{i.user.pk}}{{i.location.pk}}">Autre statut</button>-->
-
-<!--    <div>-->
-<!--        <form class="form_status" data-user="{{i.user.pk}}{{i.location.pk}}" method="POST" action="{% url 'user_site_update_status' location_id=i.location.pk %}?id={{i.pk}}">-->
-<!--            {% csrf_token %}-->
-<!--            {{form}}-->
-<!--            <input type='submit' value="Confirmer" class='input'/>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</div>-->
-<!--{% endif%}-->
-<!--{% endfor %}-->
-
-
-<!--{% endfor %}-->
-
-<!--{% include "benevoles_loop.html" %}-->
 
 </div>
 

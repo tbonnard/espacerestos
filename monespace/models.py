@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django import utils
@@ -32,26 +34,41 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
+    def serialize(self):
+        return {"id": self.id,
+                "name": self.name,
+                }
+
 
 class Event(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=False, related_name="events_locations")
-    name = models.CharField( blank=False, max_length=255)
+    name = models.CharField(blank=False, max_length=255)
     description = models.TextField(blank=True, default="")
-    start_date = models.DateField( blank=False, default=utils.timezone.now)
+    start_date = models.DateField( blank=False, default=datetime.datetime.now().strftime("%Y-%m-%d"))
     end_date = models.DateField( blank=True, null=True)
-    time_from = models.TimeField(blank=True, default="00:00:00")
-    time_to = models.TimeField(blank=True, default="00:00:00")
+    time_from = models.TimeField(blank=False, default="00:00:00")
+    time_to = models.TimeField(blank=False, default="00:00:00")
     is_full_day = models.BooleanField(default=False)
     is_recurring = models.BooleanField(default=False)
     was_recurring_event_rec = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     event_manager = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, related_name="events_manager")
     created = models.DateTimeField(auto_now_add=True)
+    is_distrib = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name}"
 
     def __repr__(self):
         return f"{self.name} - {self.pk}"
+
+    def serialize(self):
+        return {"id": self.id,
+                "name": self.name,
+                "location": self.location.serialize(),
+                "start_date": self.start_date,
+                "time_from": self.time_from,
+                "time_to": self.time_to,
+                }
 
 
 class RecurringPattern(models.Model):

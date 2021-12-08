@@ -20,14 +20,19 @@ body {
 a {
   cursor: pointer;
   text-decoration: none;
+	color: var(--pink);
 }
 
-a:visited, a:active, a {
+/* a:visited, a:active {
   color: inherit;
-}
+} */
 
 a:hover{
-  color: var(--pink);
+  color: var(--near_black);
+}
+
+.top_bar_menu a{
+	color: var(--near_black);
 }
 
 .link_pink {
@@ -651,7 +656,7 @@ margin: 0;
 }
 
 .events_list_date {
-  color: var(--pink);
+  color: var(--near_black);
 	margin-left: 10px;
 	width: 100px !important;
 }
@@ -661,7 +666,7 @@ margin: 0;
   background-color: var(--light_pink);
   color:var(--pink);
   width: 250px;
-  padding: 1% 1% 1% 2%;
+  padding: 2% 1% 2% 4%;
   margin: 1% 0;
   border-radius: 20px;
   margin-bottom: 20px;
@@ -669,6 +674,7 @@ margin: 0;
 
 .events_list_details_time_location span {
   padding: 2% 2% 2% 4%;
+	color: var(--near_black);
 }
 
 .events_list_details_time_location a:hover {

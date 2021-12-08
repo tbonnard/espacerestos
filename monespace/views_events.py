@@ -1,3 +1,6 @@
+import json
+from pprint import pprint
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -67,22 +70,31 @@ def events_list(date_from, date_to, location, event_manager=None):
                                                                                  start_date=event_date):
                             try:
                                 events = eligible_events_date[event_date]
-                                events.append(j)
+                                events.append(j.serialize())
                                 eligible_events_date[event_date] = events
                             except KeyError:
-                                eligible_events_date.setdefault(event_date, [j])
+                                eligible_events_date.setdefault(event_date, [j.serialize()])
                     event_date = return_date_based_pattern(rec_pattern, event_date)
 
             else:
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
                     try:
                         events = eligible_events_date[event_date]
-                        events.append(j)
+                        events.append(j.serialize())
                         eligible_events_date[event_date] = events
                     except KeyError:
-                        eligible_events_date.setdefault(event_date, [j])
+                        eligible_events_date.setdefault(event_date, [j.serialize()])
     sorted_eligible_events_date = sorted(eligible_events_date.items())
     return sorted_eligible_events_date
+
+
+from django.http import JsonResponse
+
+
+def events_list_json(request, user_id):
+    date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
+    events = events_list(date_from=None, date_to=date_to, location=None, event_manager=User.objects.get(pk=user_id))
+    return JsonResponse(events, safe=False)
 
 
 @login_required(login_url='/login/')
@@ -263,7 +275,7 @@ def validate_event_date(event, date):
         eligible_event_date = events_list(date_in_datetime, date_in_datetime, None)
         for i in eligible_event_date:
             for j in i[1]:
-                if i[0] == date_in_date and j == event:
+                if i[0] == date_in_date and j['id'] == event.pk:
                     event_valid = True
     else:
         if event.start_date == date_in_date:
@@ -400,6 +412,7 @@ def event_details(request, event_id):
     except:
         return redirect('index')
     else:
+        print('pre valida')
         if validate_event_date(event_page, date):
             attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id),
                                                        event_date=date).first()
@@ -416,6 +429,7 @@ def event_details(request, event_id):
                               context={"event": event_page, "manager_location": manager_location, 'date': date,
                                        "attendees": attendees, "all_attendees": all_attendees,
                                        "count_attendees": count_attendees})
+        print('pas valida')
         return redirect('index')
 
 

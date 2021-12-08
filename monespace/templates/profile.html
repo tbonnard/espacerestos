@@ -49,18 +49,11 @@
 <p>{{request.user.zip_code|default_if_none:"" }}</p>
 <p>{{request.user.tel|default_if_none:"" }}</p>
 
-<!--<a href="{% url 'change_password' %}">Changer son mot de passe</a>-->
-
 
 {% if request.user.user_type != 2 %}
     <p>Type d'utilisateur: {{request.user.get_user_type_display}}</p>
 {% endif %}
 
-<!--    <div class="sub_nav">-->
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'profile_edit' %}">Modifier votre profil</a></span>-->
-<!--        </div>-->
-<!--    </div>-->
 
 </div>
 
@@ -101,26 +94,6 @@
             </tbody>
         </table>
 
-
-<!--{% for i in locations %}-->
-<!--&lt;!&ndash;<p><a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to}}&location={{i.pk}}">{{i}}</a>&ndash;&gt;-->
-<!--<p><a href="{% url 'location_details' location_id=i.location.pk %}">{{i.location}}</a> - <span>{{i.get_status_display}}</span>-->
-<!--    {% for j in manager_locations %}-->
-<!--    {% if j == i.location %}-->
-<!--    <span> &ndash;&gt; vous êtes le gestionnaire</span>-->
-<!--    {%endif%}-->
-<!--    {%endfor%}-->
-<!--</p>-->
-<!--{%endfor%}-->
-
-<!--    <div class="sub_nav">-->
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'select_locations' %}">Modifier vos sites</a></span>-->
-<!--        </div>-->
-<!--&lt;!&ndash;        {% if request.user.user_type == 1 %}&ndash;&gt;-->
-<!--&lt;!&ndash;        <p>En tant qu'administrateur, vous pouvez accéder à tous les sites <i>(Accueil > Gérer les sites)</i> mais il est cependant pertinent de sélectionner les sites pour lesquels vous êtes bénévoles aussi afin d'avoir un compte exact</p>&ndash;&gt;-->
-<!--&lt;!&ndash;{%endif %}&ndash;&gt;-->
-<!--    </div>-->
 
        <div class="">
             <a href="{% url 'select_locations' %}">

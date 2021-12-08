@@ -66,7 +66,7 @@ function api_call_attend_decline(eventid, date, type) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data[0])
+      // console.log(data[0])
       let span_number_attendees = document.querySelector(`#attend_event_number_${eventid}${date}`);
       if (data[0] > 1 ) {
         text_attendees_number = `${data} personnes confirmées`

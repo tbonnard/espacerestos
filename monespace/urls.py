@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, views_login, views_events, views_locations, views_download, views_attend
+from . import views, views_login, views_events, views_locations, views_download, views_attend, views_distrib
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     path('benevoles_site/<int:location_id>', views.users_site, name='users_site'),
     path('benevoles/', views.all_users_site, name='all_users_site'),
     path('benevoles_status/<int:location_id>', views.user_site_update_status, name='user_site_update_status'),
+    path('distribution/<int:location_id>', views_distrib.distribution_create, name='distribution_create'),
     path('event/', views_events.event_create, name='event_create'),
     path('event/<int:event_id>', views_events.event_details, name='event_details'),
     path('event_edit/<int:event_id>', views_events.event_edit, name='event_edit'),
@@ -30,6 +31,8 @@ urlpatterns = [
     path('api_get_count_specific_attendees/', views_attend.api_get_count_specific_attendees, name='api_get_count_specific_attendees'),
     path('api_get_all_attendees_user/', views_attend.api_get_all_attendees_user, name='api_get_all_attendees_user'),
     path('api_attend_decline_event/', views_attend.api_attend_decline_event, name='api_attend_decline_event'),
+    path('events_list_json/<int:user_id>', views_events.events_list_json, name='events_list_json'),
+
 
     # Change Password
     path('change-password/', auth_views.PasswordChangeView.as_view(

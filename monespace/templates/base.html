@@ -21,46 +21,15 @@
 <body>
 
 
-<!--<nav>-->
-<!--    <div class="items_nav">-->
-<!--        <div class="item_nav">-->
-<!--            <a href="{% url 'index' %}"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="items_nav">-->
-<!--    {% if request.user.is_authenticated %}-->
-<!--        <div class="item_nav">-->
-<!--            <span>Bonjour <a href="{% url 'profile' %}">{{user.username}}</a></span>-->
-<!--        </div>-->
-<!--        <div class="item_nav">-->
-<!--            <a href="{% url 'logout_view' %}">Se déconnecter</a>-->
-<!--        </div>-->
-<!--    {% else%}-->
-<!--        <div class="item_nav">-->
-<!--            <a href="{% url 'login_view' %}">Se connecter</a>-->
-<!--        </div>-->
-<!--        <div class="item_nav">-->
-<!--            <a href="{% url 'register' %}">S'inscrire</a>-->
-<!--        </div>-->
-<!--    {% endif%}-->
-<!--    </div>-->
-<!--</nav>-->
-
-
 <div class=menu_icon>
     <i id='menu' class="fas fa-bars"></i>
-<!--    <span class="logo_img">-->
         <a href="{% url 'index' %}" id="menu_icon_image"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>
-<!--    </span>-->
 </div>
 
 
 <nav>
     <div class='sidebar'>
-<!--        <div class="logo_img">-->
-<!--            <a href="{% url 'index' %}"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>-->
-<!--        </div>-->
+
         <div class="items_nav">
             {% if not request.user.is_authenticated %}
             <div>
@@ -86,13 +55,7 @@
             </div>
             {% else %}
 
-            {% if request.user.user_type != 2 %}
-            <div class="menu_button">
-                <a href="{% url 'event_create' %}" >
-                    <button class=""><i class="fas fa-plus"></i>Evenement</button>
-                </a>
-            </div>
-            {% endif %}
+
 
             <div>
                 <a href="{% url 'index' %}" >
@@ -104,7 +67,7 @@
             <div>
                 <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to=" id="event_link_date">
                     <div class="item_nav" data-path="/events/">
-                        <i class="fas fa-calendar-alt"></i>Événements
+                        <i class="fas fa-calendar-alt"></i>Distributions
                     </div>
                 </a>
             </div>
