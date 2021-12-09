@@ -79,12 +79,12 @@
                     <th class='table_heading'>Gestionnaire</th>
                     <th class='table_heading'>Bénévoles actifs</th>
                     <th class='table_heading'>Bénévoles en attente</th>
-                    <th class='table_heading'>Annuler toutes les dates futures</th>
+                    <th class='table_heading'>Annuler toutes les dates futures<i class="fas fa-info-circle info_icon" title="Si une distribution avait des dates passées lors de la l'annulation, elle a ce statut d'annulé. Si aucune date passée, la distribution est supprimée."></i></th>
                 </tr>
             </thead>
             <tbody>
             {% for j in events %}
-                <tr>
+                <tr class="tr_distrib" data-event="{{j.pk}}">
                     <td class='table_cell'>{{j.name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.start_date|date:'l'}}</td>
                     <td class='table_cell'>{{j.time_from|default_if_none:""}} - {{j.time_to|default_if_none:""}}</td>
@@ -96,9 +96,9 @@
                     <td class='table_cell'></td>
                     <td class='table_cell'></td>
                     {% if j.is_cancelled %}
-                    <td class='table_cell'>annulée</td>
+                    <td class='table_cell' >annulée</td>
                     {% else %}
-                    <td class='table_cell'><button class="button_form_status validate_user_status" title="Changer de responsable" data-type="edit"><a href="{% url 'event_delete_all' event_id=j.pk %}"><i class="far fa-trash-alt"></i></a></button></td>
+                    <td class='table_cell' id="div_cancel_validation" data-event="{{j.pk}}"><button class="button_form_status validate_user_status" title="Annuler toutes les futures dates" data-type="edit" data-event="{{j.pk}}"><i class="far fa-trash-alt"></i></button></td>
                     {% endif %}
                 </tr>
             {% endfor %}

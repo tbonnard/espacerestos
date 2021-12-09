@@ -282,6 +282,15 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	padding: 1% 0;
 }
 
+.info_icon {
+	margin-left: 5px;
+	color: var(--pink);
+}
+
+.info_icon:hover {
+	color: var(--near_black);
+}
+
 .form_div_space {
 	width: 50%;
 	margin: 0 auto;
