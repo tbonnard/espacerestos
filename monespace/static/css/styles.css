@@ -554,6 +554,9 @@ nav::before {
 }
 
 
+.cancel_icon_event {
+	margin: 0px 20px;
+}
 
 /* EVENTS FORMS */
 .flex_div_form {

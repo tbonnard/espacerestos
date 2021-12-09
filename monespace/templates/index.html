@@ -33,9 +33,12 @@
     {% if request.user.user_type != 2 %}
     <div id="events_manager">
 
-        {% if events_manager|length == 0 %}
+<!--        {% if events_manager|length == 0 %}-->
+<!--        <p class="info_text">Aucune soirée de distribution à votre charge</p>-->
+<!--        {% else %}-->
+<!--        {% endif %}-->
         <p class="info_text">Aucune soirée de distribution à votre charge</p>
-        {% else %}
+
 
         <table class='table1'>
             <thead>
@@ -63,13 +66,13 @@
         </table>
     {% endif %}
 
+
         {{ request.user.id|json_script:"user_id" }}
         <div class="">
             <button id='button_event_manager_load' data-ideventsearch="{{request.user.pk}}" class="button_white">Voir plus</button>
         </div>
 
     </div>
-    {% endif %}
 
 
 <div id="events_14_days">

@@ -36,8 +36,12 @@ if (document.querySelector('#events_manager_menu')) {
 
 
   let buttonEvenManagerLoad = document.querySelector('#button_event_manager_load');
-
+  let info_text = document.querySelector('.info_text');
+  info_text.style.display = 'none';
+  let tableEvent = document.querySelector('.table1');
+  tableEvent.style.display = 'none';
   const user_id = buttonEvenManagerLoad.dataset.ideventsearch;
+
 
 
   function createDistrib(fromDateFinal, toDateFinal) {
@@ -45,8 +49,10 @@ if (document.querySelector('#events_manager_menu')) {
   fetch(url)
     .then(response => response.json())
     .then(data => {
-      let options = {day: 'numeric', month: 'long', year: 'numeric'}
-      // console.log(data);
+      let options = {day: 'numeric', month: 'long', year: 'numeric'};
+      if (data.length > 0) {
+        tableEvent.style.display = 'block';
+        info_text.style.display = 'none';
       data.forEach( i => {
         i[1].forEach(j => {
           let tbody = document.querySelector('#tbody_event_manager');
@@ -69,7 +75,7 @@ if (document.querySelector('#events_manager_menu')) {
           let tdCancelDate = document.createElement('td');
           tdCancelDate.className='table_cell';
           let aURLCancelDate = document.createElement('a');
-          // aURLCancelDate.href = `${window.location.origin}/event_delete_rec/${j.id}?date=${i[0]}`
+          aURLCancelDate.title = `Annuler la distribution du ${i[0]}`;
           let iCancelDate = document.createElement('i');
           iCancelDate.className = "far fa-trash-alt";
           tbody.append(tr);
@@ -91,10 +97,12 @@ if (document.querySelector('#events_manager_menu')) {
             divCancel.style.marginBottom = '5px';
             let aValidateCancelYes = document.createElement('a');
             aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${j.id}?date=${i[0]}`;
+            aValidateCancelYes.title = `Oui, annuler la distribution du ${i[0]}`;
             let iValidateCancelYes = document.createElement('i');
             iValidateCancelYes.className = "fas fa-check-square";
             iValidateCancelYes.style.marginRight = '10px';
             let aValidateCancelNo = document.createElement('a');
+            aValidateCancelNo.title = 'Non, laisser la date';
             let iValidateCancelNo = document.createElement('i');
             iValidateCancelNo.className = "far fa-window-close";
             iValidateCancelNo.style.marginLeft = '5px';
@@ -112,21 +120,38 @@ if (document.querySelector('#events_manager_menu')) {
           })
         })
         eventManagerDate = document.querySelectorAll('.event_manager_date');
+      } else {
+        info_text.style.display = 'block';
+        tableEvent.style.display = 'none';
+      }
     });
 
 }
 
+  let days = 31;
 
   buttonEvenManagerLoad.addEventListener('click', (e) => {
     e.preventDefault();
-    let eventManagerDate = document.querySelectorAll('.event_manager_date');
-    let fromDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
-    fromDate.setDate(fromDate.getDate()+2);
-    // +2 because need to search lat date visible+1 day and the search function looks on date-1 day
-    fromDateFinal = fromDate.toISOString().split('T')[0];
-    let toDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
-    toDate.setDate(toDate.getDate()+31);
-    toDateFinal = toDate.toISOString().split('T')[0];
+    if (document.querySelector('.event_manager_date')) {
+      let eventManagerDate = document.querySelectorAll('.event_manager_date');
+      let fromDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
+      fromDate.setDate(fromDate.getDate()+2);
+      // +2 because need to search lat date visible+1 day and the search function looks on date-1 day
+      fromDateFinal = fromDate.toISOString().split('T')[0];
+      let toDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
+      toDate.setDate(toDate.getDate()+31);
+      toDateFinal = toDate.toISOString().split('T')[0];
+    } else {
+      // fromDate = new Date();
+      // // +1 because the search function looks on date-1 day
+      // fromDate.setDate(fromDate.getDate()+1);
+      // fromDateFinal = fromDate.toISOString().split('T')[0];
+      // console.log(fromDateFinal);
+      days+=14;
+      toDate = new Date();
+      toDate.setDate(toDate.getDate()+days);
+      toDateFinal = toDate.toISOString().split('T')[0];
+    }
     createDistrib(fromDateFinal, toDateFinal);
   })
 
@@ -134,11 +159,14 @@ if (document.querySelector('#events_manager_menu')) {
   // +1 because the search function looks on date-1 day
   fromDate.setDate(fromDate.getDate()+1);
   fromDateFinal = fromDate.toISOString().split('T')[0];
-  console.log(fromDateFinal);
+  // console.log(fromDateFinal);
   toDate = new Date();
-  toDate.setDate(toDate.getDate()+31);
+  toDate.setDate(toDate.getDate()+days);
   toDateFinal = toDate.toISOString().split('T')[0];
+
   createDistrib(fromDateFinal, toDateFinal);
+
+
 
 
 } else {

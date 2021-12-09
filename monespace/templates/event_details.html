@@ -13,7 +13,7 @@
 <div class="top_bar_menu">
 
     <div class="sub_nav_hor active" id="eventDetails_menu">
-        <i class="fas fa-calendar-alt"></i>Détails de la distributions
+        <i class="fas fa-calendar-alt"></i>Détails de la distribution
     </div>
 
     <div class="sub_nav_hor" id="attendance_menu">
@@ -113,32 +113,48 @@
 
   </div>
 
-    {% if event.was_recurring_event_rec %}
-    <p class="info_text">Ceci est une distribution provenant d'une récurrence mais modifié pour cette date specifiquement</p>
-    {% elif not event.is_recurring %}
-    <p class="info_text">Ceci est un événement non recurrent</p>
-    {% else %}
-    <p class="info_text">Cette date fait partie d'une distribution recurrente</p>
-    {% endif %}
-
-
-
+<!--    {% if event.was_recurring_event_rec %}-->
+<!--    <p class="info_text">Ceci est une distribution provenant d'une récurrence mais modifié pour cette date specifiquement</p>-->
+<!--    {% elif not event.is_recurring %}-->
+<!--    <p class="info_text">Ceci est un événement non recurrent</p>-->
+<!--    {% else %}-->
+<!--    <p class="info_text">Cette date fait partie d'une distribution recurrente</p>-->
+<!--    {% endif %}-->
+    
 
 {% if todays_date <= date %}
+
       {% if manager_location or request.user.user_type == 1 %}
     <div class="sub_nav">
-        {% if event.is_recurring %}
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_rec' event_id=event.pk %}?date={{date}}">Annuler cette date</a></span>
+
+        <div id="cancel_div">
+            <button class="button_white" id="cancel_button">Annuler cette date</button></a>
         </div>
+
+        <div id="cancel_validation">
+            <p>Êtes-vous certain d'annuler cette date ?</p>
+            {% if event.is_recurring %}
+            <a href="{% url 'event_delete_rec' event_id=event.pk %}?date={{date}}" title="Oui, annuler la date du {{date}}"><i class="fas fa-check-square cancel_icon_event"></i></a>
+            {% else %}
+            <a href="{% url 'event_delete_all' event_id=event.pk %}" title="Oui, annuler la date du {{date}}"><i class="fas fa-check-square cancel_icon_event"></i></a>
+            {% endif %}
+            <a title="Non, laisser la date"><i class="far fa-window-close" id="cancel_cancel"></i></a>
+        </div>
+
+<!--        {% if event.is_recurring %}-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_rec' event_id=event.pk %}?date={{date}}">Annuler cette date</a></span>-->
+<!--        </div>-->
+
 <!--        <div class="sub_nav_item">-->
 <!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_all' event_id=event.pk %}">Annuler toutes les dates</a></span>-->
 <!--        </div>-->
-        {% else %}
-        <div class="sub_nav_item">
-            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_all' event_id=event.pk %}">Annuler cette date</a></span>
-        </div>
-        {% endif %}
+<!--        {% else %}-->
+<!--        <div class="sub_nav_item">-->
+<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_all' event_id=event.pk %}">Annuler cette date</a></span>-->
+<!--        </div>-->
+<!--        {% endif %}-->
+
     </div>
         {% endif %}
 {% endif %}
