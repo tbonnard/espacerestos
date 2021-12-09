@@ -54,6 +54,7 @@ class Event(models.Model):
     event_manager = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=False, related_name="events_manager")
     created = models.DateTimeField(auto_now_add=True)
     is_distrib = models.BooleanField(default=False)
+    is_cancelled = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name}"

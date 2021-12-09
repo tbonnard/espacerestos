@@ -79,6 +79,7 @@
                     <th class='table_heading'>Gestionnaire</th>
                     <th class='table_heading'>Bénévoles actifs</th>
                     <th class='table_heading'>Bénévoles en attente</th>
+                    <th class='table_heading'>Annuler toutes les dates futures</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,9 +88,18 @@
                     <td class='table_cell'>{{j.name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.start_date|date:'l'}}</td>
                     <td class='table_cell'>{{j.time_from|default_if_none:""}} - {{j.time_to|default_if_none:""}}</td>
-                    <td class='table_cell'>{{j.event_manager|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.event_manager|default_if_none:""}}
+                        {% if not j.is_cancelled %}
+                        <button class="button_form_status validate_user_status" title="Changer de responsable" data-type="edit"><i class="far fa-edit"></i></button>
+                        {% endif %}
+                    </td>
                     <td class='table_cell'></td>
                     <td class='table_cell'></td>
+                    {% if j.is_cancelled %}
+                    <td class='table_cell'>annulée</td>
+                    {% else %}
+                    <td class='table_cell'><button class="button_form_status validate_user_status" title="Changer de responsable" data-type="edit"><a href="{% url 'event_delete_all' event_id=j.pk %}"><i class="far fa-trash-alt"></i></a></button></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>

@@ -43,15 +43,11 @@ if (document.querySelector('#events_manager_menu')) {
     e.preventDefault();
     let eventManagerDate = document.querySelectorAll('.event_manager_date');
     let fromDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
-    console.log(fromDate);
     fromDate.setDate(fromDate.getDate()+2);
-    console.log(fromDate);
+    // +2 because need to search lat date visible+1 day and the search function looks on date-1 day
     let toDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
-    toDate.setDate(toDate.getDate()+14);
+    toDate.setDate(toDate.getDate()+31);
     let url = `${window.location.origin}/events_list_json/${user_id}?from=${fromDate.toISOString().split('T')[0]}&to=${toDate.toISOString().split('T')[0]}`;
-    // console.log(url);
-    // console.log(fromDate);
-    // console.log(toDate);
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -59,7 +55,6 @@ if (document.querySelector('#events_manager_menu')) {
         // console.log(data);
         data.forEach( i => {
           i[1].forEach(j => {
-            // console.log(new Date(i[0]+"T00:00:00.000Z"));
             let tbody = document.querySelector('#tbody_event_manager');
             let tr = document.createElement('tr');
             let tdDate = document.createElement('td');
@@ -77,12 +72,21 @@ if (document.querySelector('#events_manager_menu')) {
             tdTime.textContent = `${j.time_from.slice(0, -3)} - ${j.time_to.slice(0, -3)}`;
             let tdBenevoles = document.createElement('td');
             tdBenevoles.className='table_cell';
+            let tdCancelDate = document.createElement('td');
+            tdCancelDate.className='table_cell';
+            let aURLCancelDate = document.createElement('a');
+            aURLCancelDate.href = `${window.location.origin}/event_delete_rec/${j.id}?date=${i[0]}`
+            let iCancelDate = document.createElement('i');
+            iCancelDate.className = "far fa-trash-alt";
             tbody.append(tr);
             tr.append(tdDate);
             tdDate.append(aUrlEvent);
             tr.append(tdName);
             tr.append(tdTime);
             tr.append(tdBenevoles);
+            tr.append(tdCancelDate);
+            tdCancelDate.append(aURLCancelDate);
+            aURLCancelDate.append(iCancelDate);
             })
           })
           eventManagerDate = document.querySelectorAll('.event_manager_date');
