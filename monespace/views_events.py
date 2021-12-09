@@ -493,6 +493,7 @@ def event_delete_rec(request, event_id):
     else:
         if EventExceptionCancelledRescheduled.objects.filter(parent_event=event_rec_to_delete, start_date=date).first():
             rec_to_delete_exception = EventExceptionCancelledRescheduled.objects.filter(parent_event=event_rec_to_delete, start_date=date).first()
+            rec_to_delete_exception.is_cancelled=True
         else:
             rec_to_delete_exception = EventExceptionCancelledRescheduled(
                 location=event_rec_to_delete.location,

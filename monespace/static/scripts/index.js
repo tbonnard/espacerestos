@@ -39,60 +39,106 @@ if (document.querySelector('#events_manager_menu')) {
 
   const user_id = buttonEvenManagerLoad.dataset.ideventsearch;
 
+
+  function createDistrib(fromDateFinal, toDateFinal) {
+  let url = `${window.location.origin}/events_list_json/${user_id}?from=${fromDateFinal}&to=${toDateFinal}`;
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      let options = {day: 'numeric', month: 'long', year: 'numeric'}
+      // console.log(data);
+      data.forEach( i => {
+        i[1].forEach(j => {
+          let tbody = document.querySelector('#tbody_event_manager');
+          let tr = document.createElement('tr');
+          let tdDate = document.createElement('td');
+          tdDate.className='table_cell';
+          let aUrlEvent = document.createElement('a');
+          aUrlEvent.className = "event_manager_date";
+          aUrlEvent.dataset.event_manager_date = new Date(i[0]+"T00:00:00.000").toISOString().split('T')[0];
+          aUrlEvent.textContent = new Date(i[0]+"T00:00:00.000").toLocaleDateString('fr-FR', options);
+          aUrlEvent.href = `${window.location.origin}/event/${j.id}?date=${i[0]}`;
+          let tdName = document.createElement('td');
+          tdName.className='table_cell';
+          tdName.textContent = j.name;
+          let tdTime = document.createElement('td');
+          tdTime.className='table_cell';
+          tdTime.textContent = `${j.time_from.slice(0, -3)} - ${j.time_to.slice(0, -3)}`;
+          let tdBenevoles = document.createElement('td');
+          tdBenevoles.className='table_cell';
+          let tdCancelDate = document.createElement('td');
+          tdCancelDate.className='table_cell';
+          let aURLCancelDate = document.createElement('a');
+          // aURLCancelDate.href = `${window.location.origin}/event_delete_rec/${j.id}?date=${i[0]}`
+          let iCancelDate = document.createElement('i');
+          iCancelDate.className = "far fa-trash-alt";
+          tbody.append(tr);
+          tr.append(tdDate);
+          tdDate.append(aUrlEvent);
+          tr.append(tdName);
+          tr.append(tdTime);
+          tr.append(tdBenevoles);
+          tr.append(tdCancelDate);
+          tdCancelDate.append(aURLCancelDate);
+          aURLCancelDate.append(iCancelDate);
+          aURLCancelDate.addEventListener('click', () => {
+            tdCancelDate.style.display = 'none';
+            let tdValidateCancel = document.createElement('td');
+            tdValidateCancel.className='table_cell';
+            tdValidateCancel.textContent = "Êtes-vous certain?";
+            let divCancel =document.createElement('div');
+            divCancel.style.marginTop = '5px';
+            divCancel.style.marginBottom = '5px';
+            let aValidateCancelYes = document.createElement('a');
+            aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${j.id}?date=${i[0]}`;
+            let iValidateCancelYes = document.createElement('i');
+            iValidateCancelYes.className = "fas fa-check-square";
+            iValidateCancelYes.style.marginRight = '10px';
+            let aValidateCancelNo = document.createElement('a');
+            let iValidateCancelNo = document.createElement('i');
+            iValidateCancelNo.className = "far fa-window-close";
+            iValidateCancelNo.style.marginLeft = '5px';
+            tr.append(tdValidateCancel);
+            tdValidateCancel.append(divCancel);
+            divCancel.append(aValidateCancelYes)
+            divCancel.append(aValidateCancelNo)
+            aValidateCancelYes.append(iValidateCancelYes);
+            aValidateCancelNo.append(iValidateCancelNo);
+            iValidateCancelNo.addEventListener('click', () => {
+              tdValidateCancel.style.display='none';
+              tdCancelDate.style.display = 'block';
+            })
+          })
+          })
+        })
+        eventManagerDate = document.querySelectorAll('.event_manager_date');
+    });
+
+}
+
+
   buttonEvenManagerLoad.addEventListener('click', (e) => {
     e.preventDefault();
     let eventManagerDate = document.querySelectorAll('.event_manager_date');
     let fromDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
     fromDate.setDate(fromDate.getDate()+2);
     // +2 because need to search lat date visible+1 day and the search function looks on date-1 day
+    fromDateFinal = fromDate.toISOString().split('T')[0];
     let toDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
     toDate.setDate(toDate.getDate()+31);
-    let url = `${window.location.origin}/events_list_json/${user_id}?from=${fromDate.toISOString().split('T')[0]}&to=${toDate.toISOString().split('T')[0]}`;
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        let options = {day: 'numeric', month: 'long', year: 'numeric'}
-        // console.log(data);
-        data.forEach( i => {
-          i[1].forEach(j => {
-            let tbody = document.querySelector('#tbody_event_manager');
-            let tr = document.createElement('tr');
-            let tdDate = document.createElement('td');
-            tdDate.className='table_cell';
-            let aUrlEvent = document.createElement('a');
-            aUrlEvent.className = "event_manager_date";
-            aUrlEvent.dataset.event_manager_date = new Date(i[0]+"T00:00:00.000").toISOString().split('T')[0];
-            aUrlEvent.textContent = new Date(i[0]+"T00:00:00.000").toLocaleDateString('fr-FR', options);
-            aUrlEvent.href = `${window.location.origin}/event/${j.id}?date=${i[0]}`;
-            let tdName = document.createElement('td');
-            tdName.className='table_cell';
-            tdName.textContent = j.name;
-            let tdTime = document.createElement('td');
-            tdTime.className='table_cell';
-            tdTime.textContent = `${j.time_from.slice(0, -3)} - ${j.time_to.slice(0, -3)}`;
-            let tdBenevoles = document.createElement('td');
-            tdBenevoles.className='table_cell';
-            let tdCancelDate = document.createElement('td');
-            tdCancelDate.className='table_cell';
-            let aURLCancelDate = document.createElement('a');
-            aURLCancelDate.href = `${window.location.origin}/event_delete_rec/${j.id}?date=${i[0]}`
-            let iCancelDate = document.createElement('i');
-            iCancelDate.className = "far fa-trash-alt";
-            tbody.append(tr);
-            tr.append(tdDate);
-            tdDate.append(aUrlEvent);
-            tr.append(tdName);
-            tr.append(tdTime);
-            tr.append(tdBenevoles);
-            tr.append(tdCancelDate);
-            tdCancelDate.append(aURLCancelDate);
-            aURLCancelDate.append(iCancelDate);
-            })
-          })
-          eventManagerDate = document.querySelectorAll('.event_manager_date');
-      });
+    toDateFinal = toDate.toISOString().split('T')[0];
+    createDistrib(fromDateFinal, toDateFinal);
   })
 
+  fromDate = new Date();
+  // +1 because the search function looks on date-1 day
+  fromDate.setDate(fromDate.getDate()+1);
+  fromDateFinal = fromDate.toISOString().split('T')[0];
+  console.log(fromDateFinal);
+  toDate = new Date();
+  toDate.setDate(toDate.getDate()+31);
+  toDateFinal = toDate.toISOString().split('T')[0];
+  createDistrib(fromDateFinal, toDateFinal);
 
 
 } else {
