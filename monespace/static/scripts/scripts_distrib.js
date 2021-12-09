@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
   function changeDayName() {
-    let valueDate = startDate.value + " 00:00:00";
+    let valueDate = startDate.value + "T00:00:00.000";
     let d = new Date(valueDate);
     let day = d.getDay();
     nameDistrib.value = `Distribution du ${weekday[day]}`;

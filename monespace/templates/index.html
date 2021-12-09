@@ -32,7 +32,7 @@
 
     {% if request.user.user_type != 2 %}
     <div id="events_manager">
-
+        
         {% if events_manager|length == 0 %}
         <p class="info_text">Aucune soirée de distribution à votre charge</p>
         {% else %}

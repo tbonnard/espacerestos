@@ -42,9 +42,11 @@ if (document.querySelector('#events_manager_menu')) {
   buttonEvenManagerLoad.addEventListener('click', (e) => {
     e.preventDefault();
     let eventManagerDate = document.querySelectorAll('.event_manager_date');
-    let fromDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+" 00:00:00");
+    let fromDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
+    console.log(fromDate);
     fromDate.setDate(fromDate.getDate()+2);
-    let toDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+" 00:00:00");
+    console.log(fromDate);
+    let toDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
     toDate.setDate(toDate.getDate()+14);
     let url = `${window.location.origin}/events_list_json/${user_id}?from=${fromDate.toISOString().split('T')[0]}&to=${toDate.toISOString().split('T')[0]}`;
     // console.log(url);
@@ -57,15 +59,15 @@ if (document.querySelector('#events_manager_menu')) {
         // console.log(data);
         data.forEach( i => {
           i[1].forEach(j => {
-            // console.log(j);
+            // console.log(new Date(i[0]+"T00:00:00.000Z"));
             let tbody = document.querySelector('#tbody_event_manager');
             let tr = document.createElement('tr');
             let tdDate = document.createElement('td');
             tdDate.className='table_cell';
             let aUrlEvent = document.createElement('a');
             aUrlEvent.className = "event_manager_date";
-            aUrlEvent.dataset.event_manager_date = new Date(i[0]+" 00:00:00").toISOString().split('T')[0];
-            aUrlEvent.textContent = new Date(i[0]+" 00:00:00").toLocaleDateString('fr-FR', options);
+            aUrlEvent.dataset.event_manager_date = new Date(i[0]+"T00:00:00.000").toISOString().split('T')[0];
+            aUrlEvent.textContent = new Date(i[0]+"T00:00:00.000").toLocaleDateString('fr-FR', options);
             aUrlEvent.href = `${window.location.origin}/event/${j.id}?date=${i[0]}`;
             let tdName = document.createElement('td');
             tdName.className='table_cell';
