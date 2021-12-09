@@ -31,6 +31,7 @@
 <div class="container_master_mobile">
 
     {% if request.user.user_type != 2 %}
+    {% csrf_token %}
     <div id="events_manager">
 
 <!--        {% if events_manager|length == 0 %}-->

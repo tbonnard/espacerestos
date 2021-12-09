@@ -34,6 +34,28 @@ if (document.querySelector('#events_manager_menu')) {
     eventsManager.style.display = 'none';
   })
 
+  function get_number_attendees(eventid, date) {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const request = new Request(
+                      `${window.location.origin}/api_get_count_specific_attendees/`,
+                      {headers: {'X-CSRFToken': csrftoken}}
+                  );
+    const response = fetch(request, {
+      method:'POST',
+      mode: 'same-origin',
+      body: JSON.stringify({
+              parent_event: eventid,
+              event_date: date,
+          }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // console.log(data[0]);
+      let tdBenevoleText = document.querySelector(`#attend_event_number_${eventid}${date}`);
+      tdBenevoleText.textContent = data[0];
+    })
+
+  }
 
   let buttonEvenManagerLoad = document.querySelector('#button_event_manager_load');
   let info_text = document.querySelector('.info_text');
@@ -72,6 +94,8 @@ if (document.querySelector('#events_manager_menu')) {
           tdTime.textContent = `${j.time_from.slice(0, -3)} - ${j.time_to.slice(0, -3)}`;
           let tdBenevoles = document.createElement('td');
           tdBenevoles.className='table_cell';
+          tdBenevoles.id = `attend_event_number_${j.id}${i[0]}`;
+          get_number_attendees(j.id, i[0]);
           let tdCancelDate = document.createElement('td');
           tdCancelDate.className='table_cell';
           let aURLCancelDate = document.createElement('a');
