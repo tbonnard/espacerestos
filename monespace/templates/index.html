@@ -33,6 +33,10 @@
     {% if request.user.user_type != 2 %}
     <div id="events_manager">
 
+        {% if events_manager|length == 0 %}
+        <p class="info_text">Aucune soirée de distribution à votre charge</p>
+        {% else %}
+
         <table class='table1'>
             <thead>
                 <tr>
@@ -42,11 +46,11 @@
                     <th class='table_heading'>Bénévoles présents</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody_event_manager">
             {% for j in events_manager %}
             {% for z in j.1 %}
                 <tr>
-                    <td class='table_cell'><a href="{% url 'event_details' event_id=z.id %}?date={{j.0|date:'Y-m-d'}}">{{j.0}}</a></td>
+                    <td class='table_cell'><a class='event_manager_date' data-event_manager_date="{{j.0|date:'Y-m-d'}}" href="{% url 'event_details' event_id=z.id %}?date={{j.0|date:'Y-m-d'}}">{{j.0}}</a></td>
                     <td class='table_cell'>{{z.name}}</td>
                     <td class='table_cell'>{{z.time_from}} - {{z.time_to}}</td>
                     <td class='table_cell'></td>
@@ -55,7 +59,12 @@
             {% endfor %}
             </tbody>
         </table>
+    {% endif %}
 
+        {{ request.user.id|json_script:"user_id" }}
+        <div class="">
+            <button id='button_event_manager_load' data-ideventsearch="{{request.user.pk}}" class="button_white">Voir plus</button>
+        </div>
 
     </div>
     {% endif %}

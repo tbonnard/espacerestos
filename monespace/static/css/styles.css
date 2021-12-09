@@ -262,7 +262,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 	border: none;
 }
 
-.button_white {
+.button_white, .button_white:focus {
 	background-color: #fff;
 	border:1px solid var(--pink-btn);
 	outline: none;

@@ -1,10 +1,7 @@
-import json
-from pprint import pprint
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 import datetime
+from django.http import JsonResponse
 
 from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents, \
     EventExceptionCancelledRescheduled, User
@@ -88,12 +85,18 @@ def events_list(date_from, date_to, location, event_manager=None):
     return sorted_eligible_events_date
 
 
-from django.http import JsonResponse
-
-
+@forbidden_to_user
+@login_required(login_url='/login/')
 def events_list_json(request, user_id):
-    date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
-    events = events_list(date_from=None, date_to=date_to, location=None, event_manager=User.objects.get(pk=user_id))
+    try:
+        date_from = datetime.datetime.strptime(request.GET['from'], '%Y-%m-%d')
+    except:
+        date_from = None
+    try:
+        date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
+    except:
+        date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
+    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(pk=user_id))
     return JsonResponse(events, safe=False)
 
 
