@@ -45,8 +45,7 @@
                     <th class='table_heading'>Email</th>
                     <th class='table_heading'>Téléphone</th>
                     <th class='table_heading'>Dernière connexion</th>
-                    <th class='table_heading'>Statut</th>
-                    <th class='table_heading'>Mise à jour du statut</th>
+                    <th class='table_heading'>Distributions(s)</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,29 +60,7 @@
                     <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.tel|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.last_login|date:'Y-m-d H:i:s'}}</td>
-                    <td class='table_cell'><span class="user_status" data-user="{{j.user.pk}}{{j.location.pk}}" >{{j.get_status_display|default_if_none:""}}</span>
-
-                    <div class="form_status" data-user="{{j.user.pk}}{{j.location.pk}}" >
-                            <form method="POST" action="{% url 'user_site_update_status' location_id=j.location.pk %}?id={{j.pk}}">
-                                {% csrf_token %}
-                                {{form.status}}
-                                <button class="validate_user_status" title="Mettre à jour l'utilisateur"><i class="fas fa-check-circle"></i></button>
-                            </form>
-                        </div>
-
-                    </td>
-
-                    <td class='table_cell'>
-                        {% if j.status != 2 %}
-                        <form method="POST" action="{% url 'users_site' location_id=j.location.pk %}?id={{j.pk}}">
-                            {% csrf_token %}
-                            <button class="validate_user_status" title="Activer l'utilisateur"><i class="fas fa-check-circle"></i></button>
-                        </form>
-                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.location.pk}}" data-type="edit"><i class="far fa-edit"></i></button>
-                        {% else %}
-                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.location.pk}}" data-type="edit"><i class="far fa-edit"></i></button>
-                        {% endif %}
-                    </td>
+                    <td class='table_cell'><a href="{% url 'distrib_details' distrib_id=j.distrib.pk %}">{{j.distrib}}</a> ({{j.get_status_display|default_if_none:""}})</td>
                 </tr>
             {% endfor %}
             </tbody>

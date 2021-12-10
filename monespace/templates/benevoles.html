@@ -39,7 +39,7 @@
                     <th class='table_heading'>Téléphone</th>
                     <th class='table_heading'>Type d'utilisateur</th>
                     <th class='table_heading'>Dernière connexion</th>
-                    <th class='table_heading'>Site(s)</th>
+                    <th class='table_heading'>Distributions(s) / Site(s)</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
                     <td class='table_cell'>
                         {% for i in status_users_location %}
                             {% if i.user == j%}
-                        <p><a href="{% url 'users_site' location_id=i.location.pk %}">{{i.location}}</a> ({{i.get_status_display|default_if_none:""}})</p>
+                        <p><a href="{% url 'distrib_details' distrib_id=i.distrib.pk %}">{{i.distrib}}</a> ({{i.get_status_display|default_if_none:""}}) / <a href="{% url 'users_site' location_id=i.location.pk %}">{{i.location}}</a></p>
                             {% endif %}
                         {% endfor %}
                     </td>

@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let user_status = document.querySelectorAll('.user_status')
   let form_status_button= document.querySelectorAll('.button_form_status');
   let form_status= document.querySelectorAll('.form_status');
+  let validatePendingUserStatus = document.querySelector('#validate_pending_user_status');
 
   form_status.forEach(i => {
     i.style.display = 'none';

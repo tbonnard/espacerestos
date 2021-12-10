@@ -89,6 +89,10 @@ if (document.querySelector('#events_manager_menu')) {
           let tdName = document.createElement('td');
           tdName.className='table_cell';
           tdName.textContent = j.name;
+          let atdName = document.createElement('a');
+          atdName.href = `${window.location.origin}/distribution_details/${j.id}`;
+          atdName.innerHTML=`<i class='fas fa-angle-right'></i>`;
+          atdName.title = 'Détails globaux sur la distribution, et non pas juste cette date'
           let tdTime = document.createElement('td');
           tdTime.className='table_cell';
           tdTime.textContent = `${j.time_from.slice(0, -3)} - ${j.time_to.slice(0, -3)}`;
@@ -106,6 +110,7 @@ if (document.querySelector('#events_manager_menu')) {
           tr.append(tdDate);
           tdDate.append(aUrlEvent);
           tr.append(tdName);
+          tdName.append(atdName);
           tr.append(tdTime);
           tr.append(tdBenevoles);
           tr.append(tdCancelDate);

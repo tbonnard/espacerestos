@@ -86,14 +86,10 @@
             <tbody>
             {% for j in events %}
                 <tr class="tr_distrib" data-event="{{j.pk}}">
-                    <td class='table_cell'>{{j.name|default_if_none:""}}</td>
+                    <td class='table_cell'><a href="{% url 'distrib_details' distrib_id=j.pk %}" >{{j.name|default_if_none:""}}</a></td>
                     <td class='table_cell'>{{j.start_date|date:'l'}}</td>
                     <td class='table_cell'>{{j.time_from|default_if_none:""}} - {{j.time_to|default_if_none:""}}</td>
-                    <td class='table_cell'>{{j.event_manager|default_if_none:""}}
-                        {% if not j.is_cancelled %}
-                        <button class="button_form_status validate_user_status" title="Changer de responsable" data-type="edit"><i class="far fa-edit"></i></button>
-                        {% endif %}
-                    </td>
+                    <td class='table_cell'>{{j.event_manager|default_if_none:""}}</td>
                     <td class='table_cell'></td>
                     <td class='table_cell'></td>
                     {% if j.is_cancelled %}
