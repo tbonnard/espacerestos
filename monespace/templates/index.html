@@ -68,10 +68,13 @@
 <div id="events_14_days">
 
 {% if pending_location %}
-Vous avez au moins un site en attente de confirmation par le gestionnaire de site:
-    {%for i in pending_location%}
-    {{i}}
-    {% endfor %}
+        <p class="info_text">Vous avez au moins un site en attente de confirmation par le responsable de la soirée:
+            {%for i in pending_location%}
+            {{i}}
+            {% endfor %}
+        </p>
+
+
 {% endif %}
 
 
@@ -79,7 +82,7 @@ Vous avez au moins un site en attente de confirmation par le gestionnaire de sit
     <p class="info_text">Aucune présence prévue pour vous dans les 14 prochains jours</p>
 {% else %}
 
-<h1>Vos présences des 14 prochains jours</h1>
+<h3>Vos présences des 14 prochains jours</h3>
 
 {% include "events_loop.html" %}
 

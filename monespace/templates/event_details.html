@@ -124,7 +124,7 @@
 
 {% if todays_date <= date %}
 
-      {% if manager_location or request.user.user_type == 1 %}
+      {% if event.event_manager == request.user or request.user.user_type == 1 %}
     <div class="sub_nav">
 
         <div id="cancel_div">
