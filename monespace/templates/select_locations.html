@@ -52,7 +52,7 @@
                     <td class='table_cell'><a href="https://maps.google.com/maps?q={{j.address}},%20{{j.city}}%20{{j.zip_code}}%20{{j.country}}" target="_blank"><i class="fas fa-globe"></i></a></td>
                 </tr>
                 <tr class="tr_td_row" data-loc="{{j.pk}}">
-                    <td class="td_row" colspan="7">
+                    <td class="td_row" colspan="7" data-loc="{{j.pk}}">
 
                         {% for i in event_form_locations %}
                             {% if i.location.pk == j.pk %}
@@ -66,9 +66,9 @@
             </tbody>
         </table>
 
-    <p class="info_text">Chaque responsable de distributions séléctionnées devra confimer votre choix</p>
-
     <input type='submit' value="Confirmer" class='input_btn'/>
+        <p class="info_text">Chaque responsable de distributions séléctionnées devra confimer votre choix</p>
+
 </form>
 
 

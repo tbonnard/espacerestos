@@ -260,3 +260,10 @@ def get_user_distrib(request):
                                                                 status=1) | StatusUsersLocations.objects.filter(
         user=request.user, status=2)
     return JsonResponse([i.serialize() for i in status_user_distrib], safe=False)
+
+
+@login_required(login_url='/login/')
+def get_count_event_location(request, location_id):
+    location = get_object_or_404(Location, pk=location_id)
+    event_loc_count = Event.objects.filter(is_distrib=True, is_cancelled=False, location=location).count()
+    return JsonResponse(event_loc_count, safe=False)
