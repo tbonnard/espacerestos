@@ -183,14 +183,11 @@ def select_locations(request):
             user=request.user, status=2)
         locations_user_status = [i.location.pk for i in status_user_locations]
         form = SelectLocationsForm(initial={'locations': locations_user_status})
-        event_form_locations = Event.objects.filter(is_distrib=True, is_cancelled=False)
-        all_locations = Location.objects.all()
     else:
         form = SelectLocationsForm()
 
     if request.method == "POST":
         form = request.POST.getlist('distrib')
-        print(form)
         events_from_form = []
         for i in form:
             event = get_object_or_404(Event, pk=i)
@@ -245,6 +242,9 @@ def select_locations(request):
     #             j.save()
     # return redirect('index')
 
+
+    event_form_locations = Event.objects.filter(is_distrib=True, is_cancelled=False)
+    all_locations = Location.objects.all()
     return render(request, 'select_locations.html', context={"form": form, "event_form_locations": event_form_locations,
                                                              "all_locations": all_locations})
 

@@ -59,7 +59,6 @@
                                 <p><input class="distrib_checkbox" type="checkbox" id="{{ i.pk }}" name="distrib" value="{{ i.pk }}" data-distrib_us="{{ i.event_manager.pk }}">{{ i.name }} de {{ i.time_from}} à {{ i.time_to }}<i data-distrib_us="{{ i.event_manager.pk }}" class="fas fa-info-circle info_icon" title="Vous ne pourrez pas enlever une distribution pour lequel vous en êtes le responsable"></i></p>
                             {% endif %}
                         {% endfor %}
-
                     </td>
                 </tr>
 

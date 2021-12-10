@@ -22,7 +22,7 @@ def distribution_create(request, location_id):
                               time_from=form.cleaned_data['time_from'], time_to=form.cleaned_data['time_to'],
                               is_recurring=True, is_distrib=True)
             new_event.save()
-            new_rec = RecurringPattern(event=new_event, separation_count=1, max_num_occurrences=999999, repeat_each_x=0)
+            new_rec = RecurringPattern(event=new_event, separation_count=1, max_num_occurrences=999, repeat_each_x=0)
             new_rec.save()
             edit_user_type_to_manager(new_event.event_manager)
             check_if_new_status_to_create_update(distrib=new_event, location=new_event.location,
