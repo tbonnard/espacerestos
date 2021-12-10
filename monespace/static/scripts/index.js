@@ -147,6 +147,7 @@ if (document.querySelector('#events_manager_menu')) {
       } else {
         info_text.style.display = 'block';
         tableEvent.style.display = 'none';
+        document.querySelector('.view_more_event_manager').style.display = 'none';
       }
     });
 
