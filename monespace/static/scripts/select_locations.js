@@ -105,9 +105,9 @@ document.addEventListener("DOMContentLoaded", function () {
         locationsName.forEach(y => {
           if (y.dataset.loc == i.location.id) {
           } else {
-            y.style.pointerEvents="none";
-            y.style.cursor="default";
-            y.style.color='#222222';
+            // y.style.pointerEvents="none";
+            // y.style.cursor="default";
+            // y.style.color='#222222';
           }
         })
       })

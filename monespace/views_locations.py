@@ -176,15 +176,15 @@ def locations(request):
 
 @login_required(login_url='/login/')
 def select_locations(request):
-    if StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(
-            user=request.user, status=2):
-        status_user_locations = StatusUsersLocations.objects.filter(user=request.user,
-                                                                    status=1) | StatusUsersLocations.objects.filter(
-            user=request.user, status=2)
-        locations_user_status = [i.location.pk for i in status_user_locations]
-        form = SelectLocationsForm(initial={'locations': locations_user_status})
-    else:
-        form = SelectLocationsForm()
+    # if StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(
+    #         user=request.user, status=2):
+    #     status_user_locations = StatusUsersLocations.objects.filter(user=request.user,
+    #                                                                 status=1) | StatusUsersLocations.objects.filter(
+    #         user=request.user, status=2)
+    #     locations_user_status = [i.location.pk for i in status_user_locations]
+    #     form = SelectLocationsForm(initial={'locations': locations_user_status})
+    # else:
+    #     form = SelectLocationsForm()
 
     if request.method == "POST":
         form = request.POST.getlist('distrib')
@@ -242,10 +242,9 @@ def select_locations(request):
     #             j.save()
     # return redirect('index')
 
-
     event_form_locations = Event.objects.filter(is_distrib=True, is_cancelled=False)
     all_locations = Location.objects.all()
-    return render(request, 'select_locations.html', context={"form": form, "event_form_locations": event_form_locations,
+    return render(request, 'select_locations.html', context={"event_form_locations": event_form_locations,
                                                              "all_locations": all_locations})
 
 
