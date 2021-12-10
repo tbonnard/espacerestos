@@ -26,9 +26,9 @@
 <div class="form_div_space">
 
     {% if is_edit %}
-    <h1>Modifier "{{form.name.value}}"</h1>
+    <h3>Modifier "{{form.name.value}}"</h3>
     {% else %}
-    <h1>Ajouter un site</h1>
+    <h3>Ajouter un site</h3>
     {% endif %}
 
     <form  {% if is_edit%} action="{% url 'location_edit' location_id=location_id %}"

@@ -22,7 +22,7 @@
 
 <div class="form_div_space">
 
-<h1>Modifier "{{ form.name.value }}"</h1>
+<h3>Modifier "{{ form.name.value }}"</h3>
 
     <form action="{% url 'event_edit' event_id=event.pk %}" method='POST'>
         {% csrf_token %}

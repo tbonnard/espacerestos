@@ -3,7 +3,9 @@
 {% block content%}
 
 <div class="form_div_space">
-    
+
+    <h3>Bon retour!</h3>
+
     <form action="{% url 'login_view' %}" method='POST'>
         {% csrf_token %}
         {{ form.as_p}}
