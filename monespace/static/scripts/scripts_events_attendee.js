@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 
+
 function api_call_attend_decline(eventid, date, type) {
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
   const request = new Request(
@@ -23,7 +24,6 @@ function api_call_attend_decline(eventid, date, type) {
   })
 
   }
-
 
 
   function create_elements_attendees(parentDiv, eventid, date, pInner, buttonText, type) {
@@ -141,5 +141,33 @@ function api_call_attend_decline(eventid, date, type) {
   };
 
 all_attendees_user();
+
+
+  function get_user_distrib() {
+    const request = new Request(`${window.location.origin}/get_user_distrib/`);
+    const response = fetch(request, {
+      method:'GET',
+      mode: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      let attendeesForm = document.querySelectorAll('.attendees');
+      attendeesForm.forEach(i => {
+        data.forEach(y => {
+          console.log(y.id_distrib);
+          console.log(i.dataset.eventid);
+          console.log(y.user_status);
+
+          if (y.id_distrib == i.dataset.eventid && y.user_status == 1) {
+            i.innerHTML = "<p class='info_text'>en attente de confirmation par le responsable afin de pouvoir rejoindre cette distribution</p>"
+          }
+        })
+      })
+    })
+  }
+
+
+get_user_distrib();
 
 });

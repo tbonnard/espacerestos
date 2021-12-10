@@ -23,7 +23,10 @@ def index(request):
 
     pending_location = []
     if StatusUsersLocations.objects.filter(user=request.user, status=1):
-        pending_location = [i.location for i in StatusUsersLocations.objects.filter(user=request.user, status=1)]
+        # pending_location = [i.location for i in StatusUsersLocations.objects.filter(user=request.user, status=1)]
+        pending_events = StatusUsersLocations.objects.filter(user=request.user, status=1)
+    else:
+        pending_events = None
 
     eligible_events_date_locations_attendees = []
     attendees = AttendeesEvents.objects.filter(user=request.user)
@@ -55,7 +58,7 @@ def index(request):
     date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=31)
     events_manager = events_list(date_from=None, date_to=date_to, location=None, event_manager=request.user)
     return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final,
-                                                  "date_to": date_to, "pending_location":pending_location,
+                                                  "date_to": date_to, "pending_events":pending_events,
                                                   "attendees": attendees, "events_manager": events_manager })
 
 

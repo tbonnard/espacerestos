@@ -143,6 +143,7 @@ class StatusUsersLocations(models.Model):
                 "location_id": self.location.pk,
                 "distrib":self.distrib.serialize(),
                 "user_id":self.user.pk,
+                "user_status": self.status,
                 }
 
 
