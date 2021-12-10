@@ -85,8 +85,8 @@ def events_list(date_from, date_to, location, event_manager=None):
     return sorted_eligible_events_date
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def events_list_json(request, user_id):
     try:
         date_from = datetime.datetime.strptime(request.GET['from'], '%Y-%m-%d')
@@ -250,8 +250,8 @@ def default_initial_event_form(request, form, edit=False):
     return form
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def event_create(request):
     return redirect('index')
     pre_form = EventForm()
@@ -287,8 +287,8 @@ def validate_event_date(event, date):
     return event_valid
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def event_edit(request, event_id):
     return redirect('index')
     # No need with new version
@@ -361,8 +361,8 @@ def event_edit(request, event_id):
     #             return redirect('index')
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def event_edit_specific_rec(request, event_id):
     return redirect('index')
     # No need with new version
@@ -440,9 +440,9 @@ def event_details(request, event_id):
         return redirect('index')
 
 
-@location_manager_check
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
+@location_manager_check
 def event_delete_all(request, event_id):
     try:
         event_to_delete = Event.objects.get(id=event_id)
@@ -481,9 +481,9 @@ def event_delete_all(request, event_id):
         return redirect('index')
 
 
-@location_manager_check
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
+@location_manager_check
 def event_delete_rec(request, event_id):
     try:
         date = request.GET['date']

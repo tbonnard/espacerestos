@@ -66,8 +66,8 @@ def faq_view(request):
     return render(request, 'faq.html')
 
 
-@admin_only
 @login_required(login_url='/login/')
+@admin_only
 def all_users_site(request):
     users = User.objects.all()
     form = StatusUsersLocationsForm()
@@ -75,8 +75,8 @@ def all_users_site(request):
     return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form, "users":users})
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def users_site(request, location_id):
     if request.user.user_type == 3 and Location.objects.get(pk=location_id) not in Location.objects.filter(location_managers=request.user):
         return redirect('index')
@@ -100,8 +100,8 @@ def users_site(request, location_id):
         return render(request, 'benevoles_site.html', context={'location_id': location_id, "status_users_location": status_users_location, "form": form})
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def user_site_update_status(request, location_id):
     if request.method == "POST":
         try:

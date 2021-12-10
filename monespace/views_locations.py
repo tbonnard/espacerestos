@@ -86,8 +86,8 @@ def check_if_new_status_to_create_update(distrib, location, user_to_update, from
     return status
 
 
-@admin_only
 @login_required(login_url='/login/')
+@admin_only
 def location_create(request):
     form = LocationForm()
     if request.method == "POST":
@@ -104,8 +104,8 @@ def location_create(request):
     return render(request, 'location.html', context={"form": form})
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def location_edit(request, location_id):
     location_page = Location.objects.get(id=location_id)
     form = LocationForm(instance=location_page)

@@ -7,8 +7,8 @@ from .models import StatusUsersLocations, Location, Event
 from .functions_global import forbidden_to_user
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def download_users_csv(request):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(
@@ -37,8 +37,8 @@ def download_users_csv(request):
     return response
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def download_users_csv_distrib(request):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(

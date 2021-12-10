@@ -9,8 +9,8 @@ from .models import Location, Event, RecurringPattern, StatusUsersLocations, Log
 from .views_locations import edit_user_type_to_manager, check_if_new_status_to_create_update, edit_user_type_to_user
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def distribution_create(request, location_id):
     location = get_object_or_404(Location, pk=location_id)
     form = DistributionForm()
@@ -39,8 +39,8 @@ def distribution_create(request, location_id):
     return render(request, 'distrib_create.html', context={"form": form, "location": location})
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def distrib_details(request, distrib_id):
     distrib = get_object_or_404(Event, pk=distrib_id)
     if request.user.user_type == 3 and distrib.event_manager != request.user:
@@ -72,8 +72,8 @@ def distrib_details(request, distrib_id):
                                                             "form": form, "formManager":formManager})
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def user_distrib_update_status(request, distrib_id):
     if request.method == "POST":
         try:
@@ -90,8 +90,8 @@ def user_distrib_update_status(request, distrib_id):
     return redirect('index')
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def change_distrib_manager(request, distrib_id):
     if request.method== "POST":
         distrib = get_object_or_404(Event, pk=distrib_id)
@@ -131,8 +131,8 @@ def get_count_event_location(request, location_id):
     return JsonResponse(event_loc_count, safe=False)
 
 
-@forbidden_to_user
 @login_required(login_url='/login/')
+@forbidden_to_user
 def get_count_event_benev(request):
     status_user_distrib = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
     count_distrib_ben = {}

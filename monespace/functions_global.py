@@ -2,7 +2,7 @@ import datetime
 from functools import wraps
 from django.shortcuts import redirect
 
-from .models import Event, Location
+from .models import Event
 
 
 def get_date_to():
