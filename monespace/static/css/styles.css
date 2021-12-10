@@ -285,6 +285,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 .info_icon {
 	margin-left: 5px;
 	color: var(--pink);
+	cursor: pointer;
 }
 
 .info_icon:hover {
@@ -772,6 +773,16 @@ table {
 
 .table_cell i {
 		margin-left: 5px;
+}
+
+.table_cell input[type=checkbox], p input[type=checkbox] {
+	margin: 0;
+	margin-right: 10px;
+}
+
+.td_row {
+	background-color : #fff;
+	font-size: 14px;
 }
 
 td {

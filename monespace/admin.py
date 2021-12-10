@@ -14,7 +14,7 @@ class LocationAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('location', 'name', 'start_date', 'is_recurring', 'created')
+    list_display = ('location', 'name', 'start_date', 'is_recurring', 'is_distrib', 'is_cancelled', 'created')
 
 
 class RecurringPatternAdmin(admin.ModelAdmin):
@@ -22,11 +22,11 @@ class RecurringPatternAdmin(admin.ModelAdmin):
 
 
 class StatusUsersLocationsAdmin(admin.ModelAdmin):
-    list_display = ('location', "user", 'status', 'created', 'modified')
+    list_display = ('location', 'distrib',  "user", 'status', 'created', 'modified')
 
 
 class LogsStatusUsersLocationsAdmin(admin.ModelAdmin):
-    list_display = ('location', 'from_user' , "user", 'status', 'current_status', 'created')
+    list_display = ('location', 'distrib', 'from_user', "user", 'status', 'current_status', 'created')
 
 
 class EventExceptionCancelledRescheduledAdmin(admin.ModelAdmin):

@@ -128,6 +128,8 @@ class StatusUsersLocations(models.Model):
     status = models.IntegerField(choices=status_choices, null=False, blank=False, default=1)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    distrib = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=False,
+                                 related_name="event_status_user")
 
     def __str__(self):
         return f"{self.user} - {self.location} - {self.status}"
@@ -147,6 +149,8 @@ class LogsStatusUsersLocations(models.Model):
     status = models.IntegerField(choices=status_choices, null=False, blank=False, default=1)
     current_status = models.IntegerField(null=True, blank=False)
     created = models.DateTimeField(auto_now_add=True)
+    distrib = models.ForeignKey(Location, on_delete=models.CASCADE, blank=False, null=False,
+                                 related_name="Logs_distrib_status_user")
 
     def __str__(self):
         return f"Log: {self.user} - {self.location} - {self.status}"

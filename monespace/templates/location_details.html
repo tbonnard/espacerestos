@@ -70,6 +70,7 @@
 
     <div id="soirees">
 
+        {% if events|length > 0 %}
         <table class='table1'>
             <thead>
                 <tr>
@@ -104,6 +105,10 @@
             {% endfor %}
             </tbody>
         </table>
+
+        {% else %}
+        <p class="info_text">Aucune soirée de distribution pour ce site</p>
+        {% endif %}
 
         <a href="{% url 'distribution_create' location_id=location.pk %}" >
          <button class=""><i class="fas fa-plus"></i> Distribution</button>

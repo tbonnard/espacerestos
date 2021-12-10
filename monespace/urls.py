@@ -26,6 +26,7 @@ urlpatterns = [
     path('select_locations/', views_locations.select_locations, name='select_locations'),
     path('location/<int:location_id>', views_locations.location_details, name='location_details'),
     path('location_edit/<int:location_id>', views_locations.location_edit, name='location_edit'),
+    path('get_event_location/', views_locations.get_event_location, name='get_event_location'),
     path('download_users_csv/', views_download.download_users_csv, name='download_users_csv'),
     path('api_get_specific_attendees/', views_attend.api_get_specific_attendees, name='api_get_specific_attendees'),
     path('api_get_count_specific_attendees/', views_attend.api_get_count_specific_attendees, name='api_get_count_specific_attendees'),

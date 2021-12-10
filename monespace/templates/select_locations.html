@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+<script src= "{% static 'scripts/select_locations.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -20,8 +25,48 @@
 
 <form action="{% url 'select_locations' %}" method="POST">
     {% csrf_token %}
-    <label>Les sites disponibles</label>
-    {{form.locations}}
+
+    <table class='table1'>
+            <thead>
+                <tr>
+                    <th class='table_heading'>Votre séléction</th>
+                    <th class='table_heading'>Nom</th>
+                    <th class='table_heading'>Adresse</th>
+                    <th class='table_heading'>Ville</th>
+                    <th class='table_heading'>Code postal</th>
+                    <th class='table_heading'>Gestionnaire</th>
+                    <th class='table_heading'>Voir sur la carte</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for j in all_locations%}
+                <tr>
+                    <td class='table_cell'>
+                        <input class="locations_checkbox" type="checkbox" id="{{ j.pk }}" name="{{ j }}" value="{{ j.pk }}">
+                    </td>
+                    <td class='table_cell'><a href="{% url 'location_details' location_id=j.id %}">{{j.name|default_if_none:""}}</a></td>
+                    <td class='table_cell'>{{j.address|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.city}}</td>
+                    <td class='table_cell'>{{j.zip_code}}</td>
+                    <td class='table_cell'>{% for z in j.location_managers.all %}{{z.first_name}} {{z.last_name}}{% endfor %}</td>
+                    <td class='table_cell'><a href="https://maps.google.com/maps?q={{j.address}},%20{{j.city}}%20{{j.zip_code}}%20{{j.country}}" target="_blank"><i class="fas fa-globe"></i></a></td>
+                </tr>
+                <tr class="tr_td_row" data-loc="{{j.pk}}">
+                    <td class="td_row" colspan="7">
+
+                        {% for i in event_form_locations %}
+                            {% if i.location.pk == j.pk %}
+                                <p><input class="distrib_checkbox" type="checkbox" id="{{ i.pk }}" name="distrib" value="{{ i.pk }}">{{ i.name }} de {{ i.time_from}} à {{ i.time_to }}</p>
+                            {% endif %}
+                        {% endfor %}
+
+                    </td>
+                </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+
     <input type='submit' value="Confirmer" class='input_btn'/>
 </form>
 

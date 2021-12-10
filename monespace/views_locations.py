@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
@@ -8,7 +9,7 @@ from .functions_global import forbidden_to_user, admin_only
 
 
 def edit_user_type_to_manager(user):
-    if user.user_type !=1:
+    if user.user_type != 1:
         user.user_type = 3
         user.save()
 
@@ -20,9 +21,9 @@ def edit_user_type_to_user(user):
     :param user: user for which we want to update status
     :return:
     """
-    if user.user_type !=1:
+    if user.user_type != 1:
         user_manager_other_location = Location.objects.filter(location_managers=user)
-        if user_manager_other_location.count() ==0:
+        if user_manager_other_location.count() == 0:
             user.user_type = 2
             user.save()
 
@@ -49,34 +50,36 @@ def check_if_new_status_to_create_update(location, user_to_update, from_user, ma
             status.status = 2
             status.save()
             logs = LogsStatusUsersLocations(location=location, user=user_to_update, from_user=from_user, status=2,
-                                     current_status=status.status)
+                                            current_status=status.status)
             logs.save()
         elif status.status == 2:
             logs = LogsStatusUsersLocations(location=location, user=user_to_update, status=2, from_user=from_user,
-                                         current_status=status.status)
+                                            current_status=status.status)
             logs.save()
 
         elif status.status == 1 and not (manager or manager_location_check):
             logs = LogsStatusUsersLocations(location=location, user=user_to_update, status=1, from_user=from_user,
-                                     current_status=status.status)
+                                            current_status=status.status)
             logs.save()
 
         else:
             status.status = 1
             status.save()
             logs = LogsStatusUsersLocations(location=location, user=user_to_update, status=1, from_user=from_user,
-                                     current_status=status.status)
+                                            current_status=status.status)
             logs.save()
     else:
         if manager or manager_location_check:
             status = StatusUsersLocations(location=location, user=user_to_update, status=2)
             status.save()
-            logs = LogsStatusUsersLocations(location=location, user=user_to_update, from_user=from_user, status=2, current_status=status.status)
+            logs = LogsStatusUsersLocations(location=location, user=user_to_update, from_user=from_user, status=2,
+                                            current_status=status.status)
             logs.save()
         else:
             status = StatusUsersLocations(location=location, user=user_to_update)
             status.save()
-            logs = LogsStatusUsersLocations(location=location, from_user=from_user, user=user_to_update, current_status=status.status)
+            logs = LogsStatusUsersLocations(location=location, from_user=from_user, user=user_to_update,
+                                            current_status=status.status)
             logs.save()
     return status
 
@@ -92,7 +95,7 @@ def location_create(request):
             for i in new_location.location_managers.all():
                 edit_user_type_to_manager(i)
                 check_if_new_status_to_create_update(location=new_location, user_to_update=i, from_user=request.user,
-                                                 manager=True)
+                                                     manager=True)
             # edit_user_type_to_manager(new_location.manager_location)
             # check_if_new_status_to_create_update(location=new_location, user_to_update=new_location.manager_location, from_user=request.user, manager=True)
             return redirect('index')
@@ -119,13 +122,15 @@ def location_edit(request, location_id):
                 if i not in current_managers:
                     location_page.location_managers.add(i)
                     edit_user_type_to_manager(i)
-                    check_if_new_status_to_create_update(location=location_page, user_to_update=i, from_user=request.user, manager=True)
+                    check_if_new_status_to_create_update(location=location_page, user_to_update=i,
+                                                         from_user=request.user, manager=True)
 
             for i in current_managers:
                 if i not in new_managers:
                     location_page.location_managers.remove(i)
                     edit_user_type_to_user(i)
-                    check_if_new_status_to_create_update(location=location_page, user_to_update=i, from_user=request.user)
+                    check_if_new_status_to_create_update(location=location_page, user_to_update=i,
+                                                         from_user=request.user)
 
             #     if location_page.manager_location != manager:
             #         edit_user_type_to_user(location_page.manager_location)
@@ -146,19 +151,20 @@ def location_details(request, location_id):
         if i == request.user:
             manager_location_check = True
     return render(request, 'location_details.html', context={"location": location_page,
-                                                             "manager_location":manager_location_check,
-                                                             "events":all_events_location})
+                                                             "manager_location": manager_location_check,
+                                                             "events": all_events_location})
 
 
 @login_required(login_url='/login/')
 def locations(request):
     if request.user.user_type == 1:
         all_locations = Location.objects.all()
-        return render(request, 'locations.html', context={"all_locations": all_locations, "admin":True })
+        return render(request, 'locations.html', context={"all_locations": all_locations, "admin": True})
     elif Location.objects.filter(location_managers=request.user).count() == 0:
         return redirect('index')
     elif Location.objects.filter(location_managers=request.user).count() == 1:
-        return redirect(reverse('location_details', kwargs={'location_id': Location.objects.filter(location_managers=request.user).first().pk}))
+        return redirect(reverse('location_details', kwargs={
+            'location_id': Location.objects.filter(location_managers=request.user).first().pk}))
     elif request.user.user_type == 3:
         all_locations = Location.objects.filter(location_managers=request.user)
         return render(request, 'locations.html', context={"all_locations": all_locations})
@@ -168,37 +174,77 @@ def locations(request):
 
 @login_required(login_url='/login/')
 def select_locations(request):
-    if StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2):
-        status_user_locations = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
+    if StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(
+            user=request.user, status=2):
+        status_user_locations = StatusUsersLocations.objects.filter(user=request.user,
+                                                                    status=1) | StatusUsersLocations.objects.filter(
+            user=request.user, status=2)
         locations_user_status = [i.location.pk for i in status_user_locations]
         form = SelectLocationsForm(initial={'locations': locations_user_status})
+        event_form_locations = Event.objects.filter(is_distrib=True, is_cancelled=False)
+        all_locations = Location.objects.all()
     else:
         form = SelectLocationsForm()
-    if request.method == "POST":
-        form = SelectLocationsForm(data=request.POST)
-        if form.is_valid():
-            locations_form = form.cleaned_data['locations']
-            for i in locations_form:
-                status_check = check_if_new_status_to_create_update(location=i, user_to_update=request.user, from_user=request.user, manager=False)
-                if status_check is not None and status_check.status == 1:
-                    try:
-                        send_email(request.user, i.location_managers.first().email)
-                    except:
-                        print('error - email send notif status location manager')
-            for j in StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(status=5):
-                if j.location not in locations_form:
-                    logs = LogsStatusUsersLocations(location=j.location, from_user=request.user, user=request.user, status=5,
-                                             current_status=j.status)
-                    logs.save()
-                # if (j.location not in locations_form and request.user.user_type != 1) and (j.location not in locations_form and j.location.manager_location != request.user):
-                manager_location_check = False
-                for z in j.location.location_managers.all():
-                    if request.user == z:
-                        manager_location_check = True
-                if j.location not in locations_form and not manager_location_check:
-                    j.status =5
-                    j.save()
-        return redirect('index')
-    return render(request, 'select_locations.html', context={"form": form})
+    # if request.method == "POST":
+    #     form = request.POST.getlist('distrib')
+    #     for i in form:
+    #         get_object_or_404(Event, pk=i)
+    #         status_check = check_if_new_status_to_create_update(distrib=Event.objects.get(pk=i),
+    #                                                             location=Location.objects.get(
+    #                                                                 pk=Event.objects.get(pk=i).location.pk),
+    #                                                             user_to_update=request.user, from_user=request.user,
+    #                                                             manager=False)
+    #         if status_check is not None and status_check.status == 1:
+    #             try:
+    #                 send_email(request.user, Event.objects.get(pk=i).event_manager.email)
+    #             except:
+    #                 print('error - email send notif status location manager')
+    #     for j in StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(
+    #             status=5):
+    #         if j.location not in locations_form:
+    #             logs = LogsStatusUsersLocations(location=j.location, from_user=request.user, user=request.user,
+    #                                             status=5,
+    #                                             current_status=j.status)
+    #             logs.save()
+    #         # if (j.location not in locations_form and request.user.user_type != 1) and (j.location not in locations_form and j.location.manager_location != request.user):
+    #         manager_location_check = False
+    #         for z in j.location.location_managers.all():
+    #             if request.user == z:
+    #                 manager_location_check = True
+    #         if j.location not in locations_form and not manager_location_check:
+    #             j.status = 5
+    #             j.save()
+    # return redirect('index')
+
+    # form = SelectLocationsForm(data=request.POST)
+    # if form.is_valid():
+    #     locations_form = form.cleaned_data['locations']
+    #     for i in locations_form:
+    #         status_check = check_if_new_status_to_create_update(location=i, user_to_update=request.user, from_user=request.user, manager=False)
+    #         if status_check is not None and status_check.status == 1:
+    #             try:
+    #                 send_email(request.user, i.location_managers.first().email)
+    #             except:
+    #                 print('error - email send notif status location manager')
+    #     for j in StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(status=5):
+    #         if j.location not in locations_form:
+    #             logs = LogsStatusUsersLocations(location=j.location, from_user=request.user, user=request.user, status=5,
+    #                                      current_status=j.status)
+    #             logs.save()
+    #         # if (j.location not in locations_form and request.user.user_type != 1) and (j.location not in locations_form and j.location.manager_location != request.user):
+    #         manager_location_check = False
+    #         for z in j.location.location_managers.all():
+    #             if request.user == z:
+    #                 manager_location_check = True
+    #         if j.location not in locations_form and not manager_location_check:
+    #             j.status =5
+    #             j.save()
+    # return redirect('index')
+    return render(request, 'select_locations.html', context={"form": form, "event_form_locations": event_form_locations,
+                                                             "all_locations": all_locations})
 
 
+@login_required(login_url='/login/')
+def get_event_location(request):
+    event_form_locations = Event.objects.filter(is_distrib=True, is_cancelled=False)
+    return JsonResponse([i.serialize() for i in event_form_locations], safe=False)
