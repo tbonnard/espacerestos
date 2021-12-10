@@ -37,6 +37,9 @@
            method='POST'>
         {% csrf_token %}
         {{ form.as_p }}
+        {% if is_edit %}
+            <p class="info_text">Pour enlever une personne étant responsable de distribution, il faut d'abord l'enlever de la distribution</p>
+        {% endif %}
         <input type='submit' value="Confirmer" class='input_btn'/>
     </form>
 </div>

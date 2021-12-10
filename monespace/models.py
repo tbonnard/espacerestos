@@ -132,10 +132,18 @@ class StatusUsersLocations(models.Model):
                                  related_name="event_status_user")
 
     def __str__(self):
-        return f"{self.user} - {self.location} - {self.status}"
+        return f"{self.user} - {self.location} - {self.distrib} - {self.status}"
 
     def __repr__(self):
-        return f"{self.user} - {self.location} - {self.status}"
+        return f"{self.user} - {self.location} - {self.distrib} - {self.status}"
+
+    def serialize(self):
+        return {"id": self.id,
+                "id_distrib": self.distrib.pk,
+                "location_id": self.location.pk,
+                "distrib":self.distrib.serialize(),
+                "user_id":self.user.pk,
+                }
 
 
 class LogsStatusUsersLocations(models.Model):
@@ -149,7 +157,7 @@ class LogsStatusUsersLocations(models.Model):
     status = models.IntegerField(choices=status_choices, null=False, blank=False, default=1)
     current_status = models.IntegerField(null=True, blank=False)
     created = models.DateTimeField(auto_now_add=True)
-    distrib = models.ForeignKey(Location, on_delete=models.CASCADE, blank=False, null=False,
+    distrib = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=False,
                                  related_name="Logs_distrib_status_user")
 
     def __str__(self):
