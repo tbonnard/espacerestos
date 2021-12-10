@@ -724,6 +724,37 @@ margin: 0;
 
 
 
+/* DISTRIB */
+
+#change_manager {
+	padding-top: 20px;
+}
+
+#change_manager select {
+	display: block;
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+}
+
+.change_manager_button, .change_manager_button:hover {
+	background-color : #fff;
+	width: auto;
+	cursor: normal;
+}
+
+.change_manager_button i:hover {
+	color:var(--near_black);
+	background-color : #fff;
+}
+
+.change_manager_button i{
+	color:var(--pink);
+}
+
+
+
 /* TABLE USERS */
 table {
     margin: 30px 0 30px 0;
@@ -810,14 +841,16 @@ td form {
 	cursor: normal;
 }
 
+
 .validate_user_status  i {
 	color:var(--pink);
 }
 
-.validate_user_status  i:hover {
+.validate_user_status  i:hover{
 	color:var(--near_black);
 	cursor: pointer;
 }
+
 
 form #id_status {
 	background-color :var(--light_grey);

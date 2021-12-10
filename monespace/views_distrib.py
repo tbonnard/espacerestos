@@ -2,11 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 
-from .forms import EventForm, EventRecurringPatternForm, DistributionForm, StatusUsersLocationsForm
+from .forms import DistributionForm, StatusUsersLocationsForm, DistributionManagerForm
 from .functions_global import forbidden_to_user
-from .models import Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations
-from .views_events import default_initial_event_form, create_event_unit, create_recurring_pattern_event_unit
-from .views_locations import edit_user_type_to_manager, check_if_new_status_to_create_update
+from .models import Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, User
+from .views_locations import edit_user_type_to_manager, check_if_new_status_to_create_update, edit_user_type_to_user
 
 
 @forbidden_to_user
@@ -14,6 +13,12 @@ from .views_locations import edit_user_type_to_manager, check_if_new_status_to_c
 def distribution_create(request, location_id):
     location = get_object_or_404(Location, pk=location_id)
     form = DistributionForm()
+    user_from_location = [i.pk for i in Location.objects.get(pk=location_id).location_managers.all()]
+    form.fields['event_manager'].queryset = User.objects.filter(id__in=user_from_location)
+    print(len(user_from_location))
+    if len(user_from_location) == 1:
+        form.initial['event_manager'] = User.objects.get(id=user_from_location[0])
+
     if request.method == "POST":
         form = DistributionForm(data=request.POST)
         if form.is_valid():
@@ -43,6 +48,11 @@ def distrib_details(request, distrib_id):
         status_users_location = StatusUsersLocations.objects.filter(distrib=distrib, status=1) | \
                                 StatusUsersLocations.objects.filter(distrib=distrib, status=2)
         form = StatusUsersLocationsForm()
+        user_from_location = [i.pk for i in Location.objects.get(pk=distrib.location.pk).location_managers.all()]
+        formManager = DistributionManagerForm()
+        formManager.fields['event_manager'].queryset = User.objects.filter(id__in=user_from_location)
+        if len(user_from_location) ==1 :
+            formManager.initial['event_manager'] = User.objects.get(id=user_from_location[0])
 
         if request.method == "POST":
             try:
@@ -58,7 +68,7 @@ def distrib_details(request, distrib_id):
 
     return render(request, 'distrib_details.html', context={"distrib":distrib,
                                                             "status_users_location": status_users_location,
-                                                            "form": form})
+                                                            "form": form, "formManager":formManager})
 
 
 @forbidden_to_user
@@ -79,3 +89,21 @@ def user_distrib_update_status(request, distrib_id):
     return redirect('index')
 
 
+@forbidden_to_user
+@login_required(login_url='/login/')
+def change_distrib_manager(request, distrib_id):
+    if request.method== "POST":
+        distrib = get_object_or_404(Event, pk=distrib_id)
+        if request.user.user_type == 3 and distrib.event_manager != request.user:
+            return redirect('index')
+        distrib_manager = User.objects.get(pk=request.POST['event_manager'])
+        previous_manager = distrib.event_manager
+        distrib.event_manager = distrib_manager
+        distrib.save()
+        edit_user_type_to_manager(distrib.event_manager)
+        edit_user_type_to_user(previous_manager)
+        check_if_new_status_to_create_update(distrib=distrib, location=distrib.location,
+                                             user_to_update=distrib.event_manager, from_user=request.user,
+                                             manager=True)
+        return redirect(reverse('distrib_details', kwargs={'distrib_id': distrib_id}))
+    return redirect('index')

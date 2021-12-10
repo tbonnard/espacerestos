@@ -81,6 +81,15 @@ class DistributionForm(forms.ModelForm):
         }
 
 
+class DistributionManagerForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ("event_manager",)
+        labels = {
+            "event_manager": "Séléctionner le nouveau responsable de la soirée distribution"
+        }
+
+
 class EventRecurringPatternForm(forms.ModelForm):
     class Meta:
         model = RecurringPattern

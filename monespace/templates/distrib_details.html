@@ -109,7 +109,18 @@
         <p>Nom: {{distrib.name}}</p>
         <p>Journée: {{distrib.start_date|date:'l'}}</p>
         <p>Heure: {{distrib.time_from}} - {{distrib.time_to}}</p>
-        <p>Responsable: {{distrib.event_manager}}</p>
+        <p>Responsable: {{distrib.event_manager}}<a><i id="icon_change_manager" class="far fa-edit info_icon"></i></a></p>
+
+        <form id="change_manager" method='POST' action="{% url 'change_distrib_manager' distrib_id=distrib.pk %}">
+            {% csrf_token %}
+            {{formManager}}
+            <div>
+            <button class="change_manager_button" type="submit"><i id="icon_approve_change_manager" title="Valider le changement" class="fas fa-check-circle info_icon"></i></button>
+            <a><i id="icon_cancel_change_manager" title="Anuler le changement"  class="far fa-window-close info_icon"></i></a>
+            </div>
+        </form>
+
+
     </div>
 
 

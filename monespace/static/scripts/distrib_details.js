@@ -18,6 +18,18 @@ document.addEventListener("DOMContentLoaded", function () {
     distribBenevoles.style.display = 'block';
   })
 
-
+  let formChangeManager = document.querySelector('#change_manager');
+  let iconChangeManager = document.querySelector('#icon_change_manager');
+  formChangeManager.style.display = 'none';
+  iconChangeManager.addEventListener('click', () => {
+    formChangeManager.style.display = 'block';
+    iconChangeManager.style.display = 'none';
+    let approveChangeManager = document.querySelector('#icon_approve_change_manager');
+    let cancelChangeManager = document.querySelector('#icon_cancel_change_manager');
+    cancelChangeManager.addEventListener('click', () => {
+      formChangeManager.style.display = 'none';
+      iconChangeManager.style.display = 'inherit';
+    })
+  })
 
 });

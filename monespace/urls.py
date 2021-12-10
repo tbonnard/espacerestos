@@ -16,6 +16,7 @@ urlpatterns = [
     path('benevoles_distrib_status/<int:distrib_id>', views_distrib.user_distrib_update_status, name='user_distrib_update_status'),
     path('distribution/<int:location_id>', views_distrib.distribution_create, name='distribution_create'),
     path('distribution_details/<int:distrib_id>', views_distrib.distrib_details, name='distrib_details'),
+    path('change_distrib_manager/<int:distrib_id>', views_distrib.change_distrib_manager, name='change_distrib_manager'),
     path('event/', views_events.event_create, name='event_create'),
     path('event/<int:event_id>', views_events.event_details, name='event_details'),
     path('event_edit/<int:event_id>', views_events.event_edit, name='event_edit'),
