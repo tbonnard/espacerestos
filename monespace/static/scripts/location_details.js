@@ -64,5 +64,28 @@ document.addEventListener("DOMContentLoaded", function () {
     })
   })
 
+  let benevolesNumber = document.querySelectorAll('.benevoles_number');
+
+  function get_benevolesNumber() {
+    const request = new Request(`${window.location.origin}/get_count_event_benev/`);
+    const response = fetch(request, {
+      method:'GET',
+      mode: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+      benevolesNumber.forEach(y => {
+        if (data[y.dataset.event] && y.dataset.type == 'active') {
+          y.textContent = data[y.dataset.event].active;
+        }
+        if (data[y.dataset.event] && y.dataset.type == 'pending') {
+          y.textContent = data[y.dataset.event].pending;
+        }
+      })
+    })
+
+  }
+
+  get_benevolesNumber();
 
 });

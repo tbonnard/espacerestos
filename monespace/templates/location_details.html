@@ -90,8 +90,8 @@
                     <td class='table_cell'>{{j.start_date|date:'l'}}</td>
                     <td class='table_cell'>{{j.time_from|default_if_none:""}} - {{j.time_to|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.event_manager|default_if_none:""}}</td>
-                    <td class='table_cell'></td>
-                    <td class='table_cell'></td>
+                    <td class='table_cell benevoles_number' data-event="{{j.pk}}" data-type="active"></td>
+                    <td class='table_cell benevoles_number' data-event="{{j.pk}}" data-type="pending"></td>
                     {% if j.is_cancelled %}
                     <td class='table_cell' >annulée</td>
                     {% else %}

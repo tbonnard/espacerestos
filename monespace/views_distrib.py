@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 
@@ -107,3 +108,43 @@ def change_distrib_manager(request, distrib_id):
                                              manager=True)
         return redirect(reverse('distrib_details', kwargs={'distrib_id': distrib_id}))
     return redirect('index')
+
+
+@login_required(login_url='/login/')
+def get_event_location(request):
+    all_event_distrib = Event.objects.filter(is_distrib=True, is_cancelled=False)
+    return JsonResponse([i.serialize() for i in all_event_distrib], safe=False)
+
+
+@login_required(login_url='/login/')
+def get_user_distrib(request):
+    status_user_distrib = StatusUsersLocations.objects.filter(user=request.user,
+                                                                status=1) | StatusUsersLocations.objects.filter(
+        user=request.user, status=2)
+    return JsonResponse([i.serialize() for i in status_user_distrib], safe=False)
+
+
+@login_required(login_url='/login/')
+def get_count_event_location(request, location_id):
+    location = get_object_or_404(Location, pk=location_id)
+    event_loc_count = Event.objects.filter(is_distrib=True, is_cancelled=False, location=location).count()
+    return JsonResponse(event_loc_count, safe=False)
+
+
+@forbidden_to_user
+@login_required(login_url='/login/')
+def get_count_event_benev(request):
+    status_user_distrib = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
+    count_distrib_ben = {}
+    for i in status_user_distrib:
+        if i.distrib.pk in count_distrib_ben:
+            if i.status == 1:
+                count_distrib_ben[i.distrib.pk]['pending'] += 1
+            else:
+                count_distrib_ben[i.distrib.pk]['active'] += 1
+        else:
+            if i.status == 1:
+                count_distrib_ben.setdefault(i.distrib.pk, {"pending":1, "active":0})
+            else:
+                count_distrib_ben.setdefault(i.distrib.pk, {"pending":0, "active":1})
+    return JsonResponse(count_distrib_ben, safe=False)
