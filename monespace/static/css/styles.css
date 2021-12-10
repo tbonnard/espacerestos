@@ -726,7 +726,7 @@ table {
     overflow: auto;
 		border-spacing:0;
 		border-collapse: separate;
-    border-spacing: 0 5px;
+    border-spacing: 0 10px;
 }
 
 .table1 {

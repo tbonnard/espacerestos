@@ -44,7 +44,7 @@
                     <td class='table_cell'>
                         <input class="locations_checkbox" type="checkbox" id="{{ j.pk }}" name="{{ j }}" value="{{ j.pk }}">
                     </td>
-                    <td class='table_cell'><a href="{% url 'location_details' location_id=j.id %}">{{j.name|default_if_none:""}}</a></td>
+                    <td class='table_cell'><a class="locations_name" data-state="closed" data-loc="{{ j.pk }}">{{j.name|default_if_none:""}}</a></td>
                     <td class='table_cell'>{{j.address|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.city}}</td>
                     <td class='table_cell'>{{j.zip_code}}</td>
