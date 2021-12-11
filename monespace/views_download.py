@@ -55,10 +55,14 @@ def download_users_csv_distrib(request):
     except:
         return redirect('index')
     else:
-        if distrib.event_manager ==request.user or request.user.user_type == 1:
-            all_users = StatusUsersLocations.objects.filter(status=1, distrib=distrib) | StatusUsersLocations.objects.filter(status=2, distrib=distrib)
-        else:
-            return redirect('index')
+        all_users = StatusUsersLocations.objects.filter(status=1,
+                                                        distrib=distrib) | StatusUsersLocations.objects.filter(status=2,
+                                                                                                               distrib=distrib)
+
+        # if distrib.event_manager == request.user or request.user.user_type == 1:
+        #     all_users = StatusUsersLocations.objects.filter(status=1, distrib=distrib) | StatusUsersLocations.objects.filter(status=2, distrib=distrib)
+        # else:
+        #     return redirect('index')
     finally:
         writer.writerow(['Nom utilisateur', 'Email', 'Prénom', 'Nom', 'Site', 'Soirée de distribution', 'Status dans cette distribution', 'Adresse du bénévole', 'Ville du bénévole', "Code postal du bénévole", "Téléphone du bénévole"])
         for i in all_users:
