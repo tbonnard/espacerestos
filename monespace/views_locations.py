@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, Event
+from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, Event, AttendeesEvents
 from .forms import LocationForm, SelectLocationsForm
 from .notification_manager import send_email
 from .functions_global import forbidden_to_user, admin_only
@@ -207,6 +209,9 @@ def select_locations(request):
                 logs = LogsStatusUsersLocations(distrib=j.distrib, location=j.location, from_user=request.user,
                                                 user=request.user, status=5, current_status=j.status)
                 logs.save()
+                if j.distrib.event_manager == request.user:
+                    logs.is_at_time_event_manager = True
+                    logs.save()
             # if (j.location not in locations_form and request.user.user_type != 1) and (j.location not in locations_form and j.location.manager_location != request.user):
             # manager_location_check = False
             # for z in j.location.location_managers.all():
@@ -215,6 +220,9 @@ def select_locations(request):
             if j.distrib not in events_from_form and j.distrib.event_manager != request.user:
                 j.status = 5
                 j.save()
+                for i in AttendeesEvents.objects.filter(parent_event=j.distrib, user=request.user):
+                    if datetime(i.event_date.year, i.event_date.month, i.event_date.day) > datetime.now():
+                        i.delete()
         return redirect('index')
 
     # form = SelectLocationsForm(data=request.POST)

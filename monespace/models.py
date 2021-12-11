@@ -160,6 +160,8 @@ class LogsStatusUsersLocations(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     distrib = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=False,
                                  related_name="Logs_distrib_status_user")
+    is_at_time_event_manager = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"Log: {self.user} - {self.location} - {self.status}"
