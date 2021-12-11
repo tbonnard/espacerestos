@@ -62,7 +62,7 @@
 
     {% if distrib|length == 0 %}
     <p class="info_text">Vous n'êtes actuellement associé à aucune distribution</p>
-    {% endif  %}
+    {% else  %}
 
 <table class='table1'>
             <thead>
@@ -92,6 +92,8 @@
             {% endfor %}
             </tbody>
         </table>
+
+    {% endif %}
 
 
        <div class="">
