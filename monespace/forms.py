@@ -21,13 +21,15 @@ class UserProfileForm(forms.ModelForm):
         fields = ("first_name", 'last_name', "email", "address", "city", "zip_code", "tel", "profile_picture")
         widgets = {
             "profile_picture": forms.FileInput(),
-            "email":forms.EmailInput(),
-            'tel':forms.NumberInput(attrs={'min':0000000000, 'max':9999999999}),
+            "first_name": forms.TextInput(attrs={'required': 'true'}),
+            "last_name": forms.TextInput(attrs={'required': 'true'}),
+            "email":forms.EmailInput(attrs={'required': 'true'}),
+            'tel':forms.NumberInput(attrs={'min':0, 'max':9999999999}),
         }
         labels = {
-            "first_name": "Prénom",
-            'last_name': "Nom",
-            "email": "Email",
+            "first_name": "Prénom *",
+            'last_name': "Nom *",
+            "email": "Email *",
             "address": "Adresse",
             "city":"Ville",
             "zip_code": "Code Postal",
@@ -74,11 +76,11 @@ class DistributionForm(forms.ModelForm):
             "time_to": forms.TimeInput(attrs={'type': 'time'}),
         }
         labels = {
-            "name": "Nom de la soirée de distribution",
-            "start_date": "Date de début",
-            "time_from": "Heure de début",
-            "time_to": "Heure de fin",
-            "event_manager": "Responsable de la soirée distribution"
+            "name": "Nom de la soirée de distribution *",
+            "start_date": "Date de début *",
+            "time_from": "Heure de début *",
+            "time_to": "Heure de fin *",
+            "event_manager": "Responsable de la soirée distribution *"
         }
 
 
@@ -119,13 +121,13 @@ class LocationForm(forms.ModelForm):
         # fields = '__all__'
         fields = ("name", "address", "address_2", "city", "zip_code", "country", "location_managers")
         labels = {
-            "name": "Nom du site",
-            "address": "Adresse",
+            "name": "Nom du site *",
+            "address": "Adresse *",
             "address_2": "Complément d'adresse",
-            "city": "Ville",
-            "zip_code": "Code postal",
+            "city": "Ville *",
+            "zip_code": "Code postal *",
                     "country": "Pays",
-            "location_managers": "Gestionnaires du site"
+            "location_managers": "Gestionnaires du site *"
         }
         widgets = {
             "location_managers": forms.CheckboxSelectMultiple(),
