@@ -55,7 +55,7 @@ def download_users_csv_distrib(request):
     except:
         return redirect('index')
     else:
-        if distrib.event_manager ==request.user:
+        if distrib.event_manager ==request.user or request.user.user_type == 1:
             all_users = StatusUsersLocations.objects.filter(status=1, distrib=distrib) | StatusUsersLocations.objects.filter(status=2, distrib=distrib)
         else:
             return redirect('index')
