@@ -22,6 +22,7 @@ class UserProfileForm(forms.ModelForm):
         widgets = {
             "profile_picture": forms.FileInput(),
             "email":forms.EmailInput(),
+            'tel':forms.NumberInput(attrs={'min':0000000000, 'max':9999999999}),
         }
         labels = {
             "first_name": "Prénom",
