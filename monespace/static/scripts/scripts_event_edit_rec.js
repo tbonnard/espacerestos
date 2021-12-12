@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
   form_event_rec.style.display = 'none';
 
   yes_all.addEventListener('click', () => {
-    form_event_rec.action = `${window.location.origin}/event_edit/${eventid}`;
+    form_event_rec.action = `${window.location.origin}/event/modifier/${eventid}`;
     confirm_button.style.display = 'block';
     recurringDivMaster.style.display = 'block';
     form_event_rec.style.display = 'block';
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   no_only.addEventListener('click', () => {
-    form_event_rec.action = `${window.location.origin}/event_edit_one/${eventid}?date=${param_from_value}`;
+    form_event_rec.action = `${window.location.origin}/event/modifier/simple/${eventid}?date=${param_from_value}`;
     confirm_button.style.display = 'block';
     recurringDivMaster.style.display = 'none';
     form_event_rec.style.display = 'block';

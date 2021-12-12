@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // dt2 = new Date(date_to);
     // diff_dates_result= Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
     if (param_loc_value_update) {
-      form_action.href = `${window.location.origin}/events/?from=${date_from}&to=${date_to}&location=${param_loc_value}`
+      form_action.href = `${window.location.origin}/event/liste/?from=${date_from}&to=${date_to}&location=${param_loc_value}`
     } else {
-      form_action.href = `${window.location.origin}/events/?from=${date_from}&to=${date_to}`
+      form_action.href = `${window.location.origin}/event/liste/?from=${date_from}&to=${date_to}`
     }
     }
 
