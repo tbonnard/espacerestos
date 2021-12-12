@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents, \
     EventExceptionCancelledRescheduled, User
 from .forms import EventForm, EventRecurringPatternForm
-from .functions_global import get_date_to, forbidden_to_user, location_manager_check
+from .functions_global import forbidden_to_user, location_manager_check
 
 
 def return_date_based_pattern(rec_pattern, date):
@@ -264,18 +264,18 @@ def default_initial_event_form(request, form, edit=False):
 @forbidden_to_user
 def event_create(request):
     return redirect('index')
-    pre_form = EventForm()
-    form = default_initial_event_form(request, pre_form)
-    rec_form = EventRecurringPatternForm()
-    if request.method == "POST":
-        form = EventForm(data=request.POST)
-        rec_form = EventRecurringPatternForm(data=request.POST)
-        if form.is_valid() and rec_form.is_valid():
-            new_event = create_event_unit(form)
-            if new_event.is_recurring:
-                create_recurring_pattern_event_unit(event=new_event, form=rec_form)
-            return redirect('index')
-    return render(request, 'event_create.html', context={"form": form, "rec_form": rec_form})
+    # pre_form = EventForm()
+    # form = default_initial_event_form(request, pre_form)
+    # rec_form = EventRecurringPatternForm()
+    # if request.method == "POST":
+    #     form = EventForm(data=request.POST)
+    #     rec_form = EventRecurringPatternForm(data=request.POST)
+    #     if form.is_valid() and rec_form.is_valid():
+    #         new_event = create_event_unit(form)
+    #         if new_event.is_recurring:
+    #             create_recurring_pattern_event_unit(event=new_event, form=rec_form)
+    #         return redirect('index')
+    # return render(request, 'event_create.html', context={"form": form, "rec_form": rec_form})
 
 
 def validate_event_date(event, date):
@@ -429,7 +429,6 @@ def event_details(request, event_id):
     except:
         return redirect('index')
     else:
-        print('pre valida')
         if validate_event_date(event_page, date):
             attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id),
                                                        event_date=date).first()
@@ -446,7 +445,6 @@ def event_details(request, event_id):
                               context={"event": event_page, "manager_location": manager_location, 'date': date,
                                        "attendees": attendees, "all_attendees": all_attendees,
                                        "count_attendees": count_attendees})
-        print('pas valida')
         return redirect('index')
 
 
