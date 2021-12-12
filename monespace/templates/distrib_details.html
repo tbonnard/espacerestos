@@ -77,8 +77,10 @@
                     </td>
 
                     <td class='table_cell'>
-                        {% if j.distrib.event_manager == j.user %}
-                        <i class="fas fa-info-circle info_icon" title="Vous êtes le gestionnaire de cette distribution donc vous ne pouvez pas modifier votre statut"></i>
+                        {% if j.distrib.event_manager == request.user and j.user == request.user %}
+                        <i class="fas fa-info-circle info_icon" title="Vous êtes le responsable de cette distribution donc vous ne pouvez pas modifier votre statut"></i>
+                        {% elif j.user == j.distrib.event_manager %}
+                        <i class="fas fa-info-circle info_icon" title="Vous ne pouvez pas modifier le statut du responsable de la distribution"></i>
                         {% else %}
                         {% if j.status != 2 %}
                         <form method="POST" action="{% url 'distrib_details' distrib_id=j.distrib.pk %}?id={{j.pk}}">
