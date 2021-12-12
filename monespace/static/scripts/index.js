@@ -90,7 +90,7 @@ if (document.querySelector('#events_manager_menu')) {
           tdName.className='table_cell';
           tdName.textContent = j.name;
           let atdName = document.createElement('a');
-          atdName.href = `${window.location.origin}/distribution_details/${j.id}`;
+          atdName.href = `${window.location.origin}/distribution/details/${j.id}`;
           atdName.innerHTML=`<i class='fas fa-angle-right'></i>`;
           atdName.title = 'Détails globaux sur la distribution, et non pas juste cette date'
           let tdTime = document.createElement('td');

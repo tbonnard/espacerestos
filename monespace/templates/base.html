@@ -34,21 +34,21 @@
             {% if not request.user.is_authenticated %}
             <div>
                 <a href="{% url 'login_view' %}" >
-                    <div class="item_nav" data-path="/login/">
+                    <div class="item_nav" data-path="login">
                         <i class="fas fa-sign-in-alt"></i>Se connecter
                     </div>
                 </a>
             </div>
             <div>
                 <a href="{% url 'register' %}" >
-                    <div class="item_nav" data-path="/register/">
+                    <div class="item_nav" data-path="register">
                         <i class="fas fa-plus-circle"></i>S'inscrire
                     </div>
                 </a>
             </div>
             <div>
                 <a href="{% url 'faq' %}" >
-                    <div class="item_nav" data-path="/faq/">
+                    <div class="item_nav" data-path="faq">
                         <i class="fas fa-question-circle"></i>FAQ
                     </div>
                 </a>
@@ -59,22 +59,22 @@
 
             <div>
                 <a href="{% url 'index' %}" >
-                    <div class="item_nav" data-path="/">
+                    <div class="item_nav" data-path="">
                         <i class="fas fa-home"></i>Tableau de bord
                     </div>
                 </a>
             </div>
             <div>
                 <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to=" id="event_link_date">
-                    <div class="item_nav" data-path="/events/">
-                        <i class="fas fa-calendar-alt"></i>Distributions
+                    <div class="item_nav" data-path="events">
+                        <i class="fas fa-calendar-alt"></i>Recherche
                     </div>
                 </a>
             </div>
             {% if request.user.user_type != 2 %}
             <div>
                 <a href="{% url 'locations' %}">
-                    <div class="item_nav" data-path="/locations/">
+                    <div class="item_nav" data-path="sites">
                     <i class="fas fa-map-marker-alt"></i>Sites
                     </div>
                 </a>
@@ -83,7 +83,7 @@
 
             <div>
                 <a href="{% url 'all_users_site' %}">
-                    <div class="item_nav" data-path="/benevoles/">
+                    <div class="item_nav" data-path="benevoles">
                     <i class="fas fa-users"></i>Bénévoles
                     </div>
                 </a>
@@ -96,7 +96,7 @@
         <div class="menu_end">
                 <div>
                     <a href="{% url 'profile' %}">
-                        <div class="item_nav" data-path="/profil/">
+                        <div class="item_nav" data-path="profil">
                             <i class="fas fa-user-circle" title="{{request.user.username}}"></i>Profil
                             <span>{{request.user.first_name}}</span>
                         </div>
@@ -104,14 +104,14 @@
                 </div>
             <div>
                 <a href="{% url 'faq' %}" >
-                    <div class="item_nav" data-path="/faq/">
+                    <div class="item_nav" data-path="faq">
                         <i class="fas fa-question-circle"></i>FAQ
                     </div>
                 </a>
             </div>
                 <div>
                     <a href="{% url 'logout_view' %}" >
-                        <div class="item_nav" data-path="/logout/">
+                        <div class="item_nav" data-path="logout">
                             <i class="fas fa-sign-out-alt"></i>Se déconnecter
                         </div>
                     </a>

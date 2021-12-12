@@ -74,6 +74,40 @@ def distrib_details(request, distrib_id):
 
 @login_required(login_url='/login/')
 @forbidden_to_user
+def distrib_users(request, distrib_id):
+    distrib = get_object_or_404(Event, pk=distrib_id)
+    if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
+        return redirect('index')
+    else:
+        status_users_location = StatusUsersLocations.objects.filter(distrib=distrib, status=1) | \
+                                StatusUsersLocations.objects.filter(distrib=distrib, status=2)
+        form = StatusUsersLocationsForm()
+        user_from_location = [i.pk for i in Location.objects.get(pk=distrib.location.pk).location_managers.all()]
+        formManager = DistributionManagerForm()
+        formManager.fields['event_manager'].queryset = User.objects.filter(id__in=user_from_location)
+        if len(user_from_location) ==1 :
+            formManager.initial['event_manager'] = User.objects.get(id=user_from_location[0])
+
+    if request.method == "POST":
+        try:
+            user_status_update = StatusUsersLocations.objects.get(pk=request.GET['id'])
+        except:
+            pass
+        else:
+            user_status_update.status = 2
+            user_status_update.save()
+            logs = LogsStatusUsersLocations(distrib=distrib, location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=2, current_status=user_status_update.status)
+            logs.save()
+            return redirect(reverse('distrib_users', kwargs={'distrib_id': distrib_id}))
+
+    return render(request, 'benevoles_distrib.html', context={"distrib":distrib,
+                                                            "status_users_location": status_users_location,
+                                                            "form": form, "formManager":formManager})
+
+
+
+@login_required(login_url='/login/')
+@forbidden_to_user
 def user_distrib_update_status(request, distrib_id):
     if request.method == "POST":
         try:
@@ -86,7 +120,7 @@ def user_distrib_update_status(request, distrib_id):
             user_status_update.save()
             logs = LogsStatusUsersLocations(distrib=distrib_user, location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=request.POST['status'], current_status=user_status_update.status)
             logs.save()
-            return redirect(reverse('distrib_details', kwargs={'distrib_id': distrib_id}))
+            return redirect(reverse('distrib_users', kwargs={'distrib_id': distrib_id}))
     return redirect('index')
 
 

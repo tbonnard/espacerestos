@@ -9,14 +9,15 @@ urlpatterns = [
     path('logout/', views_login.logout_view, name='logout_view'),
     path('faq/', views.faq_view, name='faq'),
     path('profil/', views.profile, name='profile'),
-    path('profil_edit/', views.profile_edit, name='profile_edit'),
-    path('benevoles_site/<int:location_id>', views.users_site, name='users_site'),
+    path('profil/modifier/', views.profile_edit, name='profile_edit'),
+    path('sites/benevoles/<int:location_id>', views.users_site, name='users_site'),
     path('benevoles/', views.all_users_site, name='all_users_site'),
     path('benevoles_status/<int:location_id>', views.user_site_update_status, name='user_site_update_status'),
     path('benevoles_distrib_status/<int:distrib_id>', views_distrib.user_distrib_update_status, name='user_distrib_update_status'),
-    path('distribution/<int:location_id>', views_distrib.distribution_create, name='distribution_create'),
-    path('distribution_details/<int:distrib_id>', views_distrib.distrib_details, name='distrib_details'),
-    path('change_distrib_manager/<int:distrib_id>', views_distrib.change_distrib_manager, name='change_distrib_manager'),
+    path('distribution/benevoles/<int:distrib_id>', views_distrib.distrib_users, name='distrib_users'),
+    path('distribution/creer/<int:location_id>', views_distrib.distribution_create, name='distribution_create'),
+    path('distribution/details/<int:distrib_id>', views_distrib.distrib_details, name='distrib_details'),
+    path('distribution/modifier_responsable/<int:distrib_id>', views_distrib.change_distrib_manager, name='change_distrib_manager'),
     path('get_event_location/', views_distrib.get_event_location, name='get_event_location'),
     path('get_user_distrib/', views_distrib.get_user_distrib, name='get_user_distrib'),
     path('get_count_event_location/<int:location_id>', views_distrib.get_count_event_location,name='get_count_event_location'),
@@ -28,11 +29,11 @@ urlpatterns = [
     path('events/', views_events.events_list_date, name='events_list_date'),
     path('event_delete_all/<int:event_id>', views_events.event_delete_all, name='event_delete_all'),
     path('event_delete_rec/<int:event_id>', views_events.event_delete_rec, name='event_delete_rec'),
-    path('location/', views_locations.location_create, name='location_create'),
-    path('locations/', views_locations.locations, name='locations'),
-    path('select_locations/', views_locations.select_locations, name='select_locations'),
-    path('location/<int:location_id>', views_locations.location_details, name='location_details'),
-    path('location_edit/<int:location_id>', views_locations.location_edit, name='location_edit'),
+    path('sites/creer/', views_locations.location_create, name='location_create'),
+    path('sites/', views_locations.locations, name='locations'),
+    path('profil/selectionner_sites/', views_locations.select_locations, name='select_locations'),
+    path('sites/<int:location_id>', views_locations.location_details, name='location_details'),
+    path('sites/modifier/<int:location_id>', views_locations.location_edit, name='location_edit'),
     path('download_users_csv/', views_download.download_users_csv, name='download_users_csv'),
     path('download_users_csv_distrib/', views_download.download_users_csv_distrib, name='download_users_csv_distrib'),
     path('api_get_specific_attendees/', views_attend.api_get_specific_attendees, name='api_get_specific_attendees'),
@@ -43,7 +44,7 @@ urlpatterns = [
 
 
     # Change Password
-    path('change-password/', auth_views.PasswordChangeView.as_view(
+    path('profil/changer-mot-de-passe/', auth_views.PasswordChangeView.as_view(
             template_name='commons/change_password.html',
             success_url='/'
         ), name='change_password'),

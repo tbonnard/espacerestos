@@ -30,12 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function check_active_url(i) {
     // console.log(i);
-    let path = window.location.pathname;
+    let path = window.location.pathname.split('/')[1].toLowerCase();
     // console.log(path);
-    let menu_path = i.dataset.path;
+    let menu_path = i.dataset.path.toLowerCase();
     // console.log(menu_path);
 
-    if ( path.toLowerCase() == menu_path.toLowerCase()) {
+      if ( path == menu_path ) {
       i.className = "item_nav item_nav_active";
     }
   }
