@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", function () {
 
 
@@ -39,13 +41,16 @@ function api_call_attend_decline(eventid, date, type) {
     button.innerHTML = buttonText;
     button.id = `${eventid}_${date}`;
     if (type == "decline") {
-      button.className="button_attendee_decline button_inversed";
+      button.className="button_attendee_decline button_inversed button_attendance";
     } else {
-      button.className="button_attendee_decline";
+      button.className="button_attendee_decline button_attendance";
     }
     button.addEventListener('click', (e) => {
       e.preventDefault();
       api_call_attend_decline(eventid, date, type);
+      if (window.location.href.slice(0, -1) == window.location.origin ) {
+        window.location.reload();
+      }
     })
   }
 

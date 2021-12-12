@@ -51,7 +51,7 @@ if (document.querySelector('#events_manager_menu')) {
     .then(response => response.json())
     .then(data => {
       // console.log(data[0]);
-      let tdBenevoleText = document.querySelector(`#attend_event_number_${eventid}${date}`);
+      let tdBenevoleText = document.querySelector(`#attend_event_number_manager_${eventid}${date}`);
       tdBenevoleText.textContent = data[0];
     })
 
@@ -97,8 +97,9 @@ if (document.querySelector('#events_manager_menu')) {
           tdTime.className='table_cell';
           tdTime.textContent = `${j.time_from.slice(0, -3)} - ${j.time_to.slice(0, -3)}`;
           let tdBenevoles = document.createElement('td');
-          tdBenevoles.className='table_cell';
-          tdBenevoles.id = `attend_event_number_${j.id}${i[0]}`;
+          tdBenevoles.className='table_cell button_attendance_manager';
+          tdBenevoles.id = `attend_event_number_manager_${j.id}${i[0]}`;
+          tdBenevoles.dataset.event_date = `${j.id}_${i[0]}`;
           get_number_attendees(j.id, i[0]);
           let tdCancelDate = document.createElement('td');
           tdCancelDate.className='table_cell';
