@@ -86,6 +86,7 @@ def users_site(request, location_id):
         status_users_location = StatusUsersLocations.objects.filter(location=Location.objects.get(pk=location_id),
                                                                     status=1) | StatusUsersLocations.objects.filter(
             location=Location.objects.get(pk=location_id), status=2)
+        users = [i.user for i in status_users_location]
         form = StatusUsersLocationsForm()
 
         if request.method == "POST":
@@ -99,7 +100,7 @@ def users_site(request, location_id):
                 logs = LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=2, current_status=user_status_update.status)
                 logs.save()
                 return redirect(reverse('users_site', kwargs={'location_id': location_id}))
-        return render(request, 'benevoles_site.html', context={'location_id': location_id, "status_users_location": status_users_location, "form": form})
+        return render(request, 'benevoles_site.html', context={'location_id': location_id, "status_users_location": status_users_location, "form": form, "users":users})
 
 
 @login_required(login_url='/login/')
