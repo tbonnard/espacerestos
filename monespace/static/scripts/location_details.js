@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
   locationSoiree.style.display = 'none';
 
   locationDetailsMenu.addEventListener('click', () => {
-    locationDetails.style.display = 'block';
+    locationDetails.style.display = 'flex';
     locationSoiree.style.display = 'none';
   })
 
   locationSoireeMenu.addEventListener('click', () => {
     locationDetails.style.display = 'none';
-    locationSoiree.style.display = 'block';
+    locationSoiree.style.display = 'contents';
   })
 
 
