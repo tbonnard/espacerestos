@@ -80,7 +80,11 @@
             <tbody>
             {% for j in distrib %}
                 <tr>
+                    {% if j.distrib.event_manager == request.user %}
+                    <td class='table_cell'><a href="{% url 'distrib_details' distrib_id=j.distrib.pk %}">{{j.distrib.name|default_if_none:""}}</a></td>
+                    {% else %}
                     <td class='table_cell'>{{j.distrib.name|default_if_none:""}}</td>
+                    {% endif %}
                     <td class='table_cell'>{{j.distrib.start_date|date:'l'}}</td>
                     <td class='table_cell'>{{j.distrib.time_from|default_if_none:""}} - {{j.distrib.time_to|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.distrib.event_manager|default_if_none:""}}</td>

@@ -35,9 +35,10 @@
 {% if events|length == 0 %}
     <p class="info_text">Aucun résultat avec ces critères de recherche</p>
 {% else %}
-           {% if request.user.user_type == 1 %}
-    <p class="info_text">En tant qu'admin, vous voyez toutes les distributions, peu importe que vous soyez bénévole ou non</p>
-        {% endif %}
+
+<!--    {% if request.user.user_type == 1 %}-->
+<!--    <p class="info_text">En tant qu'admin, vous voyez toutes les distributions, peu importe que vous soyez bénévole ou non</p>-->
+<!--     {% endif %}-->
 {% include "events_loop.html" %}
 {% endif %}
 </div>

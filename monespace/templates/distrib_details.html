@@ -23,6 +23,12 @@
         </div>
     </a>
 
+    <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&distrib={{distrib.id}}&to=" id="event_link_date_distrib">
+        <div class="sub_nav_hor">
+        <i class="fas fa-calendar-alt"></i>Voir les prochaines dates
+        </div>
+    </a>
+
 </div>
 
 

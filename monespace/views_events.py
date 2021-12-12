@@ -26,7 +26,7 @@ def return_date_based_pattern(rec_pattern, date):
     return event_date
 
 
-def events_list(date_from, date_to, location, event_manager=None):
+def events_list(date_from, date_to, location=None, event_manager=None, distrib=None):
     """
     Get all events based on parameters
     :param date_from:
@@ -46,12 +46,20 @@ def events_list(date_from, date_to, location, event_manager=None):
     else:
         date_to = date_to
 
-    if location is not None and event_manager is None:
-        all_events = [Event.objects.filter(location=i) for i in location]
-    elif location is None and event_manager is not None:
+    if location is not None and event_manager is None and distrib is None:
+        all_events = [Event.objects.filter(location=location)]
+    elif location is None and event_manager is not None and distrib is None:
         all_events = [Event.objects.filter(event_manager=event_manager)]
-    elif location is not None and event_manager is not None:
-        all_events = [Event.objects.filter(location=i, event_manager=event_manager) for i in location]
+    elif location is not None and event_manager is not None and distrib is None:
+        all_events = [Event.objects.filter(location=location, event_manager=event_manager)]
+    elif location is not None and event_manager is None and distrib is not None:
+        all_events = [Event.objects.filter(pk=i.pk, location=location) for i in distrib]
+    elif location is None and event_manager is not None and distrib is not None:
+        all_events = [Event.objects.filter(pk=i.pk, event_manager=event_manager) for i in distrib]
+    elif location is None and event_manager is None and distrib is not None:
+        all_events = [Event.objects.filter(pk=i.pk) for i in distrib]
+    elif location is not None and event_manager is not None and distrib is not None:
+        all_events = [Event.objects.filter(location=location, event_manager=event_manager, pk=i.pk) for i in distrib]
     else:
         all_events = [Event.objects.all()]
 
@@ -96,12 +104,18 @@ def events_list_json(request, user_id):
         date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
     except:
         date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
-    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(pk=user_id))
+    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(pk=user_id), distrib=None)
     return JsonResponse(events, safe=False)
 
 
 @login_required(login_url='/login/')
 def events_list_date(request):
+    try:
+        distrib = [Event.objects.get(pk=request.GET['distrib'])]
+    except:
+        pre_user_distrib = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
+                             StatusUsersLocations.objects.filter(user=request.user, status=2)
+        distrib = [i.distrib for i in pre_user_distrib]
     try:
         date_from = datetime.datetime.strptime(request.GET['from'], '%Y-%m-%d')
     except:
@@ -109,20 +123,16 @@ def events_list_date(request):
     try:
         date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
     except:
-        date_to = get_date_to()
+        days_added = datetime.timedelta(weeks=8)
+        date_to = (datetime.datetime.now() + days_added)
     try:
-        location = [Location.objects.get(pk=request.GET['location'])]
+        location = Location.objects.get(pk=request.GET['location'])
     except:
-        user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
-                             StatusUsersLocations.objects.filter(user=request.user, status=2)
-        user_locations = [i.location.pk for i in user_locations_pre]
-    else:
-        user_locations = [i.pk for i in location]
+        location = None
     finally:
-        if request.user.user_type == 1:
-            user_locations = Location.objects.all()
-        eligible_events_date = events_list(date_from, date_to, user_locations)
-
+        # if request.user.user_type == 1:
+        #     distrib = Event.objects.all()
+        eligible_events_date = events_list(date_from=date_from, date_to=date_to, location=location, event_manager=None, distrib=distrib)
         attendees = AttendeesEvents.objects.filter(user=request.user)
 
     return render(request, 'all_events.html',
@@ -276,7 +286,7 @@ def validate_event_date(event, date):
     date_in_datetime = datetime.datetime(year, month, day)
     date_in_date = datetime.date(year, month, day)
     if event.is_recurring:
-        eligible_event_date = events_list(date_in_datetime, date_in_datetime, None)
+        eligible_event_date = events_list(date_from=date_in_datetime, date_to=date_in_datetime, location=None, event_manager=None, distrib=None)
         for i in eligible_event_date:
             for j in i[1]:
                 if i[0] == date_in_date and j['id'] == event.pk:

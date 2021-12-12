@@ -66,15 +66,23 @@
             </div>
             <div>
                 <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to=" id="event_link_date">
-                    <div class="item_nav" data-path="events">
+                    <div class="item_nav" data-path="event">
                         <i class="fas fa-calendar-alt"></i>Recherche
                     </div>
                 </a>
             </div>
             {% if request.user.user_type != 2 %}
             <div>
+                <a href="{% url 'distributions' %}">
+                    <div class="item_nav" data-path="distribution">
+                    <i class="fas fa-people-arrows"></i>Distributions
+                    </div>
+                </a>
+            </div>
+
+            <div>
                 <a href="{% url 'locations' %}">
-                    <div class="item_nav" data-path="sites">
+                    <div class="item_nav" data-path="site">
                     <i class="fas fa-map-marker-alt"></i>Sites
                     </div>
                 </a>

@@ -39,10 +39,26 @@ def distribution_create(request, location_id):
     return render(request, 'distrib_create.html', context={"form": form, "location": location})
 
 
+@forbidden_to_user
+@login_required(login_url='/login/')
+def distributions(request):
+    # if request.user.user_type == 1:
+    #     events = Event.objects.all()
+    #     return render(request, 'distributions.html', context={"events": events})
+    # if Event.objects.filter(event_manager=request.user).count() == 1:
+    #     return redirect(reverse('distrib_details', kwargs={'distrib_id': Event.objects.filter(event_manager=request.user).first().pk}))
+    # else:
+    events = Event.objects.filter(event_manager=request.user)
+    return render(request, 'distributions.html', context={"events": events})
+
+
+
 @login_required(login_url='/login/')
 @forbidden_to_user
 def distrib_details(request, distrib_id):
     distrib = get_object_or_404(Event, pk=distrib_id)
+    if distrib.is_cancelled:
+        return redirect('index')
     if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
         return redirect('index')
     else:

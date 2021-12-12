@@ -151,14 +151,9 @@ all_attendees_user();
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       let attendeesForm = document.querySelectorAll('.attendees');
       attendeesForm.forEach(i => {
         data.forEach(y => {
-          console.log(y.id_distrib);
-          console.log(i.dataset.eventid);
-          console.log(y.user_status);
-
           if (y.id_distrib == i.dataset.eventid && y.user_status == 1) {
             i.innerHTML = "<p class='info_text'>en attente de confirmation par le responsable afin de pouvoir rejoindre cette distribution</p>"
           }

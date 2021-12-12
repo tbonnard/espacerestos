@@ -10,16 +10,18 @@ from .functions_global import get_date_to, forbidden_to_user, admin_only
 
 @login_required(login_url='/login/')
 def index(request):
-    date_to = get_date_to()
-
-    if request.user.user_type == 1:
-        user_locations = Location.objects.all()
-    else:
-        user_locations_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
+    # if request.user.user_type == 1:
+    #     user_locations = Location.objects.all()
+    # else:
+    user_distrib_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
                          StatusUsersLocations.objects.filter(user=request.user, status=2)
-        user_locations = [i.location for i in user_locations_pre]
-
-    eligible_events_date_locations = events_list(date_from=None, date_to=None, location=user_locations)
+    distrib_user_choice = [i.distrib for i in user_distrib_pre]
+    distrib_attendees = [i.parent_event for i in AttendeesEvents.objects.filter(user=request.user)]
+    distrib = [i for i in distrib_user_choice]
+    for i in distrib_attendees:
+        if i not in distrib:
+            distrib.append(i)
+    eligible_events_date_locations = events_list(date_from=None, date_to=None, location=None, distrib=distrib, event_manager=None)
 
     pending_location = []
     if StatusUsersLocations.objects.filter(user=request.user, status=1):
@@ -56,7 +58,7 @@ def index(request):
             dates_event.append(b[0])
             eligible_events_date_locations_attendees_final.append(b)
     date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=31)
-    events_manager = events_list(date_from=None, date_to=date_to, location=None, event_manager=request.user)
+    events_manager = events_list(date_from=None, date_to=date_to, location=None, event_manager=request.user, distrib=None)
     return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final,
                                                   "date_to": date_to, "pending_events":pending_events,
                                                   "attendees": attendees, "events_manager": events_manager })
