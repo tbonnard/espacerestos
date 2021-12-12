@@ -4,9 +4,7 @@
 
 
 {% csrf_token %}
-        {% if request.user.user_type == 1 %}
-    <p class="info_text">En tant qu'admin, vous voyez toutes les distributions, peu importe que vous soyez bénévole ou non</p>
-        {% endif %}
+
 
     {% for i in events %}
 
