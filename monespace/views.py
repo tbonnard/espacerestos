@@ -15,11 +15,11 @@ def index(request):
     # else:
     user_distrib_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
                          StatusUsersLocations.objects.filter(user=request.user, status=2)
-    distrib_user_choice = [i.distrib for i in user_distrib_pre]
+    distrib_user_choice = [i.distrib for i in user_distrib_pre if not i.distrib.is_cancelled]
     distrib_attendees = [i.parent_event for i in AttendeesEvents.objects.filter(user=request.user)]
     distrib = [i for i in distrib_user_choice]
     for i in distrib_attendees:
-        if i not in distrib:
+        if i not in distrib and not i.is_cancelled:
             distrib.append(i)
     eligible_events_date_locations = events_list(date_from=None, date_to=None, location=None, distrib=distrib, event_manager=None)
 
@@ -128,7 +128,8 @@ def user_site_update_status(request, location_id):
 @login_required(login_url='/login/')
 def profile(request):
     date_to = get_date_to()
-    user_distrib = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
+    user_distrib_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
+    user_distrib = [i for i in user_distrib_pre if not i.distrib.is_cancelled]
     # user_locations = [i.location for i in user_locations_pre]
     user_manager_locations = Location.objects.filter(location_managers=request.user)
     return render(request, 'profile.html', context={'distrib': user_distrib, "date_to":date_to,
