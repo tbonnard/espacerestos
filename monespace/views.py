@@ -57,7 +57,7 @@ def index(request):
         if b[0] not in dates_event:
             dates_event.append(b[0])
             eligible_events_date_locations_attendees_final.append(b)
-    date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=31)
+    date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(weeks=8)
     events_manager = events_list(date_from=None, date_to=date_to, location=None, event_manager=request.user, distrib=None)
     return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final,
                                                   "date_to": date_to, "pending_events":pending_events,

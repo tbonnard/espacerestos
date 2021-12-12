@@ -85,7 +85,7 @@ if (document.querySelector('#events_manager_menu')) {
           aUrlEvent.className = "event_manager_date";
           aUrlEvent.dataset.event_manager_date = new Date(i[0]+"T00:00:00.000").toISOString().split('T')[0];
           aUrlEvent.textContent = new Date(i[0]+"T00:00:00.000").toLocaleDateString('fr-FR', options);
-          aUrlEvent.href = `${window.location.origin}/event/${j.id}?date=${i[0]}`;
+          aUrlEvent.href = `${window.location.origin}/event/details/${j.id}?date=${i[0]}`;
           let tdName = document.createElement('td');
           tdName.className='table_cell';
           tdName.textContent = j.name;
