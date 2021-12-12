@@ -24,7 +24,7 @@
 
 <div class="container_master_mobile">
 
-<p>Total des bénévoles (actif, en attente) : {{ users.count }}</p>
+<p>Total des bénévoles (actif, en attente) : {{ users|length }}</p>
 
 
         <table class='table1'>
@@ -42,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for j in users%}
+            {% for j in users %}
                 <tr>
                     <td class='table_cell'>{% if j.profile_picture %}
                         <img src="{{j.profile_picture.url}}">

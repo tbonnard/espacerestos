@@ -86,7 +86,12 @@ def users_site(request, location_id):
         status_users_location = StatusUsersLocations.objects.filter(location=Location.objects.get(pk=location_id),
                                                                     status=1) | StatusUsersLocations.objects.filter(
             location=Location.objects.get(pk=location_id), status=2)
-        users = [i.user for i in status_users_location]
+        users_pre = [i.user for i in status_users_location]
+        users=[]
+        for i in users_pre:
+            if i not in users:
+                users.append(i)
+
         form = StatusUsersLocationsForm()
 
         if request.method == "POST":
