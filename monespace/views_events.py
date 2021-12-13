@@ -93,6 +93,7 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
     return sorted_eligible_events_date
 
 
+# NOT USED ANYMORE
 @login_required(login_url='/login/')
 @forbidden_to_user
 def events_list_json(request, user_id):

@@ -17,16 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-  if (document.querySelector('#event_link_date')) {
-    let numWeeks = 8;
-    let now = new Date();
-    now.setDate(now.getDate() + numWeeks * 7);
-    event_link = document.querySelector('#event_link_date');
-    event_link_original = event_link.href
-    date_to = now.toISOString().split('T')[0];
-    event_link.href = event_link_original+date_to;
-  }
-
 
   function check_active_url(i) {
     // console.log(i);
@@ -44,6 +34,17 @@ document.addEventListener("DOMContentLoaded", function () {
    side_menu.forEach( i => {
      check_active_url(i);
    })
+
+
+   if (document.querySelector('#event_link_date')) {
+     let numWeeks = 8;
+     let now = new Date();
+     now.setDate(now.getDate() + numWeeks * 7);
+     event_link = document.querySelector('#event_link_date');
+     event_link_original = event_link.href
+     date_to = now.toISOString().split('T')[0];
+     event_link.href = event_link_original+date_to;
+   }
 
 
 });

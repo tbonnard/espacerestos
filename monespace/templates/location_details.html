@@ -3,6 +3,7 @@
 
 
 {% block script %}
+<script src= "{% static 'scripts/date_to.js' %}"></script>
 <script src= "{% static 'scripts/location_details.js' %}"></script>
 <script src= "{% static 'scripts/distrib_details_benevole.js' %}"></script>
 {% endblock %}
@@ -23,6 +24,12 @@
     <a href="{% url 'users_site' location_id=location.pk %}">
         <div class="sub_nav_hor">
         <i class="fas fa-users"></i>Bénévoles du site
+        </div>
+    </a>
+
+    <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&location={{location.pk}}&to=" id="event_link_date_distrib_loc">
+        <div class="sub_nav_hor">
+        <i class="fas fa-calendar-alt"></i>Voir toutes les prochaines dates pour ce site
         </div>
     </a>
 
