@@ -48,19 +48,35 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
 
     if location is not None and event_manager is None and distrib is None:
         all_events = [Event.objects.filter(location=location)]
+        print('1')
     elif location is None and event_manager is not None and distrib is None:
         all_events = [Event.objects.filter(event_manager=event_manager)]
+        print('2')
+
     elif location is not None and event_manager is not None and distrib is None:
+        print('3')
         all_events = [Event.objects.filter(location=location, event_manager=event_manager)]
     elif location is not None and event_manager is None and distrib is not None:
+        print('4')
+        print(location)
+        print(distrib)
         all_events = [Event.objects.filter(pk=i.pk, location=location) for i in distrib]
+        print(all_events)
     elif location is None and event_manager is not None and distrib is not None:
         all_events = [Event.objects.filter(pk=i.pk, event_manager=event_manager) for i in distrib]
+        print('5')
+
     elif location is None and event_manager is None and distrib is not None:
         all_events = [Event.objects.filter(pk=i.pk) for i in distrib]
+        print('6')
+
     elif location is not None and event_manager is not None and distrib is not None:
+        print('7')
+
         all_events = [Event.objects.filter(location=location, event_manager=event_manager, pk=i.pk) for i in distrib]
     else:
+        print('8')
+
         all_events = [Event.objects.all()]
 
     eligible_events_date = {}
@@ -105,7 +121,8 @@ def events_list_json(request, user_id):
         date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
     except:
         date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
-    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(pk=user_id), distrib=None)
+    distrib = Event.objects.filter(is_cancelled=False)
+    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(pk=user_id), distrib=distrib)
     return JsonResponse(events, safe=False)
 
 
@@ -131,9 +148,17 @@ def events_list_date(request):
     except:
         location = None
     finally:
+        try:
+            all_from_loc = request.GET['all']
+            if all_from_loc != 'true':
+                raise KeyError
+        except:
+            eligible_events_date = events_list(date_from=date_from, date_to=date_to, location=location,
+                                               event_manager=None, distrib=distrib)
+        else:
         # if request.user.user_type == 1:
         #     distrib = Event.objects.all()
-        eligible_events_date = events_list(date_from=date_from, date_to=date_to, location=location, event_manager=None, distrib=distrib)
+            eligible_events_date = events_list(date_from=date_from, date_to=date_to, location=location, event_manager=None, distrib=None)
         attendees = AttendeesEvents.objects.filter(user=request.user)
 
     return render(request, 'all_events.html',

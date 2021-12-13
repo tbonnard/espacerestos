@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
             divCancel.style.marginTop = '5px';
             divCancel.style.marginBottom = '5px';
             let aValidateCancelYes = document.createElement('a');
-            aValidateCancelYes.href = `${window.location.origin}/event_delete_all/${i.dataset.event}`;
+            aValidateCancelYes.href = `${window.location.origin}/event_delete_all/${i.dataset.event}/`;
             aValidateCancelYes.title = `Oui, annuler la distribution`;
             let iValidateCancelYes = document.createElement('i');
             iValidateCancelYes.className = "fas fa-check-square";

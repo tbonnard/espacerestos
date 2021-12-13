@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
   function get_count_event_location (location_id) {
-    const request = new Request(`${window.location.origin}/get_count_event_location/${location_id}`);
+    const request = new Request(`${window.location.origin}/get_count_event_location/${location_id}/`);
     const response = fetch(request, {
       method:'GET',
       mode: 'same-origin'

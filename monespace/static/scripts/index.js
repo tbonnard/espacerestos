@@ -67,7 +67,7 @@ if (document.querySelector('#events_manager_menu')) {
 
 
   function createDistrib(fromDateFinal, toDateFinal) {
-  let url = `${window.location.origin}/events_list_json/${user_id}?from=${fromDateFinal}&to=${toDateFinal}`;
+  let url = `${window.location.origin}/events_list_json/${user_id}/?from=${fromDateFinal}&to=${toDateFinal}`;
   fetch(url)
     .then(response => response.json())
     .then(data => {
@@ -85,12 +85,12 @@ if (document.querySelector('#events_manager_menu')) {
           aUrlEvent.className = "event_manager_date";
           aUrlEvent.dataset.event_manager_date = new Date(i[0]+"T00:00:00.000").toISOString().split('T')[0];
           aUrlEvent.textContent = new Date(i[0]+"T00:00:00.000").toLocaleDateString('fr-FR', options);
-          aUrlEvent.href = `${window.location.origin}/event/details/${j.id}?date=${i[0]}`;
+          aUrlEvent.href = `${window.location.origin}/event/details/${j.id}/?date=${i[0]}`;
           let tdName = document.createElement('td');
           tdName.className='table_cell';
           tdName.textContent = j.name;
           let atdName = document.createElement('a');
-          atdName.href = `${window.location.origin}/distribution/details/${j.id}`;
+          atdName.href = `${window.location.origin}/distribution/details/${j.id}/`;
           atdName.innerHTML=`<i class='fas fa-angle-right'></i>`;
           atdName.title = 'Détails globaux sur la distribution, et non pas juste cette date'
           let tdTime = document.createElement('td');
@@ -126,7 +126,7 @@ if (document.querySelector('#events_manager_menu')) {
             divCancel.style.marginTop = '5px';
             divCancel.style.marginBottom = '5px';
             let aValidateCancelYes = document.createElement('a');
-            aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${j.id}?date=${i[0]}`;
+            aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${j.id}/?date=${i[0]}`;
             aValidateCancelYes.title = `Oui, annuler la distribution du ${i[0]}`;
             let iValidateCancelYes = document.createElement('i');
             iValidateCancelYes.className = "fas fa-check-square";
