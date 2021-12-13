@@ -1,5 +1,5 @@
 import datetime
-
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django import utils
@@ -8,6 +8,7 @@ country_list = (("FR", 'France'),)
 
 
 class User(AbstractUser):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     user_type_choices = ((1, 'Admin'), (2, 'User'), (3, 'Manager'))
     user_type = models.IntegerField(choices=user_type_choices, null=False, blank=False, default=2)
     address = models.CharField(blank=True, null=True, max_length=255)
@@ -22,6 +23,7 @@ class User(AbstractUser):
 
 
 class Location(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(blank=False, max_length=255)
     address = models.CharField(blank=False, max_length=255)
     address_2 = models.CharField(blank=True, max_length=255, default="")
@@ -35,12 +37,13 @@ class Location(models.Model):
         return self.name
 
     def serialize(self):
-        return {"id": self.id,
+        return {"uuid": self.uuid,
                 "name": self.name,
                 }
 
 
 class Event(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=False, related_name="events_locations")
     name = models.CharField(blank=False, max_length=255)
     description = models.TextField(blank=True, default="")
@@ -60,10 +63,10 @@ class Event(models.Model):
         return f"{self.name}"
 
     def __repr__(self):
-        return f"{self.name} - {self.pk}"
+        return f"{self.name}"
 
     def serialize(self):
-        return {"id": self.id,
+        return {"uuid": self.uuid,
                 "name": self.name,
                 "location": self.location.serialize(),
                 "start_date": self.start_date,
@@ -112,8 +115,8 @@ class AttendeesEvents(models.Model):
 
     def serialize(self):
         return {"id": self.id,
-                "parent_event": self.parent_event.pk,
-                "user": self.user.pk,
+                "parent_event": self.parent_event.uuid,
+                "user": self.user.uuid,
                 "event_date": self.event_date,
                 "plus_other": self.plus_other,
                 }
@@ -139,10 +142,10 @@ class StatusUsersLocations(models.Model):
 
     def serialize(self):
         return {"id": self.id,
-                "id_distrib": self.distrib.pk,
-                "location_id": self.location.pk,
+                "id_distrib": self.distrib.uuid,
+                "location_id": self.location.uuid,
                 "distrib":self.distrib.serialize(),
-                "user_id":self.user.pk,
+                "user_id":self.user.uuid,
                 "user_status": self.status,
                 }
 

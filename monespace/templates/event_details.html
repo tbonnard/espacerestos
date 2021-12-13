@@ -20,21 +20,6 @@
         <i class="fas fa-users"></i>Présences ({{count_attendees}})
     </div>
 
-<!--    {% if manager_location or request.user.user_type == 1 %}-->
-<!--        {% if event.is_recurring %}-->
-<!--        <a href="{% url 'event_edit' event_id=event.id %}?date={{date}}">-->
-<!--            <div class="sub_nav_hor">-->
-<!--                <i class="fas fa-edit"></i>Modifier l'évenement-->
-<!--            </div>-->
-<!--        </a>-->
-<!--        {% else %}-->
-<!--        <a href="{% url 'event_edit' event_id=event.id %}">-->
-<!--            <div class="sub_nav_hor">-->
-<!--                <i class="fas fa-edit"></i>Modifier l'évenement-->
-<!--            </div>-->
-<!--        </a>-->
-<!--        {% endif %}-->
-<!--    {% endif %}-->
 
 </div>
 
@@ -77,7 +62,7 @@
       <div class="event_right_subitem">
         <div class="event_right_subitem_box">
         <i class="fas fa-map-marker-alt"></i><span class="name_event_right_subitem">LIEU</span>
-        <p><a href="{% url 'location_details' location_id=event.location.id %}">{{ event.location }}</a></p>
+        <p><a href="{% url 'location_details' location_id=event.location.uuid %}">{{ event.location }}</a></p>
         <p>{{ event.location.address }} - {{ event.location.zipcode }} - {{ event.location.city }}</p>
         </div>
       </div>
@@ -89,12 +74,12 @@
             {% if attendees %}
             <form>
               {% csrf_token %}
-              <button class="button_attendees button_white" data-type="decline" type='submit' data-eventid="{{event.id}}" data-date="{{date}}"><i class="fas fa-check-square icon_attend"></i>Je serai là</button>
+              <button class="button_attendees button_white" data-type="decline" type='submit' data-eventid="{{event.uuid}}" data-date="{{date}}"><i class="fas fa-check-square icon_attend"></i>Je serai là</button>
             </form>
             {% else %}
             <form>
               {% csrf_token %}
-              <button class="button_attendees" data-type="attend" type='submit' data-eventid="{{event.id}}" data-date="{{date}}"><i class="far fa-square icon_attend"></i>Confirmer ma présence</button>
+              <button class="button_attendees" data-type="attend" type='submit' data-eventid="{{event.uuid}}" data-date="{{date}}"><i class="far fa-square icon_attend"></i>Confirmer ma présence</button>
             </form>
             {% endif %}
             {% endif %}
@@ -104,7 +89,7 @@
       <div class="event_right_subitem_attend">
           <form>
             <label for="plus_other">Venez vous avez d'autres personnes? Entrez le nombre de personnes vous accompagnant</label>
-            <input type="number" id="plus_other" name="plus_other" value="{{attendees.plus_other}}"  min="0" data-eventid="{{event.id}}" data-date="{{date}}">
+            <input type="number" id="plus_other" name="plus_other" value="{{attendees.plus_other}}"  min="0" data-eventid="{{event.uuid}}" data-date="{{date}}">
         </form>
       </div>
         {% endif %}
@@ -113,13 +98,6 @@
 
   </div>
 
-<!--    {% if event.was_recurring_event_rec %}-->
-<!--    <p class="info_text">Ceci est une distribution provenant d'une récurrence mais modifié pour cette date specifiquement</p>-->
-<!--    {% elif not event.is_recurring %}-->
-<!--    <p class="info_text">Ceci est un événement non recurrent</p>-->
-<!--    {% else %}-->
-<!--    <p class="info_text">Cette date fait partie d'une distribution recurrente</p>-->
-<!--    {% endif %}-->
 
 
 {% if todays_date <= date %}
@@ -134,26 +112,13 @@
         <div id="cancel_validation">
             <p>Êtes-vous certain d'annuler cette date ?</p>
             {% if event.is_recurring %}
-            <a href="{% url 'event_delete_rec' event_id=event.pk %}?date={{date}}" title="Oui, annuler la date du {{date}}"><i class="fas fa-check-square cancel_icon_event"></i></a>
+            <a href="{% url 'event_delete_rec' event_id=event.uuid %}?date={{date}}" title="Oui, annuler la date du {{date}}"><i class="fas fa-check-square cancel_icon_event"></i></a>
             {% else %}
-            <a href="{% url 'event_delete_all' event_id=event.pk %}" title="Oui, annuler la date du {{date}}"><i class="fas fa-check-square cancel_icon_event"></i></a>
+            <a href="{% url 'event_delete_all' event_id=event.uuid %}" title="Oui, annuler la date du {{date}}"><i class="fas fa-check-square cancel_icon_event"></i></a>
             {% endif %}
             <a title="Non, laisser la date"><i class="far fa-window-close" id="cancel_cancel"></i></a>
         </div>
 
-<!--        {% if event.is_recurring %}-->
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_rec' event_id=event.pk %}?date={{date}}">Annuler cette date</a></span>-->
-<!--        </div>-->
-
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_all' event_id=event.pk %}">Annuler toutes les dates</a></span>-->
-<!--        </div>-->
-<!--        {% else %}-->
-<!--        <div class="sub_nav_item">-->
-<!--            <span><img src="{% static 'images/arrow.svg' %}" alt="Les Restos du Cœur"><a href="{% url 'event_delete_all' event_id=event.pk %}">Annuler cette date</a></span>-->
-<!--        </div>-->
-<!--        {% endif %}-->
 
     </div>
         {% endif %}

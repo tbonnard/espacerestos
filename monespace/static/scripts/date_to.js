@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
   if (document.querySelector('#event_link_date_distrib_loc')) {
-    console.log('1')
     let numWeeks = 8;
     let now = new Date();
     now.setDate(now.getDate() + numWeeks * 7);

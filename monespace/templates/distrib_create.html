@@ -11,6 +11,10 @@
 
 <div class="top_bar_menu">
 
+    <div class="sub_nav_hor active" id="distrib_details_menu">
+        <i class="fas fa-people-arrows"></i>Création de distribution
+    </div>
+
     <a href="{% url 'index' %}">
         <div class="sub_nav_hor">
         <i class="fas fa-ban"></i>Annuler
@@ -27,7 +31,7 @@
 
     <h1>Créer un nouvelle soirée de distribution</h1>
 
-    <form  action="{% url 'distribution_create' location_id=location.pk %}" method='POST'>
+    <form  action="{% url 'distribution_create' location_id=location.uuid %}" method='POST'>
         {% csrf_token %}
         {{ form.as_p }}
         <p id="id_dayValue"></p>

@@ -10,7 +10,7 @@
 
 <div class="top_bar_menu">
 
-    <a href="{% url 'event_details' event_id=event.id %}?date={{event.start_date|date:'Y-m-d'}}">
+    <a href="{% url 'event_details' event_id=event.uuid %}?date={{event.start_date|date:'Y-m-d'}}">
         <div class="sub_nav_hor">
         <i class="fas fa-calendar-alt"></i>Retour à l'événement
     </div>
@@ -24,7 +24,7 @@
 
 <h3>Modifier "{{ form.name.value }}"</h3>
 
-    <form action="{% url 'event_edit' event_id=event.pk %}" method='POST'>
+    <form action="{% url 'event_edit' event_id=event.uuid %}" method='POST'>
         {% csrf_token %}
         {% include "event_form.html" %}
         <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>

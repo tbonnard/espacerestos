@@ -57,7 +57,7 @@
                     <td class='table_cell'>
                         {% for i in status_users_location %}
                             {% if i.user == j%}
-                        <p><a href="{% url 'distrib_details' distrib_id=i.distrib.pk %}">{{i.distrib}}</a> ({{i.get_status_display|default_if_none:""}}) / <a href="{% url 'users_site' location_id=i.location.pk %}">{{i.location}}</a></p>
+                        <p><a href="{% url 'distrib_details' distrib_id=i.distrib.uuid %}">{{i.distrib}}</a> ({{i.get_status_display|default_if_none:""}}) / <a href="{% url 'users_site' location_id=i.location.uuid %}">{{i.location}}</a></p>
                             {% endif %}
                         {% endfor %}
                     </td>

@@ -24,6 +24,9 @@
 
 <div class="container_master_mobile">
 
+    {% if all_locations|length == 0 %}
+    <p class="info_text">Aucun site encore créé</p>
+    {% else %}
     <table class='table1'>
             <thead>
                 <tr>
@@ -38,7 +41,7 @@
             <tbody>
             {% for j in all_locations%}
                 <tr>
-                    <td class='table_cell'><a href="{% url 'location_details' location_id=j.id %}">{{j.name|default_if_none:""}}</a></td>
+                    <td class='table_cell'><a href="{% url 'location_details' location_id=j.uuid %}">{{j.name|default_if_none:""}}</a></td>
                     <td class='table_cell'>{{j.address|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.city}}</td>
                     <td class='table_cell'>{{j.zip_code}}</td>
@@ -50,6 +53,7 @@
             </tbody>
         </table>
 
+    {% endif %}
 
 </div>
 {% endblock %}

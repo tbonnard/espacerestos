@@ -14,7 +14,7 @@
     </div>
 
     <div class="sub_nav_hor" id="locations_menu">
-        <i class="fas fa-map-marker-alt"></i>Mes choix de distributions
+        <i class="fas fa-people-arrows"></i>Mes choix de distributions
     </div>
 
     <a href="{% url 'profile_edit' %}">
@@ -81,7 +81,7 @@
             {% for j in distrib %}
                 <tr>
                     {% if j.distrib.event_manager == request.user %}
-                    <td class='table_cell'><a href="{% url 'distrib_details' distrib_id=j.distrib.pk %}">{{j.distrib.name|default_if_none:""}}</a></td>
+                    <td class='table_cell'><a href="{% url 'distrib_details' distrib_id=j.distrib.uuid %}">{{j.distrib.name|default_if_none:""}}</a></td>
                     {% else %}
                     <td class='table_cell'>{{j.distrib.name|default_if_none:""}}</td>
                     {% endif %}
@@ -89,7 +89,7 @@
                     <td class='table_cell'>{{j.distrib.time_from|default_if_none:""}} - {{j.distrib.time_to|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.distrib.event_manager|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.get_status_display}}</td>
-                    <td class='table_cell'><a href="{% url 'location_details' location_id=j.location.id %}">{{j.location.name}}</a></td>
+                    <td class='table_cell'><a href="{% url 'location_details' location_id=j.location.uuid %}">{{j.location.name}}</a></td>
                     <td class='table_cell'>{{j.location.address|default_if_none:""}} {{j.location.city|default_if_none:""}} {{j.location.zip_code|default_if_none:""}}</td>
                     <td class='table_cell'><a href="https://maps.google.com/maps?q={{j.location.address}},%20{{j.location.city}}%20{{j.location.zip_code}}%20{{j.location.country}}" target="_blank"><i class="fas fa-globe"></i></a></td>
                 </tr>

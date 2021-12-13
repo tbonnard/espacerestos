@@ -21,7 +21,7 @@ def download_users_csv(request):
 
     try:
         request.GET['site']
-        location = Location.objects.get(pk=request.GET['site'])
+        location = Location.objects.get(uuid=request.GET['site'])
     except:
         all_users = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
     else:
@@ -51,7 +51,7 @@ def download_users_csv_distrib(request):
 
     try:
         request.GET['distrib']
-        distrib = Event.objects.get(pk=request.GET['distrib'])
+        distrib = Event.objects.get(uuid=request.GET['distrib'])
     except:
         return redirect('index')
     else:

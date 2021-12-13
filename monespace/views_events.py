@@ -48,35 +48,19 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
 
     if location is not None and event_manager is None and distrib is None:
         all_events = [Event.objects.filter(location=location)]
-        print('1')
     elif location is None and event_manager is not None and distrib is None:
         all_events = [Event.objects.filter(event_manager=event_manager)]
-        print('2')
-
     elif location is not None and event_manager is not None and distrib is None:
-        print('3')
         all_events = [Event.objects.filter(location=location, event_manager=event_manager)]
     elif location is not None and event_manager is None and distrib is not None:
-        print('4')
-        print(location)
-        print(distrib)
         all_events = [Event.objects.filter(pk=i.pk, location=location) for i in distrib]
-        print(all_events)
     elif location is None and event_manager is not None and distrib is not None:
         all_events = [Event.objects.filter(pk=i.pk, event_manager=event_manager) for i in distrib]
-        print('5')
-
     elif location is None and event_manager is None and distrib is not None:
         all_events = [Event.objects.filter(pk=i.pk) for i in distrib]
-        print('6')
-
     elif location is not None and event_manager is not None and distrib is not None:
-        print('7')
-
         all_events = [Event.objects.filter(location=location, event_manager=event_manager, pk=i.pk) for i in distrib]
     else:
-        print('8')
-
         all_events = [Event.objects.all()]
 
     eligible_events_date = {}
@@ -109,7 +93,7 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
     return sorted_eligible_events_date
 
 
-# NOT USED ANYMORE
+# USED BY JS
 @login_required(login_url='/login/')
 @forbidden_to_user
 def events_list_json(request, user_id):
@@ -122,14 +106,14 @@ def events_list_json(request, user_id):
     except:
         date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
     distrib = Event.objects.filter(is_cancelled=False)
-    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(pk=user_id), distrib=distrib)
+    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(uuid=user_id), distrib=distrib)
     return JsonResponse(events, safe=False)
 
 
 @login_required(login_url='/login/')
 def events_list_date(request):
     try:
-        distrib = [Event.objects.get(pk=request.GET['distrib'])]
+        distrib = [Event.objects.get(uuid=request.GET['distrib'])]
     except:
         pre_user_distrib = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
                              StatusUsersLocations.objects.filter(user=request.user, status=2)
@@ -144,7 +128,7 @@ def events_list_date(request):
         days_added = datetime.timedelta(weeks=8)
         date_to = (datetime.datetime.now() + days_added)
     try:
-        location = Location.objects.get(pk=request.GET['location'])
+        location = Location.objects.get(uuid=request.GET['location'])
     except:
         location = None
     finally:
@@ -171,11 +155,11 @@ def create_event_unit(form):
     if form.cleaned_data['end_date'] is None or form.cleaned_data['is_recurring']:
         end_date = form.cleaned_data['start_date']
     try:
-        Location.objects.get(id=form['location'].value())
+        Location.objects.get(uuid=form['location'].value())
     except:
         location = None
     else:
-        location = Location.objects.get(id=form['location'].value())
+        location = Location.objects.get(uuid=form['location'].value())
     finally:
         new_event = Event(name=form.cleaned_data['name'].title(),
                           description=form.cleaned_data['description'],
@@ -211,11 +195,11 @@ def edit_event_unit(event, form):
     event.is_full_day = form.cleaned_data['is_full_day']
     event.event_manager = form.cleaned_data['event_manager']
     try:
-        Location.objects.get(id=form['location'].value())
+        Location.objects.get(uuid=form['location'].value())
     except:
         event.location = None
     else:
-        event.location = Location.objects.get(id=form['location'].value())
+        event.location = Location.objects.get(uuid=form['location'].value())
     finally:
         event.save()
         return event
@@ -278,10 +262,10 @@ def default_initial_event_form(request, form, edit=False):
     users_loc = []
     for i in user_from_location:
         for y in i.location_managers.all():
-            users_loc.append(y.pk)
-    form.fields['event_manager'].queryset = User.objects.filter(id__in=users_loc)
+            users_loc.append(y.uuid)
+    form.fields['event_manager'].queryset = User.objects.filter(uuid__in=users_loc)
     if not edit:
-        if request.user.pk in users_loc:
+        if request.user.uuid in users_loc:
             form.initial["event_manager"] = request.user
     return form
 
@@ -315,7 +299,7 @@ def validate_event_date(event, date):
         eligible_event_date = events_list(date_from=date_in_datetime, date_to=date_in_datetime, location=None, event_manager=None, distrib=None)
         for i in eligible_event_date:
             for j in i[1]:
-                if i[0] == date_in_date and j['id'] == event.pk:
+                if i[0] == date_in_date and j['uuid'] == event.uuid:
                     event_valid = True
     else:
         if event.start_date == date_in_date:
@@ -451,14 +435,14 @@ def event_edit_specific_rec(request, event_id):
 def event_details(request, event_id):
     try:
         date = request.GET['date']
-        event_page = Event.objects.get(id=event_id)
+        event_page = Event.objects.get(uuid=event_id)
     except:
         return redirect('index')
     else:
         if validate_event_date(event_page, date):
-            attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(pk=event_id),
+            attendees = AttendeesEvents.objects.filter(user=request.user, parent_event=Event.objects.get(uuid=event_id),
                                                        event_date=date).first()
-            all_attendees = AttendeesEvents.objects.filter(parent_event=Event.objects.get(pk=event_id), event_date=date)
+            all_attendees = AttendeesEvents.objects.filter(parent_event=Event.objects.get(uuid=event_id), event_date=date)
             count_attendees = all_attendees.count()
             for i in all_attendees:
                 count_attendees += i.plus_other
@@ -479,7 +463,7 @@ def event_details(request, event_id):
 @location_manager_check
 def event_delete_all(request, event_id):
     try:
-        event_to_delete = Event.objects.get(id=event_id)
+        event_to_delete = Event.objects.get(uuid=event_id)
     except:
         return redirect('index')
     else:
@@ -520,11 +504,15 @@ def event_delete_all(request, event_id):
 @location_manager_check
 def event_delete_rec(request, event_id):
     try:
+        print('1')
         date = request.GET['date']
-        event_rec_to_delete = Event.objects.get(id=event_id)
+        event_rec_to_delete = Event.objects.get(uuid=event_id)
     except:
+        print('2')
+
         return redirect('index')
     else:
+        print('3')
         if EventExceptionCancelledRescheduled.objects.filter(parent_event=event_rec_to_delete, start_date=date).first():
             rec_to_delete_exception = EventExceptionCancelledRescheduled.objects.filter(parent_event=event_rec_to_delete, start_date=date).first()
             rec_to_delete_exception.is_cancelled=True

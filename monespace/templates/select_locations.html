@@ -9,16 +9,23 @@
 
 <div class="top_bar_menu">
 
+    <div class="sub_nav_hor active">
+        <i class="fas fa-people-arrows"></i>Séléction des distributions
+    </div>
+
     <a href="{% url 'profile' %}">
         <div class="sub_nav_hor">
         <i class="fas fa-ban"></i>Annuler
-    </div>
+        </div>
     </a>
 
 </div>
 
 <div class="container_master_mobile">
 
+    {% if all_locations|length == 0 %}
+        <p class="info_text">Aucune distribution à séléctionner actuellement</p>
+    {% else %}
 
 <h3>Sélectionner les distributions pour lesquelles vous souhaitez être bénevole</h3>
 
@@ -42,21 +49,21 @@
             {% for j in all_locations%}
                 <tr>
                     <td class='table_cell'>
-                        <a class="locations_checkbox" id="{{ j.pk }}" name="{{ j }}" data-loc="{{ j.pk }}" data-state="closed"><i class="fas fa-chevron-down"></i></a>
+                        <a class="locations_checkbox" id="{{ j.uuid }}" name="{{ j }}" data-loc="{{ j.uuid }}" data-state="closed"><i class="fas fa-chevron-down"></i></a>
                     </td>
-                    <td class='table_cell'><a class="locations_name" data-state="closed" data-loc="{{ j.pk }}">{{j.name|default_if_none:""}}</a></td>
+                    <td class='table_cell'><a class="locations_name" data-state="closed" data-loc="{{ j.uuid }}">{{j.name|default_if_none:""}}</a></td>
                     <td class='table_cell'>{{j.address|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.city}}</td>
                     <td class='table_cell'>{{j.zip_code}}</td>
                     <td class='table_cell'>{% for z in j.location_managers.all %}{{z.first_name}} {{z.last_name}}{% endfor %}</td>
                     <td class='table_cell'><a href="https://maps.google.com/maps?q={{j.address}},%20{{j.city}}%20{{j.zip_code}}%20{{j.country}}" target="_blank"><i class="fas fa-globe"></i></a></td>
                 </tr>
-                <tr class="tr_td_row" data-loc="{{j.pk}}">
-                    <td class="td_row" colspan="7" data-loc="{{j.pk}}">
+                <tr class="tr_td_row" data-loc="{{j.uuid}}">
+                    <td class="td_row" colspan="7" data-loc="{{j.uuid}}">
 
                         {% for i in event_form_locations %}
                             {% if i.location.pk == j.pk %}
-                                <p><input class="distrib_checkbox" type="checkbox" id="{{ i.pk }}" name="distrib" value="{{ i.pk }}" data-distrib_us="{{ i.event_manager.pk }}">{{ i.name }} de {{ i.time_from}} à {{ i.time_to }}, géré par {{i.event_manager }}<i data-distrib_us="{{ i.event_manager.pk }}" class="fas fa-info-circle info_icon" title="Vous ne pourrez pas enlever une distribution pour lequel vous en êtes le responsable"></i></p>
+                                <p><input class="distrib_checkbox" type="checkbox" id="{{ i.uuid }}" name="distrib" value="{{ i.uuid }}" data-distrib_us="{{ i.event_manager.uuid }}">{{ i.name }} de {{ i.time_from}} à {{ i.time_to }}, géré par {{i.event_manager }}<i data-distrib_us="{{ i.event_manager.uuid }}" class="fas fa-info-circle info_icon" title="Vous ne pourrez pas enlever une distribution pour lequel vous en êtes le responsable"></i></p>
                             {% endif %}
                         {% endfor %}
                     </td>
@@ -71,6 +78,7 @@
 
 </form>
 
+    {% endif %}
 
 </div>
 

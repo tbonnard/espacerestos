@@ -1,3 +1,4 @@
+from celery.utils.serialization import jsonify
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
@@ -12,13 +13,12 @@ from .views_locations import edit_user_type_to_manager, check_if_new_status_to_c
 @login_required(login_url='/login/')
 @forbidden_to_user
 def distribution_create(request, location_id):
-    location = get_object_or_404(Location, pk=location_id)
+    location = get_object_or_404(Location, uuid=location_id)
     form = DistributionForm()
-    user_from_location = [i.pk for i in Location.objects.get(pk=location_id).location_managers.all()]
-    form.fields['event_manager'].queryset = User.objects.filter(id__in=user_from_location)
-    print(len(user_from_location))
+    user_from_location = [i.uuid for i in Location.objects.get(uuid=location_id).location_managers.all()]
+    form.fields['event_manager'].queryset = User.objects.filter(uuid__in=user_from_location)
     if len(user_from_location) == 1:
-        form.initial['event_manager'] = User.objects.get(id=user_from_location[0])
+        form.initial['event_manager'] = User.objects.get(uuid=user_from_location[0])
 
     if request.method == "POST":
         form = DistributionForm(data=request.POST)
@@ -56,7 +56,7 @@ def distributions(request):
 @login_required(login_url='/login/')
 @forbidden_to_user
 def distrib_details(request, distrib_id):
-    distrib = get_object_or_404(Event, pk=distrib_id)
+    distrib = get_object_or_404(Event, uuid=distrib_id)
     if distrib.is_cancelled:
         return redirect('index')
     if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
@@ -65,15 +65,15 @@ def distrib_details(request, distrib_id):
         status_users_location = StatusUsersLocations.objects.filter(distrib=distrib, status=1) | \
                                 StatusUsersLocations.objects.filter(distrib=distrib, status=2)
         form = StatusUsersLocationsForm()
-        user_from_location = [i.pk for i in Location.objects.get(pk=distrib.location.pk).location_managers.all()]
+        user_from_location = [i.uuid for i in Location.objects.get(uuid=distrib.location.uuid).location_managers.all()]
         formManager = DistributionManagerForm()
-        formManager.fields['event_manager'].queryset = User.objects.filter(id__in=user_from_location)
-        if len(user_from_location) ==1 :
-            formManager.initial['event_manager'] = User.objects.get(id=user_from_location[0])
+        formManager.fields['event_manager'].queryset = User.objects.filter(uuid__in=user_from_location)
+        if len(user_from_location) == 1 :
+            formManager.initial['event_manager'] = User.objects.get(uuid=user_from_location[0])
 
     if request.method == "POST":
         try:
-            user_status_update = StatusUsersLocations.objects.get(pk=request.GET['id'])
+            user_status_update = StatusUsersLocations.objects.get(uuid=request.GET['id'])
         except:
             pass
         else:
@@ -91,22 +91,22 @@ def distrib_details(request, distrib_id):
 @login_required(login_url='/login/')
 @forbidden_to_user
 def distrib_users(request, distrib_id):
-    distrib = get_object_or_404(Event, pk=distrib_id)
+    distrib = get_object_or_404(Event, uuid=distrib_id)
     if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
         return redirect('index')
     else:
         status_users_location = StatusUsersLocations.objects.filter(distrib=distrib, status=1) | \
                                 StatusUsersLocations.objects.filter(distrib=distrib, status=2)
         form = StatusUsersLocationsForm()
-        user_from_location = [i.pk for i in Location.objects.get(pk=distrib.location.pk).location_managers.all()]
+        user_from_location = [i.uuid for i in Location.objects.get(uuid=distrib.location.uuid).location_managers.all()]
         formManager = DistributionManagerForm()
-        formManager.fields['event_manager'].queryset = User.objects.filter(id__in=user_from_location)
+        formManager.fields['event_manager'].queryset = User.objects.filter(uuid__in=user_from_location)
         if len(user_from_location) ==1 :
-            formManager.initial['event_manager'] = User.objects.get(id=user_from_location[0])
+            formManager.initial['event_manager'] = User.objects.get(uuid=user_from_location[0])
 
     if request.method == "POST":
         try:
-            user_status_update = StatusUsersLocations.objects.get(pk=request.GET['id'])
+            user_status_update = StatusUsersLocations.objects.get(uuid=request.GET['id'])
         except:
             pass
         else:
@@ -127,8 +127,8 @@ def distrib_users(request, distrib_id):
 def user_distrib_update_status(request, distrib_id):
     if request.method == "POST":
         try:
-            user_status_update = StatusUsersLocations.objects.get(pk=request.GET['id'])
-            distrib_user = get_object_or_404(Event, pk=distrib_id)
+            user_status_update = StatusUsersLocations.objects.get(uuid=request.GET['id'])
+            distrib_user = get_object_or_404(Event, uuid=distrib_id)
         except:
             pass
         else:
@@ -143,13 +143,13 @@ def user_distrib_update_status(request, distrib_id):
 @login_required(login_url='/login/')
 @forbidden_to_user
 def change_distrib_manager(request, distrib_id):
-    distrib = get_object_or_404(Event, pk=distrib_id)
+    distrib = get_object_or_404(Event, uuid=distrib_id)
     if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
         return redirect('index')
 
     if request.method== "POST":
-        distrib = get_object_or_404(Event, pk=distrib_id)
-        distrib_manager = User.objects.get(pk=request.POST['event_manager'])
+        distrib = get_object_or_404(Event, uuid=distrib_id)
+        distrib_manager = User.objects.get(uuid=request.POST['event_manager'])
         previous_manager = distrib.event_manager
         distrib.event_manager = distrib_manager
         distrib.save()
@@ -178,7 +178,7 @@ def get_user_distrib(request):
 
 @login_required(login_url='/login/')
 def get_count_event_location(request, location_id):
-    location = get_object_or_404(Location, pk=location_id)
+    location = get_object_or_404(Location, uuid=location_id)
     event_loc_count = Event.objects.filter(is_distrib=True, is_cancelled=False, location=location).count()
     return JsonResponse(event_loc_count, safe=False)
 
@@ -189,14 +189,14 @@ def get_count_event_benev(request):
     status_user_distrib = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
     count_distrib_ben = {}
     for i in status_user_distrib:
-        if i.distrib.pk in count_distrib_ben:
+        if i.distrib.uuid in count_distrib_ben:
             if i.status == 1:
-                count_distrib_ben[i.distrib.pk]['pending'] += 1
+                str(count_distrib_ben[i.distrib.uuid])['pending'] += 1
             else:
-                count_distrib_ben[i.distrib.pk]['active'] += 1
+                str(count_distrib_ben[i.distrib.uuid])['active'] += 1
         else:
             if i.status == 1:
-                count_distrib_ben.setdefault(i.distrib.pk, {"pending":1, "active":0})
+                count_distrib_ben.setdefault(str(i.distrib.uuid), {"pending":1, "active":0})
             else:
-                count_distrib_ben.setdefault(i.distrib.pk, {"pending":0, "active":1})
+                count_distrib_ben.setdefault(str(i.distrib.uuid), {"pending":0, "active":1})
     return JsonResponse(count_distrib_ben, safe=False)

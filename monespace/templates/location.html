@@ -6,6 +6,16 @@
 <div class="top_bar_menu">
 
     {% if is_edit %}
+    <div class="sub_nav_hor active">
+        <i class="fas fa-map-marker-alt"></i>Modification de site
+    </div>
+    {% else %}
+    <div class="sub_nav_hor active">
+        <i class="fas fa-map-marker-alt"></i>Création de site
+    </div>
+    {% endif %}
+
+    {% if is_edit %}
     <a href="{% url 'location_details' location_id=location_id %}">
         <div class="sub_nav_hor">
         <i class="fas fa-ban"></i>Annuler

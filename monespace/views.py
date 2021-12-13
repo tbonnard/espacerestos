@@ -35,7 +35,7 @@ def index(request):
     for i in eligible_events_date_locations:
         for j in i[1]:
             for z in attendees:
-                if j['id'] == z.parent_event.id and i[0] == z.event_date:
+                if j['uuid'] == z.parent_event.uuid and i[0] == z.event_date:
                     for y in eligible_events_date_locations_attendees:
                         if y[0] == i[0]:
                             for x in eligible_events_date_locations_attendees:
@@ -80,12 +80,12 @@ def all_users_site(request):
 @login_required(login_url='/login/')
 @forbidden_to_user
 def users_site(request, location_id):
-    if request.user.user_type == 3 and Location.objects.get(pk=location_id) not in Location.objects.filter(location_managers=request.user):
+    if request.user.user_type == 3 and Location.objects.get(uuid=location_id) not in Location.objects.filter(location_managers=request.user):
         return redirect('index')
     else:
-        status_users_location = StatusUsersLocations.objects.filter(location=Location.objects.get(pk=location_id),
+        status_users_location = StatusUsersLocations.objects.filter(location=Location.objects.get(uuid=location_id),
                                                                     status=1) | StatusUsersLocations.objects.filter(
-            location=Location.objects.get(pk=location_id), status=2)
+            location=Location.objects.get(uuid=location_id), status=2)
         users_pre = [i.user for i in status_users_location]
         users=[]
         for i in users_pre:
@@ -96,7 +96,7 @@ def users_site(request, location_id):
 
         if request.method == "POST":
             try:
-                user_status_update = StatusUsersLocations.objects.get(pk=request.GET['id'])
+                user_status_update = StatusUsersLocations.objects.get(uuid=request.GET['id'])
             except:
                 pass
             else:
@@ -113,7 +113,7 @@ def users_site(request, location_id):
 def user_site_update_status(request, location_id):
     if request.method == "POST":
         try:
-            user_status_update = StatusUsersLocations.objects.get(pk=request.GET['id'])
+            user_status_update = StatusUsersLocations.objects.get(uuid=request.GET['id'])
         except:
             pass
         else:

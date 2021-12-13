@@ -15,16 +15,16 @@
 <div class="top_bar_menu">
 
     <div class="sub_nav_hor active" id="distrib_details_menu">
-        <i class="fas fa-map-marker-alt"></i>Détails de la distribution
+        <i class="fas fa-people-arrows"></i>Détails de la distribution
     </div>
 
-    <a href="{% url 'distrib_users' distrib_id=distrib.id %}">
+    <a href="{% url 'distrib_users' distrib_id=distrib.uuid %}">
         <div class="sub_nav_hor" id="distrib_benevoles_menu">
         <i class="fas fa-users"></i>Bénévoles de la distribution
         </div>
     </a>
 
-    <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&distrib={{distrib.id}}&to=" id="event_link_date_distrib_loc">
+    <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&distrib={{distrib.uuid}}&to=" id="event_link_date_distrib_loc">
         <div class="sub_nav_hor">
         <i class="fas fa-calendar-alt"></i>Voir les prochaines dates
         </div>
@@ -42,7 +42,7 @@
         <p>Heure: {{distrib.time_from}} - {{distrib.time_to}}</p>
         <p>Responsable: {{distrib.event_manager}}<a><i id="icon_change_manager" class="far fa-edit info_icon"></i></a></p>
 
-        <form id="change_manager" method='POST' action="{% url 'change_distrib_manager' distrib_id=distrib.pk %}">
+        <form id="change_manager" method='POST' action="{% url 'change_distrib_manager' distrib_id=distrib.uuid %}">
             {% csrf_token %}
             {{formManager}}
             <div>

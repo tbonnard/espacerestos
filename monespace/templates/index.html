@@ -34,7 +34,6 @@
     {% csrf_token %}
     <div id="events_manager">
 
-
         <p class="info_text">Aucune soirée de distribution à votre charge</p>
 
         <table class='table1'>
@@ -58,7 +57,7 @@
 
 
         <div class="view_more_event_manager">
-            <button id='button_event_manager_load' data-ideventsearch="{{request.user.pk}}" class="button_white">Voir plus</button>
+            <button id='button_event_manager_load' data-ideventsearch="{{request.user.uuid}}" class="button_white">Voir plus</button>
         </div>
 
     </div>

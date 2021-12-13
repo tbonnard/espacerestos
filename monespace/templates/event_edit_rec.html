@@ -12,7 +12,7 @@
 
 <div class="top_bar_menu">
 
-    <a href="{% url 'event_details' event_id=event.id %}?date={{date}}">
+    <a href="{% url 'event_details' event_id=event.uuid %}?date={{date}}">
         <div class="sub_nav_hor">
         <i class="fas fa-calendar-alt"></i>Retour à l'événement
     </div>
@@ -41,7 +41,7 @@
    </fieldset>
 
 
-    <form action="" method='POST' id="form_rec" data-eventid={{event.pk}}>
+    <form action="" method='POST' id="form_rec" data-eventid={{event.uuid}}>
         {% csrf_token %}
         {% include "event_form.html" %}
         {% include "event_form_only_rec.html" %}

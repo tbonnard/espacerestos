@@ -92,6 +92,11 @@ class DistributionManagerForm(forms.ModelForm):
             "event_manager": "Séléctionner le nouveau responsable de la soirée distribution"
         }
 
+    def __init__(self, *args, **kwargs):
+        super(DistributionManagerForm, self).__init__(*args, **kwargs)
+        managers = [(i.uuid, i) for i in User.objects.all()]
+        self.fields['event_manager'] = forms.ChoiceField(choices=managers)
+
 
 class EventRecurringPatternForm(forms.ModelForm):
     class Meta:
@@ -132,6 +137,7 @@ class LocationForm(forms.ModelForm):
         widgets = {
             "location_managers": forms.CheckboxSelectMultiple(),
         }
+
 
 
 class SelectLocationsForm(forms.Form):

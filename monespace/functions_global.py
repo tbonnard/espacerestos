@@ -40,7 +40,7 @@ def location_manager_check(f):
         # print(args[0])
         # print(kwargs['event_id'])
         try:
-            event = Event.objects.get(pk=kwargs['event_id'])
+            event = Event.objects.get(uuid=kwargs['event_id'])
         except:
             print("event not found")
             return redirect('index')

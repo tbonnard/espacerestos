@@ -5,15 +5,15 @@ from .models import User, Location, Event, RecurringPattern, StatusUsersLocation
 
 
 class UserAdminCustom(admin.ModelAdmin):
-    list_display = ("username", 'email', 'user_type', 'date_joined')
+    list_display = ('uuid', "username", 'email', 'user_type', 'date_joined')
 
 
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ("name", "address", "address_2", "city", "zip_code", "country", 'created')
+    list_display = ('uuid', "name", "address", "address_2", "city", "zip_code", "country", 'created')
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('location', 'name', 'event_manager', 'start_date', 'is_recurring', 'is_distrib', 'is_cancelled', 'created')
+    list_display = ('uuid', 'location', 'name', 'event_manager', 'start_date', 'is_recurring', 'is_distrib', 'is_cancelled', 'created')
 
 
 class RecurringPatternAdmin(admin.ModelAdmin):

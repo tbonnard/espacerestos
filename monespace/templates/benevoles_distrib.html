@@ -9,7 +9,7 @@
 
 <div class="top_bar_menu">
 
-    <a href="{% url 'distrib_details' distrib_id=distrib.pk %}">
+    <a href="{% url 'distrib_details' distrib_id=distrib.uuid %}">
     <div class="sub_nav_hor">
         <i class="fas fa-map-marker-alt"></i>Retour à la distribution
     </div>
@@ -19,7 +19,7 @@
         <i class="fas fa-users"></i>Bénévoles actifs
     </div>
 
-    <a href="{% url 'download_users_csv_distrib' %}?distrib={{distrib.pk}}">
+    <a href="{% url 'download_users_csv_distrib' %}?distrib={{distrib.uuid}}">
         <div class="sub_nav_hor">
             <i class="fas fa-cloud-download-alt"></i>Exporter
         </div>
@@ -61,10 +61,10 @@
                     <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.tel|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.last_login|date:'Y-m-d H:i:s'}}</td>
-                    <td class='table_cell'><span class="user_status" data-user="{{j.user.pk}}{{j.distrib.pk}}" >{{j.get_status_display|default_if_none:""}}</span>
+                    <td class='table_cell'><span class="user_status" data-user="{{j.user.uuid}}{{j.distrib.uuid}}" >{{j.get_status_display|default_if_none:""}}</span>
 
-                    <div class="form_status" data-user="{{j.user.pk}}{{j.distrib.pk}}" >
-                            <form method="POST" action="{% url 'user_distrib_update_status' distrib_id=j.distrib.pk %}?id={{j.pk}}">
+                    <div class="form_status" data-user="{{j.user.uuid}}{{j.distrib.uuid}}" >
+                            <form method="POST" action="{% url 'user_distrib_update_status' distrib_id=j.distrib.uuid %}?id={{j.uuid}}">
                                 {% csrf_token %}
                                 {{form.status}}
                                 <button class="validate_user_status" title="Mettre à jour l'utilisateur"><i class="fas fa-check-circle"></i></button>
@@ -80,13 +80,13 @@
                         <i class="fas fa-info-circle info_icon" title="Vous ne pouvez pas modifier le statut du responsable de la distribution"></i>
                         {% else %}
                         {% if j.status != 2 %}
-                        <form method="POST" action="{% url 'distrib_users' distrib_id=j.distrib.pk %}?id={{j.pk}}">
+                        <form method="POST" action="{% url 'distrib_users' distrib_id=j.distrib.uuid %}?id={{j.uuid}}">
                             {% csrf_token %}
                             <button class="validate_user_status" id="validate_pending_user_status" title="Activer l'utilisateur"><i class="fas fa-check-circle"></i></button>
                         </form>
-                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.distrib.pk}}" data-type="edit"><i class="far fa-edit"></i></button>
+                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.distrib.uuid}}" data-type="edit"><i class="far fa-edit"></i></button>
                         {% else %}
-                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.distrib.pk}}" data-type="edit"><i class="far fa-edit"></i></button>
+                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.distrib.uuid}}" data-type="edit"><i class="far fa-edit"></i></button>
                         {% endif %}
                         {% endif %}
 

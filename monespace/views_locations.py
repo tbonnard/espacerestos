@@ -109,7 +109,7 @@ def location_create(request):
 @login_required(login_url='/login/')
 @forbidden_to_user
 def location_edit(request, location_id):
-    location_page = Location.objects.get(id=location_id)
+    location_page = Location.objects.get(uuid=location_id)
     form = LocationForm(instance=location_page)
     if request.method == "POST":
         form = LocationForm(data=request.POST)
@@ -148,7 +148,7 @@ def location_edit(request, location_id):
 
 @login_required(login_url='/login/')
 def location_details(request, location_id):
-    location_page = get_object_or_404(Location, pk=location_id)
+    location_page = get_object_or_404(Location, uuid=location_id)
     manager_location_check = False
     all_events_location = Event.objects.filter(location=location_page, is_distrib=True)
     for i in location_page.location_managers.all():
@@ -168,7 +168,7 @@ def locations(request):
         return redirect('index')
     elif Location.objects.filter(location_managers=request.user).count() == 1:
         return redirect(reverse('location_details', kwargs={
-            'location_id': Location.objects.filter(location_managers=request.user).first().pk}))
+            'location_id': Location.objects.filter(location_managers=request.user).first().uuid}))
     elif request.user.user_type == 3:
         all_locations = Location.objects.filter(location_managers=request.user)
         return render(request, 'locations.html', context={"all_locations": all_locations})
@@ -192,10 +192,10 @@ def select_locations(request):
         form = request.POST.getlist('distrib')
         events_from_form = []
         for i in form:
-            event = get_object_or_404(Event, pk=i)
+            event = get_object_or_404(Event, uuid=i)
             events_from_form.append(event)
             status_check = check_if_new_status_to_create_update(distrib=event,
-                                                                location=Location.objects.get( pk=event.location.pk),
+                                                                location=Location.objects.get(uuid=event.location.uuid),
                                                                 user_to_update=request.user, from_user=request.user,
                                                                 manager=False)
             if status_check is not None and status_check.status == 1:

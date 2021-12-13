@@ -85,12 +85,12 @@ if (document.querySelector('#events_manager_menu')) {
           aUrlEvent.className = "event_manager_date";
           aUrlEvent.dataset.event_manager_date = new Date(i[0]+"T00:00:00.000").toISOString().split('T')[0];
           aUrlEvent.textContent = new Date(i[0]+"T00:00:00.000").toLocaleDateString('fr-FR', options);
-          aUrlEvent.href = `${window.location.origin}/event/details/${j.id}/?date=${i[0]}`;
+          aUrlEvent.href = `${window.location.origin}/event/details/${j.uuid}/?date=${i[0]}`;
           let tdName = document.createElement('td');
           tdName.className='table_cell';
           tdName.textContent = j.name;
           let atdName = document.createElement('a');
-          atdName.href = `${window.location.origin}/distribution/details/${j.id}/`;
+          atdName.href = `${window.location.origin}/distribution/details/${j.uuid}/`;
           atdName.innerHTML=`<i class='fas fa-angle-right'></i>`;
           atdName.title = 'Détails globaux sur la distribution, et non pas juste cette date'
           let tdTime = document.createElement('td');
@@ -98,9 +98,9 @@ if (document.querySelector('#events_manager_menu')) {
           tdTime.textContent = `${j.time_from.slice(0, -3)} - ${j.time_to.slice(0, -3)}`;
           let tdBenevoles = document.createElement('td');
           tdBenevoles.className='table_cell button_attendance_manager';
-          tdBenevoles.id = `attend_event_number_manager_${j.id}${i[0]}`;
-          tdBenevoles.dataset.event_date = `${j.id}_${i[0]}`;
-          get_number_attendees(j.id, i[0]);
+          tdBenevoles.id = `attend_event_number_manager_${j.uuid}${i[0]}`;
+          tdBenevoles.dataset.event_date = `${j.uuid}_${i[0]}`;
+          get_number_attendees(j.uuid, i[0]);
           let tdCancelDate = document.createElement('td');
           tdCancelDate.className='table_cell';
           let aURLCancelDate = document.createElement('a');
@@ -126,7 +126,7 @@ if (document.querySelector('#events_manager_menu')) {
             divCancel.style.marginTop = '5px';
             divCancel.style.marginBottom = '5px';
             let aValidateCancelYes = document.createElement('a');
-            aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${j.id}/?date=${i[0]}`;
+            aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${j.uuid}/?date=${i[0]}`;
             aValidateCancelYes.title = `Oui, annuler la distribution du ${i[0]}`;
             let iValidateCancelYes = document.createElement('i');
             iValidateCancelYes.className = "fas fa-check-square";

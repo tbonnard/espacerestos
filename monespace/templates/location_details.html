@@ -21,19 +21,19 @@
         <i class="fas fa-people-arrows"></i>Distributions
     </div>
 
-    <a href="{% url 'users_site' location_id=location.pk %}">
+    <a href="{% url 'users_site' location_id=location.uuid %}">
         <div class="sub_nav_hor">
         <i class="fas fa-users"></i>Bénévoles du site
         </div>
     </a>
 
-    <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&location={{location.pk}}&all=true&to=" id="event_link_date_distrib_loc">
+    <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&location={{location.uuid}}&all=true&to=" id="event_link_date_distrib_loc">
         <div class="sub_nav_hor">
         <i class="fas fa-calendar-alt"></i>Voir toutes les prochaines dates pour ce site
         </div>
     </a>
 
-    <a href="{% url 'location_edit' location_id=location.pk %}">
+    <a href="{% url 'location_edit' location_id=location.uuid %}">
         <div class="sub_nav_hor">
         <i class="fas fa-edit"></i>Modifier le site
         </div>
@@ -79,7 +79,7 @@
 
         {% include 'distributions_list.html' %}
 
-        <a href="{% url 'distribution_create' location_id=location.pk %}" >
+        <a href="{% url 'distribution_create' location_id=location.uuid %}" >
          <button class=""><i class="fas fa-plus"></i> Distribution</button>
         </a>
 
