@@ -7,13 +7,12 @@
 
 <div id="send_message_div">
 
-    <h3>Envoyer un message</h3>
-
+<!--    <h3>Envoyer un message</h3>-->
     <a><i id="close_message_box" class="far fa-times-circle"></i></a>
 
            <form id="send_messages_form" method='POST'>
                 {% csrf_token %}
-                {{form}}
+                {{form.as_p}}
                <button class="" type='button' id="send_messages_form_button">Envoyer le message</button>
             </form>
 </div>
