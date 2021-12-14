@@ -505,6 +505,64 @@ nav::before {
 
 
 
+/* MESSAGES */
+
+#send_messages_global{
+	display: none;
+	position: fixed;
+  bottom: 0px;
+	width: 90%;
+	background: #eee;
+}
+
+#send_message_div {
+	width: 70%;
+}
+
+#success_message_result {
+	display: none;
+}
+
+#received_messages, #sent_messages {
+	width: 80%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+#messages_sub_menu{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.message_unit {
+	margin-bottom: 20px;
+}
+.message_nav_line {
+	display: flex;
+	justify-content: space-between;
+	background-color: var(--light_grey);
+	padding: 2%;
+}
+
+.message_nav_line p {
+	margin: 0;
+}
+
+.message_nav_line_title{
+	font-weight: bold;
+}
+
+.message_nav_line_details{
+	font-weight: normal;
+}
+
+.message_nav_line_description{
+	padding: 2%;
+}
+
+
+
 /* EVENTS */
 .event_details_master {
 
@@ -926,7 +984,7 @@ details[open] summary ~ * {
   }
 	.top_bar_menu{
 		padding: 75px 0 0px 0px;
-		width: 100px;
+		width: 105px;
 		height: 100%;
 		position: fixed;
 		z-index: 1;
@@ -949,6 +1007,9 @@ details[open] summary ~ * {
 	}
 	.container_master_revert{
 		margin-top: 100px;
+	}
+	#send_messages{
+		width: 70%;
 	}
 	.form_div_space{
 		width: 80%;

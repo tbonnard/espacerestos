@@ -106,7 +106,7 @@ class AttendeesEvents(models.Model):
     parent_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=False, null=True, related_name="AttendeesEvents_event")
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
     status = models.IntegerField(blank=False, null=False, default=1)
-    event_date = models.DateField( blank=False, null=False, default=utils.timezone.now)
+    event_date = models.DateField(blank=False, null=False, default=utils.timezone.now)
     plus_other = models.IntegerField(blank=True, null=False, default=0)
     recurring_pattern = models.ForeignKey(RecurringPattern, on_delete=models.CASCADE, blank=True, null=True)
     time_from = models.TimeField(blank=True, default="00:00:00")
@@ -165,18 +165,22 @@ class LogsStatusUsersLocations(models.Model):
                                  related_name="Logs_distrib_status_user")
     is_at_time_event_manager = models.BooleanField(default=False)
 
-
     def __str__(self):
         return f"Log: {self.user} - {self.location} - {self.status}"
 
     def __repr__(self):
         return f"Log: {self.user} - {self.location} - {self.status}"
 
-#
-# class Messages(models.Model):
-#     subject = models.CharField( blank=False, max_length=255)
-#     description = models.TextField(blank=True, default="")
-#     location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True, related_name="Messages_location")
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True, related_name="Messages_event")
-#     users = models.ManyToManyField(User, blank=True)
-# est-ce que si par exemple je send au "attendees", est-ce que si je attend apres le message vnevoye je vois quand meme le message ?
+
+class Message(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    description = models.TextField(blank=False, default="")
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="messages_from_user")
+    to_location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True, related_name="Messages_location")
+    to_event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True, related_name="Messages_event")
+    to_event_date = models.DateField(blank=True, null=True)
+    group_choices = ((1, 'À tous'), (2, 'Aux présents'), (3, 'Aux non présents'))
+    to_event_group = models.IntegerField(choices=group_choices, null=True, blank=True)
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="message_to_user")
+    info_all_locations = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)

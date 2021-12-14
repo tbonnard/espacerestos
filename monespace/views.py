@@ -4,12 +4,16 @@ import datetime
 
 from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, User, AttendeesEvents, Event
 from .views_events import events_list
-from .forms import StatusUsersLocationsForm, UserProfileForm
+from .forms import StatusUsersLocationsForm, UserProfileForm, MessagesEventsForm
 from .functions_global import get_date_to, forbidden_to_user, admin_only
+from .views_messages import get_to_user_messages, get_from_user_messages
 
 
 @login_required(login_url='/login/')
 def index(request):
+    to_user_messages = get_to_user_messages(request.user)
+    from_user_messages = get_from_user_messages(request.user)
+
     # if request.user.user_type == 1:
     #     user_locations = Location.objects.all()
     # else:
@@ -59,9 +63,12 @@ def index(request):
             eligible_events_date_locations_attendees_final.append(b)
     date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(weeks=8)
     events_manager = events_list(date_from=None, date_to=date_to, location=None, event_manager=request.user, distrib=None)
+    message_form = MessagesEventsForm()
     return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final,
                                                   "date_to": date_to, "pending_events":pending_events,
-                                                  "attendees": attendees, "events_manager": events_manager })
+                                                  "attendees": attendees, "events_manager": events_manager,
+                                                  "form": message_form, "to_user_messages": to_user_messages,
+                                                  "from_user_messages": from_user_messages})
 
 
 def faq_view(request):

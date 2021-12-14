@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, views_login, views_events, views_locations, views_download, views_attend, views_distrib
+from . import views, views_login, views_events, views_locations, views_download, views_attend, views_distrib, views_messages
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -42,7 +42,7 @@ urlpatterns = [
     path('api_get_all_attendees_user/', views_attend.api_get_all_attendees_user, name='api_get_all_attendees_user'),
     path('api_attend_decline_event/', views_attend.api_attend_decline_event, name='api_attend_decline_event'),
     path('events_list_json/<uuid:user_id>/', views_events.events_list_json, name='events_list_json'),
-
+    path('send_message/', views_messages.send_message, name='send_message'),
 
     # Change Password
     path('profil/changer-mot-de-passe/', auth_views.PasswordChangeView.as_view(

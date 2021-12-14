@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
     event_link = document.querySelector('#event_link_date_distrib_loc');
     event_link_original = event_link.href
     date_to = now.toISOString().split('T')[0];
-    console.log(now.toISOString());
     event_link.href = event_link_original+date_to;
   }
 

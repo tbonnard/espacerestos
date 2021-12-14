@@ -20,13 +20,13 @@
 
     <a href="{% url 'distrib_users' distrib_id=distrib.uuid %}">
         <div class="sub_nav_hor" id="distrib_benevoles_menu">
-        <i class="fas fa-users"></i>Bénévoles de la distribution
+        <i class="fas fa-users"></i>Bénévoles
         </div>
     </a>
 
     <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&distrib={{distrib.uuid}}&to=" id="event_link_date_distrib_loc">
         <div class="sub_nav_hor">
-        <i class="fas fa-calendar-alt"></i>Voir les prochaines dates
+        <i class="fas fa-calendar-alt"></i>Prochaines dates
         </div>
     </a>
 

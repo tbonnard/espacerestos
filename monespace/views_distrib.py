@@ -68,7 +68,7 @@ def distrib_details(request, distrib_id):
         user_from_location = [i.uuid for i in Location.objects.get(uuid=distrib.location.uuid).location_managers.all()]
         formManager = DistributionManagerForm()
         formManager.fields['event_manager'].queryset = User.objects.filter(uuid__in=user_from_location)
-        if len(user_from_location) == 1 :
+        if len(user_from_location) == 1:
             formManager.initial['event_manager'] = User.objects.get(uuid=user_from_location[0])
 
     if request.method == "POST":

@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
   let events14Days = document.querySelector('#events_14_days');
@@ -5,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let events14DaysMenu = document.querySelector('#events_14_days_menu');
   let messagesMenu = document.querySelector('#messages_menu');
+
 
 if (document.querySelector('#events_manager_menu')) {
   let eventsManager = document.querySelector('#events_manager');
@@ -75,7 +77,7 @@ if (document.querySelector('#events_manager_menu')) {
       if (data.length > 0) {
         tableEvent.style.display = 'block';
         info_text.style.display = 'none';
-      data.forEach( i => {
+      data.forEach(i => {
         i[1].forEach(j => {
           let tbody = document.querySelector('#tbody_event_manager');
           let tr = document.createElement('tr');
@@ -101,6 +103,15 @@ if (document.querySelector('#events_manager_menu')) {
           tdBenevoles.id = `attend_event_number_manager_${j.uuid}${i[0]}`;
           tdBenevoles.dataset.event_date = `${j.uuid}_${i[0]}`;
           get_number_attendees(j.uuid, i[0]);
+          let tdMessage = document.createElement('td');
+          tdMessage.className='table_cell';
+          let aTdMessage = document.createElement('a');
+          aTdMessage.title = 'Envoyer un message aux bénévoles';
+          aTdMessage.id = `message_icon_button`;
+          aTdMessage.dataset.details = `${j.uuid}${i[0]}`
+          aTdMessage.dataset.event = `${j.uuid}`
+          aTdMessage.dataset.date = `${i[0]}`
+          aTdMessage.innerHTML=`<i class='fas fa-envelope'></i>`;
           let tdCancelDate = document.createElement('td');
           tdCancelDate.className='table_cell';
           let aURLCancelDate = document.createElement('a');
@@ -114,6 +125,8 @@ if (document.querySelector('#events_manager_menu')) {
           tdName.append(atdName);
           tr.append(tdTime);
           tr.append(tdBenevoles);
+          tr.append(tdMessage);
+          tdMessage.append(aTdMessage);
           tr.append(tdCancelDate);
           tdCancelDate.append(aURLCancelDate);
           aURLCancelDate.append(iCancelDate);
@@ -150,11 +163,26 @@ if (document.querySelector('#events_manager_menu')) {
           })
         })
         eventManagerDate = document.querySelectorAll('.event_manager_date');
+
+
+
+        let sendMessagesFormButton = document.querySelector('#send_messages_form_button');
+        let sendMessagesGlobal = document.querySelector('#send_messages_global');
+        let iconMessage = document.querySelectorAll('#message_icon_button');
+        iconMessage.forEach(i => {
+          i.addEventListener('click', () => {
+            sendMessagesGlobal.style.display = 'block';
+            sendMessagesFormButton.dataset.event = i.dataset.event;
+            sendMessagesFormButton.dataset.date= i.dataset.date;
+          })
+        })
+
       } else {
         info_text.style.display = 'block';
         tableEvent.style.display = 'none';
         document.querySelector('.view_more_event_manager').style.display = 'none';
       }
+
     });
 
 }
@@ -217,5 +245,24 @@ if (document.querySelector('#events_manager_menu')) {
   }
 
 
+let messageReceivedDiv = document.querySelector('#received_messages');
+let aMessageReceivedDiv = document.querySelector('#a_received_messages');
+let messageSentDiv = document.querySelector('#sent_messages');
+let aMessageSentDiv = document.querySelector('#a_sent_messages');
+messageSentDiv.style.display = 'none';
+
+aMessageReceivedDiv.addEventListener('click', () => {
+  messageReceivedDiv.style.display = 'block';
+  messageSentDiv.style.display = 'none';
+  aMessageSentDiv.className = '';
+  aMessageReceivedDiv.className = 'active';
+})
+
+aMessageSentDiv.addEventListener('click', () => {
+  messageReceivedDiv.style.display = 'none';
+  messageSentDiv.style.display = 'block';
+  aMessageSentDiv.className = 'active';
+  aMessageReceivedDiv.className = '';
+})
 
 });

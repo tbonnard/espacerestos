@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block script %}
-<script src= "{% static 'scripts/scripts_events_attendee.js' %}"></script>
 <script src= "{% static 'scripts/index.js' %}"></script>
+<script src= "{% static 'scripts/scripts_events_attendee.js' %}"></script>
 {% endblock %}
 
 
@@ -43,6 +43,7 @@
                     <th class='table_heading'>Nom</th>
                     <th class='table_heading'>Heure</th>
                     <th class='table_heading'>Bénévoles présents</th>
+                    <th class='table_heading'>Envoyer un message</th>
                     <th class='table_heading'>Annuler cette date</th>
                 </tr>
             </thead>
@@ -96,10 +97,61 @@
 
 
 <div id="messages">
-    <p class="info_text">Aucun message</p>
+
+    <div id="messages_sub_menu">
+    <a id="a_received_messages" class="active"><h3>Message reçu</h3></a>
+    <a id="a_sent_messages"><h3>Message envoyé</h3></a>
+    </div>
+
+    <div id="received_messages">
+        {% if to_user_messages|length == 0 %}
+        <p class="info_text">Aucun message reçu</p>
+        {% else %}
+        {% for i in to_user_messages %}
+        <div class="message_unit">
+            <div class="message_nav_line">
+                <div class="message_nav_line_title">Envoyé par<p class="message_nav_line_details">{{i.from_user}}</p></div>
+                <div class="message_nav_line_title">Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:""}}</p></div>
+                <div class="message_nav_line_title">Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:""}}</p></div>
+                <div class="message_nav_line_title">De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:""}}</p></div>
+                <div class="message_nav_line_title">Envoyé<p class="message_nav_line_details">{{i.get_to_event_group_display|default_if_none:""}}</p></div>
+            </div>
+            <div class="message_nav_line_description">
+                {{i.description}}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+      <div id="sent_messages">
+        {% if from_user_messages|length == 0 %}
+        <p class="info_text">Aucun message envoyé</p>
+        {% else %}
+          {% for i in from_user_messages %}
+          <div class="message_unit">
+            <div class="message_nav_line">
+                <div class="message_nav_line_title">Envoyé par<p class="message_nav_line_details">{{i.from_user}}</p></div>
+                <div class="message_nav_line_title">Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:""}}</p></div>
+                <div class="message_nav_line_title">Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:""}}</p></div>
+                <div class="message_nav_line_title">De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:""}}</p></div>
+                <div class="message_nav_line_title">Envoyé<p class="message_nav_line_details">{{i.get_to_event_group_display|default_if_none:""}}</p></div>
+            </div>
+            <div class="message_nav_line_description">
+                {{i.description}}
+            </div>
+        </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+
+
 </div>
 
 
+<div id="send_messages_global">
+    {% include 'send_messages.html' %}
+</div>
 
 
 

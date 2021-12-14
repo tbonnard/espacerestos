@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
-from .models import User, Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents
+from .models import User, Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents, Message
 
 
 class UserCreateForm(UserCreationForm):
@@ -92,10 +92,11 @@ class DistributionManagerForm(forms.ModelForm):
             "event_manager": "Séléctionner le nouveau responsable de la soirée distribution"
         }
 
-    def __init__(self, *args, **kwargs):
-        super(DistributionManagerForm, self).__init__(*args, **kwargs)
-        managers = [(i.uuid, i) for i in User.objects.all()]
-        self.fields['event_manager'] = forms.ChoiceField(choices=managers)
+    # def __init__(self, *args, **kwargs):
+    #     super(DistributionManagerForm, self).__init__(*args, **kwargs)
+    #     managers = [(i.uuid, i) for i in User.objects.all()]
+    #     self.fields['event_manager'] = forms.ChoiceField(choices=managers)
+    #     self.fields["event_manager"].label = "Séléctionner le nouveau responsable de la soirée distribution"
 
 
 class EventRecurringPatternForm(forms.ModelForm):
@@ -154,3 +155,16 @@ class AttendeesEventsForm(forms.ModelForm):
     class Meta:
         model = AttendeesEvents
         fields = ('plus_other',)
+
+
+class MessagesEventsForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('to_event_group', 'description')
+        widgets = {
+            "to_event_group": forms.Select(attrs={'required': 'true'}),
+        }
+        labels = {
+            "to_event_group": "Séléctionner à qui envoyer ce message *",
+            "description": "Votre message"
+        }
