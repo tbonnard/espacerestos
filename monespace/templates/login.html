@@ -2,6 +2,8 @@
 
 {% block content%}
 
+<div class="container_master">
+
 <div class="form_div_space">
 
     <h3>Bon retour!</h3>
@@ -13,5 +15,6 @@
         <span class="info_text"><a href="{% url 'password_reset' %}" class="link_pink">Mot de passe/Nom utilisateur oublié?</a></span>
     </form>
     <p class="info_text">Vous n'avez pas encore de compte? <a href="{% url 'register' %}" class="link_pink">Vous inscrire ici</a></p>
+</div>
 </div>
 {% endblock %}

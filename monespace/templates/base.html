@@ -108,7 +108,11 @@
                     <a href="{% url 'profile' %}">
                         <div class="item_nav" data-path="profil">
                             <i class="fas fa-user-circle" title="{{request.user.username}}"></i>Profil
+                            {% if request.user.first_name == "" %}
+                            <span>{{request.user.username}}</span>
+                            {% else %}
                             <span>{{request.user.first_name}}</span>
+                            {% endif %}
                         </div>
                     </a>
                 </div>
@@ -139,11 +143,9 @@
 
 
 
-<div class="container_master">
 {% block content%}
 
 {% endblock %}
-</div>
 
 </body>
 </html>

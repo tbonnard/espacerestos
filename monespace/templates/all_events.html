@@ -30,6 +30,8 @@
     </div>
 </div>
 
+<div class="container_master">
+
 <!--<h1>Tous les évenements</h1>-->
 <div class="container_master_revert">
 {% if events|length == 0 %}
@@ -41,6 +43,7 @@
 <!--     {% endif %}-->
 {% include "events_loop.html" %}
 {% endif %}
+</div>
 </div>
 
 {% endblock %}
