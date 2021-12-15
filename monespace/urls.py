@@ -10,6 +10,7 @@ urlpatterns = [
     path('faq/', views.faq_view, name='faq'),
     path('profil/', views.profile, name='profile'),
     path('profil/modifier/', views.profile_edit, name='profile_edit'),
+    path('profil/modifier/<uuid:user_id>/<uuid:distrib_id>/', views.profile_edit_manager, name='profile_edit_manager'),
     path('site/benevoles/<uuid:location_id>/', views.users_site, name='users_site'),
     path('benevoles/', views.all_users_site, name='all_users_site'),
     path('benevoles_status/<uuid:location_id>/', views.user_site_update_status, name='user_site_update_status'),

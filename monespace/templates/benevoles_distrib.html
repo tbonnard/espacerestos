@@ -49,6 +49,7 @@
                     <th class='table_heading'>Envoyer un message</th>
                     <th class='table_heading'>Statut</th>
                     <th class='table_heading'>Mise à jour du statut</th>
+                    <th class='table_heading'>Modifier le bénévole</th>
                 </tr>
             </thead>
             <tbody>
@@ -96,8 +97,11 @@
                         <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.distrib.uuid}}" data-type="edit"><i class="far fa-edit"></i></button>
                         {% endif %}
                         {% endif %}
-
                     </td>
+                    <td class='table_cell'><a href="{% url 'profile_edit_manager' user_id=j.user.uuid distrib_id=j.distrib.uuid %}"><i class="fas fa-edit"></i></a></td>
+
+
+
                 </tr>
             {% endfor %}
             </tbody>

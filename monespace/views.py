@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import datetime
 
@@ -169,3 +169,34 @@ def profile_edit(request):
                 updated_user.save()
                 return redirect('profile')
     return render(request, 'profile_edit.html', context={"form" : form})
+
+
+@login_required(login_url='/login/')
+@forbidden_to_user
+def profile_edit_manager(request, user_id, distrib_id):
+    distrib = get_object_or_404(Event, uuid=distrib_id)
+    if request.user.user_type == 3 and Location.objects.get(uuid=distrib.location.uuid) not in Location.objects.filter(location_managers=request.user):
+        return redirect('index')
+    else:
+        updated_user = get_object_or_404(User, uuid=user_id)
+        form = UserProfileForm(instance=updated_user)
+        if request.method == "POST":
+            form = UserProfileForm(data=request.POST)
+            if form.is_valid():
+                try:
+                    image = request.FILES['profile_picture']
+                except:
+                    pass
+                else:
+                    updated_user.profile_picture.save(image.name, image)
+                finally:
+                    updated_user.first_name = form.cleaned_data['first_name']
+                    updated_user.last_name = form.cleaned_data['last_name']
+                    updated_user.email = form.cleaned_data['email']
+                    updated_user.address = form.cleaned_data['address']
+                    updated_user.city = form.cleaned_data['city']
+                    updated_user.zip_code = form.cleaned_data['zip_code']
+                    updated_user.tel = form.cleaned_data['tel']
+                    updated_user.save()
+                    return redirect(reverse('distrib_users', kwargs={'distrib_id': distrib_id}))
+        return render(request, 'profile_edit_manager.html', context={"form" : form, "distrib":distrib, "user":updated_user})
