@@ -109,7 +109,9 @@ document.addEventListener("DOMContentLoaded", function () {
          sendMessagesGlobal.style.display = 'none';
          successMessages.style.display = 'none';
          sendMessagesDiv.style.display = 'block';
-      }, 3000);
+         window.location.reload(true);
+      }, 2000);
+
 
 
     } else {
