@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, Event, AttendeesEvents
-from .forms import LocationForm, SelectLocationsForm
+from .forms import LocationForm, SelectLocationsForm, MessagesEventsSimpleForm
 from .notification_manager import send_email
 from .functions_global import forbidden_to_user, admin_only
 
@@ -161,17 +161,18 @@ def location_details(request, location_id):
 
 @login_required(login_url='/login/')
 def locations(request):
+    message_form = MessagesEventsSimpleForm()
     if request.user.user_type == 1:
         all_locations = Location.objects.all()
-        return render(request, 'locations.html', context={"all_locations": all_locations, "admin": True})
+        return render(request, 'locations.html', context={"all_locations": all_locations, "admin": True, "message_form":message_form})
     elif Location.objects.filter(location_managers=request.user).count() == 0:
         return redirect('index')
-    elif Location.objects.filter(location_managers=request.user).count() == 1:
-        return redirect(reverse('location_details', kwargs={
-            'location_id': Location.objects.filter(location_managers=request.user).first().uuid}))
+    # elif Location.objects.filter(location_managers=request.user).count() == 1:
+    #     return redirect(reverse('location_details', kwargs={
+    #         'location_id': Location.objects.filter(location_managers=request.user).first().uuid}))
     elif request.user.user_type == 3:
         all_locations = Location.objects.filter(location_managers=request.user)
-        return render(request, 'locations.html', context={"all_locations": all_locations})
+        return render(request, 'locations.html', context={"all_locations": all_locations, "message_form":message_form})
     else:
         return redirect('index')
 

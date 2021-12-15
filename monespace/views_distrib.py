@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 
-from .forms import DistributionForm, StatusUsersLocationsForm, DistributionManagerForm
+from .forms import DistributionForm, StatusUsersLocationsForm, DistributionManagerForm, MessagesEventsSimpleForm
 from .functions_global import forbidden_to_user
 from .models import Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, User
 from .views_locations import edit_user_type_to_manager, check_if_new_status_to_create_update, edit_user_type_to_user
@@ -42,6 +42,7 @@ def distribution_create(request, location_id):
 @forbidden_to_user
 @login_required(login_url='/login/')
 def distributions(request):
+    message_form = MessagesEventsSimpleForm()
     # if request.user.user_type == 1:
     #     events = Event.objects.all()
     #     return render(request, 'distributions.html', context={"events": events})
@@ -49,7 +50,7 @@ def distributions(request):
     #     return redirect(reverse('distrib_details', kwargs={'distrib_id': Event.objects.filter(event_manager=request.user).first().pk}))
     # else:
     events = Event.objects.filter(event_manager=request.user)
-    return render(request, 'distributions.html', context={"events": events})
+    return render(request, 'distributions.html', context={"events": events, "message_form":message_form})
 
 
 
@@ -91,6 +92,7 @@ def distrib_details(request, distrib_id):
 @login_required(login_url='/login/')
 @forbidden_to_user
 def distrib_users(request, distrib_id):
+    message_form = MessagesEventsSimpleForm()
     distrib = get_object_or_404(Event, uuid=distrib_id)
     if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
         return redirect('index')
@@ -118,7 +120,7 @@ def distrib_users(request, distrib_id):
 
     return render(request, 'benevoles_distrib.html', context={"distrib":distrib,
                                                             "status_users_location": status_users_location,
-                                                            "form": form, "formManager":formManager})
+                                                            "form": form, "formManager":formManager, "message_form":message_form})
 
 
 

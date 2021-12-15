@@ -3,6 +3,7 @@
 
 {% block script %}
 <script src= "{% static 'scripts/scripts_benevoles.js' %}"></script>
+<script src= "{% static 'scripts/distribution_benevole_list.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -45,6 +46,7 @@
                     <th class='table_heading'>Email</th>
                     <th class='table_heading'>Téléphone</th>
                     <th class='table_heading'>Dernière connexion</th>
+                    <th class='table_heading'>Envoyer un message</th>
                     <th class='table_heading'>Statut</th>
                     <th class='table_heading'>Mise à jour du statut</th>
                 </tr>
@@ -61,6 +63,7 @@
                     <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.tel|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.last_login|date:'Y-m-d H:i:s'}}</td>
+                    <td class='table_cell'><a id="message_icon_button" title="Envoyer un message aux bénévoles" data-user="{{j.user.uuid}}"><i class='fas fa-envelope'></i></a></td>
                     <td class='table_cell'><span class="user_status" data-user="{{j.user.uuid}}{{j.distrib.uuid}}" >{{j.get_status_display|default_if_none:""}}</span>
 
                     <div class="form_status" data-user="{{j.user.uuid}}{{j.distrib.uuid}}" >
@@ -101,6 +104,10 @@
         <p class="info_text">Aucune bénévole pour cette distribution</p>
         {% endif %}
 
+
+    <div id="send_messages_global">
+    {% include 'send_messages.html' %}
+    </div>
 
 
 </div>

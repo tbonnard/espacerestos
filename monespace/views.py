@@ -4,7 +4,7 @@ import datetime
 
 from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, User, AttendeesEvents, Event
 from .views_events import events_list
-from .forms import StatusUsersLocationsForm, UserProfileForm, MessagesEventsForm
+from .forms import StatusUsersLocationsForm, UserProfileForm, MessagesEventsForm, MessagesEventsSimpleForm
 from .functions_global import get_date_to, forbidden_to_user, admin_only
 from .views_messages import get_to_user_messages, get_from_user_messages
 
@@ -67,7 +67,7 @@ def index(request):
     return render(request, 'index.html', context={"events": eligible_events_date_locations_attendees_final,
                                                   "date_to": date_to, "pending_events":pending_events,
                                                   "attendees": attendees, "events_manager": events_manager,
-                                                  "form": message_form, "to_user_messages": to_user_messages,
+                                                  "message_form": message_form, "to_user_messages": to_user_messages,
                                                   "from_user_messages": from_user_messages})
 
 
@@ -80,8 +80,9 @@ def faq_view(request):
 def all_users_site(request):
     users = User.objects.all()
     form = StatusUsersLocationsForm()
+    message_form = MessagesEventsSimpleForm()
     status_users_location = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
-    return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form, "users":users})
+    return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form, "users":users, "message_form":message_form})
 
 
 @login_required(login_url='/login/')
@@ -100,6 +101,7 @@ def users_site(request, location_id):
                 users.append(i)
 
         form = StatusUsersLocationsForm()
+        message_form = MessagesEventsSimpleForm()
 
         if request.method == "POST":
             try:
@@ -112,7 +114,7 @@ def users_site(request, location_id):
                 logs = LogsStatusUsersLocations(location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=2, current_status=user_status_update.status)
                 logs.save()
                 return redirect(reverse('users_site', kwargs={'location_id': location_id}))
-        return render(request, 'benevoles_site.html', context={'location_id': location_id, "status_users_location": status_users_location, "form": form, "users":users})
+        return render(request, 'benevoles_site.html', context={'location_id': location_id, "status_users_location": status_users_location, "form": form, "users":users, "message_form":message_form})
 
 
 @login_required(login_url='/login/')

@@ -1,3 +1,8 @@
+{% load static %}
+
+{% block script %}
+<script src= "{% static 'scripts/distributions.js' %}"></script>
+{% endblock %}
 
 
         {% if events|length > 0 %}
@@ -10,6 +15,7 @@
                     <th class='table_heading'>Gestionnaire</th>
                     <th class='table_heading'>Bénévoles actifs</th>
                     <th class='table_heading'>Bénévoles en attente</th>
+                    <th class='table_heading'>Envoyer un message</th>
                     <th class='table_heading'>Annuler toutes les dates futures<i class="fas fa-info-circle info_icon" title="Si une distribution a des dates passées (ou du jour) lors de l'annulation, elle a ce statut d'annulé. Si aucune date passée, la distribution est supprimée."></i></th>
                 </tr>
             </thead>
@@ -26,6 +32,7 @@
                     <td class='table_cell'>{{j.event_manager|default_if_none:""}}</td>
                     <td class='table_cell benevoles_number' data-event="{{j.uuid}}" data-type="active"></td>
                     <td class='table_cell benevoles_number' data-event="{{j.uuid}}" data-type="pending"></td>
+                    <td class='table_cell'><a id="message_icon_button" title="Envoyer un message aux bénévoles" data-event="{{j.uuid}}"><i class='fas fa-envelope'></i></a></td>
                     {% if j.is_cancelled %}
                     <td class='table_cell' >annulée</td>
                     {% else %}
@@ -45,3 +52,8 @@
         <p class="info_text">Aucune distribution à votre charge</p>
         {% endif %}
 
+
+
+    <div id="send_messages_global">
+    {% include 'send_messages.html' %}
+    </div>

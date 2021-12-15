@@ -24,7 +24,6 @@ def send_message(request):
         event = Event.objects.get(uuid=event_uuid)
     except:
         event = None
-
     site_uuid = data.get('site')
     try:
         location = Location.objects.get(uuid=site_uuid)
@@ -44,24 +43,28 @@ def get_to_user_messages(user):
     all_attend_to_user_events = []
     attend_to_user_events = []
     non_attend_to_user_events = []
-    to_user_events = []
+    to_user_events_groups = []
     for i in messages_events:
         if i.to_event_group == 1:
             all_attend_to_user_events.append(i)
-            to_user_events.append(i.id)
+            to_user_events_groups.append(i.id)
         elif i.to_event_group == 2:
             if AttendeesEvents.objects.filter(user=user, parent_event=i.to_event, event_date=i.to_event_date):
                 attend_to_user_events.append(i)
-                to_user_events.append(i.id)
+                to_user_events_groups.append(i.id)
         elif i.to_event_group == 3:
             if not AttendeesEvents.objects.filter(user=user, parent_event=i.to_event, event_date=i.to_event_date):
                 non_attend_to_user_events.append(i)
-                to_user_events.append(i.id)
+                to_user_events_groups.append(i.id)
+    to_user_distrib = []
+    for i in messages_events:
+        if i.to_event_group is None:
+            to_user_distrib.append(i)
     to_user_locations_pre = StatusUsersLocations.objects.filter(user=user, status=2)
     to_user_locations = [i.location for i in to_user_locations_pre]
-    to_user_messages = Message.objects.filter(to_user=user) | Message.objects.filter(id__in=to_user_events) \
+    to_user_messages = Message.objects.filter(to_user=user) | Message.objects.filter(id__in=to_user_events_groups) \
                        | Message.objects.filter(to_location__in=to_user_locations) \
-                       | Message.objects.filter(info_all_locations=True)
+                       | Message.objects.filter(info_all_locations=True )
     to_user_messages_tuple = tuple(to_user_messages.order_by('-created'))
     return to_user_messages_tuple
 

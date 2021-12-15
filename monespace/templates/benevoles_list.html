@@ -1,0 +1,54 @@
+{% load static %}
+
+{% block script %}
+<script src= "{% static 'scripts/benevoles_list.js' %}"></script>
+{% endblock %}
+
+
+<p>Total des bénévoles (actif, en attente) : {{ users|length }}</p>
+
+
+<table class='table1'>
+            <thead>
+                <tr>
+                    <th class='table_heading'></th>
+                    <th class='table_heading'>Prénom</th>
+                    <th class='table_heading'>Nom</th>
+                    <th class='table_heading'>Nom d'utilisateur</th>
+                    <th class='table_heading'>Email</th>
+                    <th class='table_heading'>Téléphone</th>
+                    <th class='table_heading'>Type d'utilisateur</th>
+                    <th class='table_heading'>Dernière connexion</th>
+                    <th class='table_heading'>Envoyer un message</th>
+                    <th class='table_heading'>Distributions(s) / Site(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for j in users %}
+                <tr>
+                    <td class='table_cell'>{% if j.profile_picture %}
+                        <img src="{{j.profile_picture.url}}">
+                        {% endif %}</td>
+                    <td class='table_cell'>{{j.first_name|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.last_name|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.username}}</td>
+                    <td class='table_cell'>{{j.email|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.tel|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.get_user_type_display}}</td>
+                    <td class='table_cell'>{{j.last_login|date:'Y-m-d H:i:s'}}</td>
+                    <td class='table_cell'><a id="message_icon_button" title="Envoyer un message aux bénévoles" data-user="{{j.uuid}}"><i class='fas fa-envelope'></i></a></td>
+                    <td class='table_cell'>
+                        {% for i in status_users_location %}
+                            {% if i.user == j%}
+                        <p><a href="{% url 'distrib_details' distrib_id=i.distrib.uuid %}">{{i.distrib}}</a> ({{i.get_status_display|default_if_none:""}}) / <a href="{% url 'users_site' location_id=i.location.uuid %}">{{i.location}}</a></p>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+   <div id="send_messages_global">
+    {% include 'send_messages.html' %}
+    </div>

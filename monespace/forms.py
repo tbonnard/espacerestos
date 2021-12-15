@@ -168,3 +168,12 @@ class MessagesEventsForm(forms.ModelForm):
             "to_event_group": "Séléctionner à qui envoyer ce message *",
             "description": "Votre message"
         }
+
+
+class MessagesEventsSimpleForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('description',)
+        labels = {
+            "description": "Votre message"
+        }

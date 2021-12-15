@@ -142,6 +142,7 @@
                     <th class='table_heading'>Prénom</th>
                     <th class='table_heading'>Nom</th>
                     <th class='table_heading'>Accompagné de</th>
+                    <th class='table_heading'>Envoyer un message</th>
                     {% if request.user.user_type != 2 %}
                     <th class='table_heading'>Nom d'utilisateur</th>
                     <th class='table_heading'>Email</th>
@@ -157,6 +158,7 @@
                     <td class='table_cell'>{{j.user.first_name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.last_name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.plus_other|default_if_none:""}} personne(s)</td>
+                    <td class='table_cell'><a id="message_icon_button" title="Envoyer un message aux bénévoles" data-user="{{j.user.uuid}}"><i class='fas fa-envelope'></i></a></td>
                     {% if request.user.user_type != 2 %}
                     <td class='table_cell'>{{j.user.username}}</td>
                     <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>
@@ -169,6 +171,12 @@
         </table>
 
     {% endif %}
+
+
+    <div id="send_messages_global">
+    {% include 'send_messages.html' %}
+    </div>
+
 
 </div>
 

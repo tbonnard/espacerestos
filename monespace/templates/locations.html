@@ -2,6 +2,12 @@
 {% load static %}
 
 
+
+{% block script %}
+<script src= "{% static 'scripts/locations.js' %}"></script>
+{% endblock %}
+
+
 {% block content %}
 
 
@@ -36,6 +42,7 @@
                     <th class='table_heading'>Code postal</th>
                     <th class='table_heading'>Gestionnaire</th>
                     <th class='table_heading'>Voir sur la carte</th>
+                    <th class='table_heading'>Envoyer un message</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,13 +54,20 @@
                     <td class='table_cell'>{{j.zip_code}}</td>
                     <td class='table_cell'>{% for i in j.location_managers.all %}<p>{{i.first_name}} {{i.last_name}}</p>{% endfor %}</td>
                     <td class='table_cell'><a href="https://maps.google.com/maps?q={{j.address}},%20{{j.city}}%20{{j.zip_code}}%20{{j.country}}" target="_blank"><i class="fas fa-globe"></i></a></td>
-
+                    <td class='table_cell'><a id="message_icon_button" title="Envoyer un message aux bénévoles" data-site="{{j.uuid}}"><i class='fas fa-envelope'></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
 
     {% endif %}
+
+
+    <div id="send_messages_global">
+    {% include 'send_messages.html' %}
+    </div>
+
+
 
 </div>
 {% endblock %}

@@ -5,7 +5,7 @@ from django.http import JsonResponse
 
 from .models import Event, Location, RecurringPattern, StatusUsersLocations, AttendeesEvents, \
     EventExceptionCancelledRescheduled, User
-from .forms import EventForm, EventRecurringPatternForm
+from .forms import EventForm, EventRecurringPatternForm, MessagesEventsSimpleForm
 from .functions_global import forbidden_to_user, location_manager_check
 
 
@@ -451,10 +451,11 @@ def event_details(request, event_id):
                 if i == request.user:
                     manager_location = True
             if event_page:
+                message_form = MessagesEventsSimpleForm()
                 return render(request, 'event_details.html',
                               context={"event": event_page, "manager_location": manager_location, 'date': date,
                                        "attendees": attendees, "all_attendees": all_attendees,
-                                       "count_attendees": count_attendees})
+                                       "count_attendees": count_attendees, "message_form":message_form})
         return redirect('index')
 
 

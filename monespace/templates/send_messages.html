@@ -12,7 +12,7 @@
 
            <form id="send_messages_form" method='POST'>
                 {% csrf_token %}
-                {{form.as_p}}
+                {{message_form.as_p}}
                <button class="" type='button' id="send_messages_form_button">Envoyer le message</button>
             </form>
 </div>

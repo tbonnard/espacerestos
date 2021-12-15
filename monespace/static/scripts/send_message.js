@@ -11,17 +11,18 @@ document.addEventListener("DOMContentLoaded", function () {
   let group = null;
   let all_site = false;
   let user = null;
-  let location = null;
+  let site = null;
+  let groupField = null;
   let descriptionField = document.querySelector('#id_description');
   const borderColor = "#cacaca";
 
   if (document.querySelector('#id_to_event_group')) {
     groupField = document.querySelector('#id_to_event_group');
-   }
+  }
 
 
    let listFieldsValidation = [descriptionField]
-   if (groupField) {
+   if (groupField != null) {
      listFieldsValidation = [descriptionField, groupField]
      }
 
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
   })
 
-  function send_message(event_id, event_date, all_site, user, location, group, description) {
+  function send_message(event_id, event_date, all_site, user, site, group, description) {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const request = new Request(
                       `${window.location.origin}/send_message/`,
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
               date: event_date,
               all_site: all_site,
               user: user,
-              location: location,
+              site: site,
               group: group,
               description: description
           }),
@@ -75,15 +76,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (validationNumber == listFieldsValidation.length) {
 
-      if (groupField) {
+      if (groupField != null) {
         group = groupField.value;
-       }
+      } else {group = 1}
 
        if (sendMessagesFormButton.dataset.event) {
          event_id = sendMessagesFormButton.dataset.event
        }
-       if (sendMessagesFormButton.dataset.location) {
-         location = sendMessagesFormButton.dataset.location
+       if (sendMessagesFormButton.dataset.site) {
+         site = sendMessagesFormButton.dataset.site
        }
        if (sendMessagesFormButton.dataset.date) {
          event_date = sendMessagesFormButton.dataset.date
@@ -95,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
          user = sendMessagesFormButton.dataset.user
        }
 
-       send_message(event_id, event_date, all_site, user, location, group, description);
+       send_message(event_id, event_date, all_site, user, site, group, description);
 
        listFieldsValidation.forEach(i => {
            i.style.borderColor = borderColor;
