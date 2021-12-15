@@ -1030,6 +1030,7 @@ details[open] summary ~ * {
 		cursor: pointer;
 	}
 	.container_master_mobile{
+		margin-top: 75px;
 	}
 	.container_master_revert{
 	}
