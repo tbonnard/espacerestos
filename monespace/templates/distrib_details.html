@@ -18,17 +18,17 @@
         <i class="fas fa-people-arrows"></i>Détails de la distribution
     </div>
 
-        <div class="sub_nav_hor" id="distrib_benevoles_menu">
     <a href="{% url 'distrib_users' distrib_id=distrib.uuid %}">
+        <div class="sub_nav_hor" id="distrib_benevoles_menu">
         <i class="fas fa-users"></i>Bénévoles
-    </a>
         </div>
+    </a>
 
-        <div class="sub_nav_hor">
     <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&distrib={{distrib.uuid}}&to=" id="event_link_date_distrib_loc">
+        <div class="sub_nav_hor">
         <i class="fas fa-calendar-alt"></i>Prochaines dates
-    </a>
         </div>
+    </a>
 
 </div>
 

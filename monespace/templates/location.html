@@ -16,17 +16,17 @@
     {% endif %}
 
     {% if is_edit %}
-        <div class="sub_nav_hor">
     <a href="{% url 'location_details' location_id=location_id %}">
-        <i class="fas fa-ban"></i>Annuler
-    </a>
-        </div>
-    {% else %}
         <div class="sub_nav_hor">
-    <a href="{% url 'locations' %}">
         <i class="fas fa-ban"></i>Annuler
-    </a>
         </div>
+    </a>
+    {% else %}
+    <a href="{% url 'locations' %}">
+        <div class="sub_nav_hor">
+        <i class="fas fa-ban"></i>Annuler
+        </div>
+    </a>
     {% endif %}
 
 </div>
