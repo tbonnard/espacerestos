@@ -354,6 +354,10 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 
 }
 
+.sidebarTransform_top_bar_menu {
+	/* transform: translatey(-500px); */
+	visibility: hidden;
+}
 
 .sub_nav_hor {
 	margin: 0 10px;
@@ -364,7 +368,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 
 .sub_nav_hor:hover, .active {
 	color: var(--pink);
-	border-bottom:5px solid var(--pink);
+	border-bottom:5px solid var(--pink) !important;
 }
 
 .sub_nav_hor i {
@@ -390,6 +394,14 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 
 #menu {
 	cursor: pointer;
+}
+
+.sub_menu_icon {
+	display: none !important;
+  position: absolute;
+	top:25px;
+	right:20px;
+	z-index: 3;
 }
 
 /* .logo_img {
@@ -994,31 +1006,34 @@ details[open] summary ~ * {
     position: relative;
   }
 	.top_bar_menu{
-		padding: 75px 0 0px 0px;
-		width: 105px;
-		height: 100%;
+		padding:0px 0 0px 0px;
+		width: 100%;
 		position: fixed;
 		z-index: 1;
 		top: 0;
-		left: 0;
 		border-bottom:1px solid #f3f3f3;
 		background-color: var(--light_grey);
 		display: flex;
 		flex-direction: column;
 		/* justify-content: flex-start; */
 	}
+
+	.sub_menu_icon {
+		display: block !important;
+	}
+
 	.sub_nav_hor {
-		margin: 10px 0;
-		padding: 10px 0;
+		width: auto;
+		margin: 0 auto;
+		padding: 20px 0;
 		border-bottom:5px solid var(--light_grey);
 		cursor: pointer;
 	}
 	.container_master_mobile{
-		margin-left: 100px;
 	}
 	.container_master_revert{
-		margin-top: 100px;
 	}
+
 	#send_messages{
 		width: 70%;
 	}

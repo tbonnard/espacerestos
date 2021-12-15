@@ -9,21 +9,21 @@
 
 <div class="top_bar_menu">
 
-    <a href="{% url 'distrib_details' distrib_id=distrib.uuid %}">
     <div class="sub_nav_hor">
+    <a href="{% url 'distrib_details' distrib_id=distrib.uuid %}">
         <i class="fas fa-map-marker-alt"></i>Retour à la distribution
-    </div>
     </a>
+    </div>
 
     <div class="sub_nav_hor active">
         <i class="fas fa-users"></i>Bénévoles actifs
     </div>
 
-    <a href="{% url 'download_users_csv_distrib' %}?distrib={{distrib.uuid}}">
         <div class="sub_nav_hor">
+    <a href="{% url 'download_users_csv_distrib' %}?distrib={{distrib.uuid}}">
             <i class="fas fa-cloud-download-alt"></i>Exporter
-        </div>
     </a>
+        </div>
 
 </div>
 

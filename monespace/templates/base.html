@@ -21,11 +21,14 @@
 <body>
 
 
-<div class=menu_icon>
+<div class="menu_icon">
     <i id='menu' class="fas fa-bars"></i>
         <a href="{% url 'index' %}" id="menu_icon_image"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>
 </div>
 
+<div class="sub_menu_icon">
+        <a><i id="sub_menu_icon" data-state="to_visible" class="fas fa-chevron-circle-down"></i></a>
+</div>
 
 <nav>
     <div class='sidebar'>

@@ -21,23 +21,23 @@
         <i class="fas fa-people-arrows"></i>Distributions
     </div>
 
+        <div class="sub_nav_hor">
     <a href="{% url 'users_site' location_id=location.uuid %}">
-        <div class="sub_nav_hor">
         <i class="fas fa-users"></i>Bénévoles
-        </div>
     </a>
+        </div>
 
+        <div class="sub_nav_hor">
     <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&location={{location.uuid}}&all=true&to=" id="event_link_date_distrib_loc">
-        <div class="sub_nav_hor">
         <i class="fas fa-calendar-alt"></i>Prochaines dates
-        </div>
     </a>
+        </div>
 
-    <a href="{% url 'location_edit' location_id=location.uuid %}">
         <div class="sub_nav_hor">
+    <a href="{% url 'location_edit' location_id=location.uuid %}">
         <i class="fas fa-edit"></i>Modifier le site
-        </div>
     </a>
+        </div>
 
 </div>
 

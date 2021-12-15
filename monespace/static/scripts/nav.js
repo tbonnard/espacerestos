@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+
   // check width of the window and based on that hide the menu
-      if (screen.availWidth < 751) {
+      if (window.innerWidth < 990) {
           ToggleMenu();
       }
 
@@ -15,6 +16,46 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector('#menu').addEventListener('click', function () {
       ToggleMenu();
   });
+
+
+
+  let subMenuDivIcon = document.querySelector('.sub_menu_icon');
+  let topBarMenu = document.querySelector('.top_bar_menu');
+  let subMenuIcon = document.querySelector('#sub_menu_icon');
+
+  if (window.location.pathname.includes('event/liste/')) {
+    subMenuDivIcon.style.visibility = 'hidden';
+  }
+
+  function ToggleSubMenu() {
+      document.querySelector('.top_bar_menu').classList.toggle("sidebarTransform_top_bar_menu");
+  }
+
+  if (window.innerWidth < 990) {
+      ToggleSubMenu();
+  }
+
+  window.addEventListener('resize', function(event){
+    if (window.innerWidth < 990) {
+      ToggleMenu();
+      ToggleSubMenu();
+    }
+  });
+
+
+  subMenuDivIcon.addEventListener('click',() => {
+    ToggleSubMenu();
+    if (subMenuIcon.dataset.state == 'to_visible') {
+      subMenuIcon.dataset.state = 'to_hidden';
+      subMenuIcon.className = "fas fa-chevron-circle-up";
+    } else {
+      subMenuIcon.dataset.state = 'to_visible';
+      subMenuIcon.className = "fas fa-chevron-circle-down";
+    }
+
+  })
+
+
 
 
 
