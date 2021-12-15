@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import User, Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, \
-    EventExceptionCancelledRescheduled, AttendeesEvents, Message
+    EventExceptionCancelledRescheduled, AttendeesEvents, Message, MessageSeen
 
 
 class UserAdminCustom(admin.ModelAdmin):
@@ -40,6 +40,10 @@ class MessageAdmin(admin.ModelAdmin):
     list_display = ('uuid', "from_user", 'to_location', "to_event", "to_event_date", "to_event_group", "to_user", "info_all_locations")
 
 
+class MessageSeenAdmin(admin.ModelAdmin):
+    list_display = ( "user", 'message', "date_seen")
+
+
 admin.site.register(User, UserAdminCustom)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(Event, EventAdmin)
@@ -49,3 +53,4 @@ admin.site.register(LogsStatusUsersLocations, LogsStatusUsersLocationsAdmin)
 admin.site.register(EventExceptionCancelledRescheduled, EventExceptionCancelledRescheduledAdmin)
 admin.site.register(AttendeesEvents, AttendeesEventsAdmin)
 admin.site.register(Message, MessageAdmin)
+admin.site.register(MessageSeen, MessageSeenAdmin)

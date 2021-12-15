@@ -22,8 +22,9 @@
     </div>
 
     <div class="sub_nav_hor" id="messages_menu">
+        {% csrf_token %}
         <i class="fas fa-envelope"></i>Messages
-<!--        <div class="notification_messages"><span class="dot"></span></div>-->
+        <div id="notification_messages_top" class="notification_messages"><span class="dot"></span></div>
     </div>
 
 
@@ -112,6 +113,7 @@
         {% else %}
         {% for i in to_user_messages %}
         <div class="message_unit">
+            <div class="notification_messages_solo" data-message="{{i.uuid}}"><span class="dot"></span></div>
             <div class="message_nav_line">
                 <div class="message_nav_line_title">Envoyé par<p class="message_nav_line_details">{{i.from_user}}</p></div>
                 <div class="message_nav_line_title">Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:""}}</p></div>

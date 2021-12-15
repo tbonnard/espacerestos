@@ -265,4 +265,58 @@ aMessageSentDiv.addEventListener('click', () => {
   aMessageReceivedDiv.className = '';
 })
 
+
+let NotificationTopDiv = document.querySelector('#notification_messages_top');
+NotificationTopDiv.style.display = 'none';
+let notificationMessagesSolo = document.querySelectorAll('.notification_messages_solo');
+notificationMessagesSolo.forEach(i => {
+  i.style.display = 'none';
+})
+
+
+let url = `${window.location.origin}/get_info_if_new_messages/`;
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    if (data.length > 0) {
+      NotificationTopDiv.style.display = 'block';
+      data.forEach(j => {
+        notificationMessagesSolo.forEach(i => {
+          if (j.uuid == i.dataset.message) {
+            i.style.display = 'block';
+          }
+        })
+      })
+
+
+     }
+  })
+
+  function seen_messages() {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const request = new Request(
+                      `${window.location.origin}/create_messages_seen/`,
+                      {headers: {'X-CSRFToken': csrftoken}}
+                  );
+    const response = fetch(request, {
+      method:'POST',
+      mode: 'same-origin',
+      body: JSON.stringify({
+          }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      notificationMessagesSolo.forEach(i => {
+          i.style.display = 'none';
+          NotificationTopDiv.style.display = 'none';
+      })
+    })
+  }
+
+
+messagesMenu.addEventListener('click', () => {
+  seen_messages();
+})
+
+
 });

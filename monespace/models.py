@@ -184,3 +184,13 @@ class Message(models.Model):
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="message_to_user")
     info_all_locations = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+
+    def serialize(self):
+        return {
+                "uuid": self.uuid,
+                }
+
+class MessageSeen(models.Model):
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, blank=False, null=False, related_name="messages_seen_message")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="messages_seen_user")
+    date_seen = models.DateTimeField(auto_now_add=True)

@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
-from .models import Event, Location, Message, User, StatusUsersLocations, AttendeesEvents
+from .models import Event, Location, Message, User, StatusUsersLocations, AttendeesEvents, MessageSeen
 
 
 @login_required(login_url='/login/')
@@ -33,6 +33,9 @@ def send_message(request):
     new_message = Message(to_event=event, to_location=location, from_user=request.user, to_event_group=group,
                           description=description, info_all_locations=all_site, to_event_date=date, to_user=users_to)
     new_message.save()
+
+    # send message
+
     return JsonResponse({"Success": "Le message a été envoyé"}, status=200)
 
 
@@ -72,3 +75,36 @@ def get_to_user_messages(user):
 def get_from_user_messages(user):
     from_user_messages = Message.objects.filter(from_user=user)
     return from_user_messages.order_by('-created')
+
+
+@login_required(login_url='/login/')
+def get_info_if_new_messages(request):
+    messages = get_to_user_messages(request.user)
+    messages_seen = [i.message for i in MessageSeen.objects.filter(user=user)]
+    new_message = []
+    for i in messages:
+        if i not in messages_seen:
+            new_message.append(i)
+    return JsonResponse([i.serialize() for i in new_message], safe=False)
+
+
+def get_messages_seen(user):
+    messages = get_to_user_messages(user)
+    messages_seen = [i.message for i in MessageSeen.objects.filter(user=user)]
+    new_message = []
+    for i in messages:
+        if i not in messages_seen:
+            new_message.append(i)
+    return new_message
+
+
+@login_required(login_url='/login/')
+def create_messages_seen(request):
+    if request.method == 'POST':
+        user = request.user
+        messages = get_messages_seen(user)
+        for i in messages:
+            if not MessageSeen.objects.filter(user=user, message=i):
+                new_seen = MessageSeen(user=user, message=i)
+                new_seen.save()
+        return JsonResponse(True, safe=False)
