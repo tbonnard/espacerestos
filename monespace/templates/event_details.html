@@ -155,7 +155,11 @@
             <tbody>
             {% for j in all_attendees %}
                 <tr>
-                    <td class='table_cell'>{{j.user.first_name|default_if_none:""}}</td>
+                  {% if j.user.first_name == "" %}
+                    <td class='table_cell'>{{j.user.username}}</td>
+                    {% else %}
+                    <td class='table_cell'>{{j.user.first_name|default_if_none:j.user.username}}</td>
+                    {% endif %}
                     <td class='table_cell'>{{j.user.last_name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.plus_other|default_if_none:""}} personne(s)</td>
                     <td class='table_cell'><a id="message_icon_button" title="Envoyer un message aux bénévoles" data-user="{{j.user.uuid}}"><i class='fas fa-envelope'></i></a></td>

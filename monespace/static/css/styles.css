@@ -360,6 +360,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 }
 
 .sub_nav_hor {
+	position: relative;
 	margin: 0 10px;
 	padding: 20px 10px;
 	border-bottom:5px solid var(--light_grey);
@@ -518,6 +519,20 @@ nav::before {
 
 
 /* MESSAGES */
+
+.notification_messages{
+		position: absolute;
+		top: 5px;
+		right: 0px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
 
 #send_messages_global{
 	display: none;

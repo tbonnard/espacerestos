@@ -34,7 +34,6 @@
 
 <p>Total des bénévoles (actif, en attente) pour le site: {{ status_users_location.count }}</p>
 
-
     {% if status_users_location|length > 0 %}
         <table class='table1'>
             <thead>
@@ -57,7 +56,11 @@
                     <td class='table_cell'>{% if j.user.profile_picture %}
                         <img src="{{j.user.profile_picture.url}}">
                         {% endif %}</td>
-                    <td class='table_cell'>{{j.user.first_name|default_if_none:""}}</td>
+                    {% if j.user.first_name == "" %}
+                    <td class='table_cell'>{{j.user.username}}</td>
+                    {% else %}
+                    <td class='table_cell'>{{j.user.first_name|default_if_none:j.user.username}}</td>
+                    {% endif %}
                     <td class='table_cell'>{{j.user.last_name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.username}}</td>
                     <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>

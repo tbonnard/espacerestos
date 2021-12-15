@@ -29,7 +29,11 @@
                     <td class='table_cell'>{% if j.profile_picture %}
                         <img src="{{j.profile_picture.url}}">
                         {% endif %}</td>
-                    <td class='table_cell'>{{j.first_name|default_if_none:""}}</td>
+                  {% if j.first_name == "" %}
+                    <td class='table_cell'>{{j.username}}</td>
+                    {% else %}
+                    <td class='table_cell'>{{j.first_name|default_if_none:j.username}}</td>
+                    {% endif %}
                     <td class='table_cell'>{{j.last_name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.username}}</td>
                     <td class='table_cell'>{{j.email|default_if_none:""}}</td>
