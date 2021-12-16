@@ -92,9 +92,9 @@
                             {% csrf_token %}
                             <button class="validate_user_status" id="validate_pending_user_status" title="Activer l'utilisateur"><i class="fas fa-check-circle"></i></button>
                         </form>
-                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.distrib.uuid}}" data-type="edit"><i class="far fa-edit"></i></button>
+                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.uuid}}{{j.distrib.uuid}}" data-type="edit"><i class="far fa-edit"></i></button>
                         {% else %}
-                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.pk}}{{j.distrib.uuid}}" data-type="edit"><i class="far fa-edit"></i></button>
+                        <button class="button_form_status validate_user_status" title="Changer de statut pour l'utilisateur" data-user="{{j.user.uuid}}{{j.distrib.uuid}}" data-type="edit"><i class="far fa-edit"></i></button>
                         {% endif %}
                         {% endif %}
                     </td>

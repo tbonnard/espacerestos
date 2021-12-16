@@ -123,6 +123,7 @@ class AttendeesEvents(models.Model):
 
 
 class StatusUsersLocations(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=False, null=False,
                                  related_name="location_status_user")
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False,

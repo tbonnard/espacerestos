@@ -95,7 +95,8 @@ def distrib_users(request, distrib_id):
     message_form = MessagesEventsSimpleForm()
     distrib = get_object_or_404(Event, uuid=distrib_id)
     if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
-        return redirect('index')
+        # return redirect('index')
+        pass
     else:
         status_users_location = StatusUsersLocations.objects.filter(distrib=distrib, status=1) | \
                                 StatusUsersLocations.objects.filter(distrib=distrib, status=2)
@@ -121,7 +122,6 @@ def distrib_users(request, distrib_id):
     return render(request, 'benevoles_distrib.html', context={"distrib":distrib,
                                                             "status_users_location": status_users_location,
                                                             "form": form, "formManager":formManager, "message_form":message_form})
-
 
 
 @login_required(login_url='/login/')

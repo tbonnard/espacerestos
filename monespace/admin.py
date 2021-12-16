@@ -21,7 +21,7 @@ class RecurringPatternAdmin(admin.ModelAdmin):
 
 
 class StatusUsersLocationsAdmin(admin.ModelAdmin):
-    list_display = ('location', 'distrib',  "user", 'status', 'created', 'modified')
+    list_display = ("uuid", 'location', 'distrib',  "user", 'status', 'created', 'modified')
 
 
 class LogsStatusUsersLocationsAdmin(admin.ModelAdmin):
