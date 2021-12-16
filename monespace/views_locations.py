@@ -202,7 +202,7 @@ def select_locations(request):
                                                                 manager=False)
             if status_check is not None and status_check.status == 1:
                 try:
-                    send_email(request.user, event.event_manager.email)
+                    send_email(1, [event.event_manager], request.user)
                 except:
                     print('error - email send notif status location manager')
         for j in StatusUsersLocations.objects.filter(user=request.user).exclude(status=3).exclude(status=4).exclude(

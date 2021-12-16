@@ -191,6 +191,7 @@ class Message(models.Model):
                 "uuid": self.uuid,
                 }
 
+
 class MessageSeen(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE, blank=False, null=False, related_name="messages_seen_message")
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="messages_seen_user")

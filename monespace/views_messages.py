@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
 from .models import Event, Location, Message, User, StatusUsersLocations, AttendeesEvents, MessageSeen
+from .notification_manager import send_email
 
 
 @login_required(login_url='/login/')
@@ -33,10 +34,57 @@ def send_message(request):
     new_message = Message(to_event=event, to_location=location, from_user=request.user, to_event_group=group,
                           description=description, info_all_locations=all_site, to_event_date=date, to_user=users_to)
     new_message.save()
+    group_message = int(new_message.to_event_group)
 
+    users_to = []
+    # print('start')
+    if new_message.to_user is not None:
+        # print('user')
+        users_to.append(new_message.to_user)
+    elif new_message.to_event_date is not None:
+        # print('a')
+        if group_message == 2:
+            # print('2a')
+            for i in AttendeesEvents.objects.filter(parent_event=new_message.to_event, event_date=new_message.to_event_date, status=1):
+                # print('attendee')
+                users_to.append(i.user)
+        elif group_message == 3:
+            # print('b')
+            attendees = AttendeesEvents.objects.filter(parent_event=new_message.to_event, event_date=new_message.to_event_date, status=1)
+            attendees_user = [i.user for i in attendees]
+            # print('3 start')
+            for i in StatusUsersLocations.objects.filter(distrib=new_message.to_event, status=2):
+                if i.user not in attendees_user:
+                    # print('non attendee')
+                    users_to.append(i.user)
+        else:
+            # print('c')
+            for i in StatusUsersLocations.objects.filter(distrib=new_message.to_event, status=2):
+                # print('all att or non att de distirb')
+                users_to.append(i.user)
+    elif new_message.to_event is not None and new_message.to_event_date is None:
+        # print('d')
+        for i in StatusUsersLocations.objects.filter(distrib=new_message.to_event, status=2):
+            # print('all de distirb')
+            users_to.append(i.user)
+    elif new_message.to_location is not None:
+        # print('e')
+        for i in StatusUsersLocations.objects.filter(location=new_message.to_location, status=2):
+            # print('all de location')
+            users_to.append(i.user)
+    elif new_message.all_site:
+        # print('f')
+        for i in StatusUsersLocations.objects.filter(status=2):
+            # print('all de all')
+            users_to.append(i.user)
+    else:
+        pass
+        # print('nothing')
+    users_to_final = tuple(users_to)
     # send message
+    send_email(2, users_to_final, request.user)
 
-    return JsonResponse({"Success": "Le message a été envoyé"}, status=200)
+    return JsonResponse({"Success": "Le message a été envoyé - créé"}, status=200)
 
 
 def get_to_user_messages(user):

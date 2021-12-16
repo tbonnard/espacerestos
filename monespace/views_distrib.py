@@ -7,6 +7,7 @@ from django.urls import reverse
 from .forms import DistributionForm, StatusUsersLocationsForm, DistributionManagerForm, MessagesEventsSimpleForm
 from .functions_global import forbidden_to_user
 from .models import Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, User
+from .notification_manager import send_email
 from .views_locations import edit_user_type_to_manager, check_if_new_status_to_create_update, edit_user_type_to_user
 
 
@@ -95,8 +96,7 @@ def distrib_users(request, distrib_id):
     message_form = MessagesEventsSimpleForm()
     distrib = get_object_or_404(Event, uuid=distrib_id)
     if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
-        # return redirect('index')
-        pass
+        return redirect('index')
     else:
         status_users_location = StatusUsersLocations.objects.filter(distrib=distrib, status=1) | \
                                 StatusUsersLocations.objects.filter(distrib=distrib, status=2)
@@ -117,6 +117,7 @@ def distrib_users(request, distrib_id):
             user_status_update.save()
             logs = LogsStatusUsersLocations(distrib=distrib, location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=2, current_status=user_status_update.status)
             logs.save()
+            send_email(3, [user_status_update.user], request.user)
             return redirect(reverse('distrib_users', kwargs={'distrib_id': distrib_id}))
 
     return render(request, 'benevoles_distrib.html', context={"distrib":distrib,
@@ -138,6 +139,10 @@ def user_distrib_update_status(request, distrib_id):
             user_status_update.save()
             logs = LogsStatusUsersLocations(distrib=distrib_user, location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=request.POST['status'], current_status=user_status_update.status)
             logs.save()
+            user_status_int = int(user_status_update.status)
+            if user_status_int == 3:
+                send_email(4, [user_status_update.user], request.user)
+
             return redirect(reverse('distrib_users', kwargs={'distrib_id': distrib_id}))
     return redirect('index')
 
