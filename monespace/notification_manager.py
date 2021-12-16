@@ -36,7 +36,10 @@ def send_email(type_email, to_user, from_user):
             email = (subject, message_body, email_gmail, [i.email])
             emails_pre.append(email)
     emails = tuple(emails_pre)
-    send_mass_mail(emails)
+    try:
+        send_mass_mail(emails)
+    except:
+        print('error')
 
     # send_mail(
     # subject,
