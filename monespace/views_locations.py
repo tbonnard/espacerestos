@@ -149,6 +149,7 @@ def location_edit(request, location_id):
 @login_required(login_url='/login/')
 def location_details(request, location_id):
     location_page = get_object_or_404(Location, uuid=location_id)
+    message_form = MessagesEventsSimpleForm()
     manager_location_check = False
     all_events_location = Event.objects.filter(location=location_page, is_distrib=True)
     for i in location_page.location_managers.all():
@@ -156,7 +157,7 @@ def location_details(request, location_id):
             manager_location_check = True
     return render(request, 'location_details.html', context={"location": location_page,
                                                              "manager_location": manager_location_check,
-                                                             "events": all_events_location})
+                                                             "events": all_events_location, "message_form":message_form})
 
 
 @login_required(login_url='/login/')

@@ -325,7 +325,8 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 }
 
 .top_bar {
-	padding: 19px 0;
+	text-align: center;
+	padding: 19px 10px;
 	width: 100%;
 	position: fixed;
 	z-index: 1;
@@ -581,6 +582,7 @@ nav::before {
 #messages_sub_menu a {
 	padding: 1% 2%;
 	color: var(--near_black);
+	font-size: 15px;
 }
 
 #close_message_box{
@@ -607,6 +609,8 @@ nav::before {
 }
 
 .message_nav_line_description{
+	font-size: .64286rem;
+	letter-spacing: 0.10em;
 }
 
 
@@ -894,6 +898,17 @@ table {
     min-width: 90px;
 }
 
+.table1_message {
+    margin: 0px 0 0px 0;
+    overflow-x: auto;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+		margin: 0 auto;
+		padding-bottom: 15px;
+		border-bottom: solid 1px var(--light_grey);
+}
+
 .table_heading_message {
     padding: 10px 0px 0px 15px;
     font-weight: 600;
@@ -907,6 +922,7 @@ table {
     min-width: 90px;
 		background-color: var(--light_grey);
 }
+
 
 .table_heading1 {
     padding: 0 0 6px 5px;
@@ -1099,10 +1115,11 @@ details[open] summary ~ * {
 	flex-direction: column;
 	}
 	.search_events{
-		margin-left: 40px;
+		width: 85%;
+		margin: 0 auto;
 	}
 	.search_events input{
-		width: 30%;
+		max-width: 30%;
 	}
 
 }
