@@ -400,7 +400,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 .sub_menu_icon {
 	display: none !important;
   position: absolute;
-	top:25px;
+	top:30px;
 	right:20px;
 	z-index: 3;
 }
@@ -520,6 +520,11 @@ nav::before {
 
 /* MESSAGES */
 
+.pre_table_notif {
+	position: relative;
+	max-width: 100%;
+}
+
 .notification_messages{
 		position: absolute;
 		top: 5px;
@@ -528,9 +533,10 @@ nav::before {
 
 .notification_messages_solo {
 	position: absolute;
-	top: 5px;
+	top: 2px;
 	right: 5px;
 }
+
 .dot {
   height: 10px;
   width: 10px;
@@ -569,7 +575,12 @@ nav::before {
 #messages_sub_menu{
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: center;
+	margin-bottom: 30px;
+}
+#messages_sub_menu a {
+	padding: 1% 2%;
+	color: var(--near_black);
 }
 
 #close_message_box{
@@ -582,6 +593,7 @@ nav::before {
 	position: relative;
 	margin-bottom: 20px;
 }
+
 .message_nav_line {
 	display: flex;
 	justify-content: space-between;
@@ -589,20 +601,12 @@ nav::before {
 	padding: 2%;
 }
 
-.message_nav_line p {
-	margin: 0;
-}
-
-.message_nav_line_title{
-	font-weight: bold;
-}
 
 .message_nav_line_details{
 	font-weight: normal;
 }
 
 .message_nav_line_description{
-	padding: 2%;
 }
 
 
@@ -888,6 +892,20 @@ table {
     vertical-align: bottom;
     text-align: center;
     min-width: 90px;
+}
+
+.table_heading_message {
+    padding: 10px 0px 0px 15px;
+    font-weight: 600;
+    font-size: .64286rem;
+    color: #6a6a6a;
+    border-bottom: 1px solid #e1e1e1;
+    letter-spacing: .025em;
+    text-transform: uppercase;
+    vertical-align: bottom;
+    text-align: center;
+    min-width: 90px;
+		background-color: var(--light_grey);
 }
 
 .table_heading1 {
