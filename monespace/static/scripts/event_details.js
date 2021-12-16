@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
 
+if (document.querySelector('#cancel_div') && document.querySelector('#cancel_button') && document.querySelector('#cancel_validation') && document.querySelector('#cancel_cancel')) {
   let cancelDiv = document.querySelector('#cancel_div');
   let cancelButton = document.querySelector('#cancel_button');
   let cancelValidation = document.querySelector('#cancel_validation');
@@ -34,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
       cancelDiv.style.display = 'block';
     })
   })
+}
+
 
   let sendMessagesFormButton = document.querySelector('#send_messages_form_button');
   let sendMessagesGlobal = document.querySelector('#send_messages_global');

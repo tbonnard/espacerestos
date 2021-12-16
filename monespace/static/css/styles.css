@@ -901,9 +901,10 @@ table {
 .table1_message {
     margin: 0px 0 0px 0;
     overflow-x: auto;
-    display: block;
+    /* display: block; */
     width: fit-content;
-    max-width: 100%;
+    /* max-width: 100%; */
+		width: 85%;
 		margin: 0 auto;
 		padding-bottom: 15px;
 		border-bottom: solid 1px var(--light_grey);
