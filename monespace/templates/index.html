@@ -115,14 +115,22 @@
         <table class='table1_message'>
             <thead class="message_unit" data-message="{{i.uuid}}">
                 <tr>
-                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">{{i.from_user}}</p></th>
+                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">
+                        {% if i.from_user == request.user  %}
+                        Vous
+                        {% else %}
+                        {{i.from_user}}
+                        {% endif %}
+                    </p></th>
                     <th class='table_heading_message'>Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:"/"}}</p></th>
                     <th class='table_heading_message'>Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:"/"}}</p></th>
                     <th class='table_heading_message'>De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:"/"}}</p></th>
-                    <th class='table_heading_message'>Envoyé<p class="message_nav_line_details">
-                    {% if i.to_user %}
+                    <th class='table_heading_message'>Envoyé à<p class="message_nav_line_details">
+                    {% if i.to_user == request.user  %}
                     A vous
-                    {% else %}
+                    {% elif i.to_user %}
+                        {{ i.to_user }}
+                        {% else %}
                     {{i.get_to_event_group_display|default_if_none:"/"}}
                     {% endif %}
                 </p></th>
@@ -153,14 +161,22 @@
         <table class='table1_message'>
             <thead>
                 <tr>
-                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">{{i.from_user}}</p></th>
+                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">
+                        {% if i.from_user == request.user  %}
+                        Vous
+                        {% else %}
+                        {{i.from_user}}
+                        {% endif %}
+                    </p></th>
                     <th class='table_heading_message'>Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:"/"}}</p></th>
                     <th class='table_heading_message'>Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:"/"}}</p></th>
                     <th class='table_heading_message'>De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:"/"}}</p></th>
-                    <th class='table_heading_message'>Envoyé<p class="message_nav_line_details">
-                    {% if i.to_user %}
+                    <th class='table_heading_message'>Envoyé à<p class="message_nav_line_details">
+                    {% if i.to_user == request.user  %}
                     A vous
-                    {% else %}
+                    {% elif i.to_user %}
+                        {{ i.to_user }}
+                        {% else %}
                     {{i.get_to_event_group_display|default_if_none:"/"}}
                     {% endif %}
                 </p></th>

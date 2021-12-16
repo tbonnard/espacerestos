@@ -88,7 +88,7 @@
                     {% endif %}
                     <td class='table_cell'>{{j.distrib.start_date|date:'l'}}</td>
                     <td class='table_cell'>{{j.distrib.time_from|default_if_none:""}} - {{j.distrib.time_to|default_if_none:""}}</td>
-                    <td class='table_cell'>{{j.distrib.event_manager|default_if_none:""}}</td>
+                    <td class='table_cell'>{{j.distrib.event_manager|default_if_none:""}}<a id="message_icon_button" title="Envoyer un message au gestionnaire de la distribution" data-user="{{j.distrib.event_manager.uuid}}"><i class='fas fa-envelope'></i></a></td>
                     <td class='table_cell'>{{j.get_status_display}}</td>
                     <td class='table_cell'><a href="{% url 'location_details' location_id=j.location.uuid %}">{{j.location.name}}</a></td>
                     <td class='table_cell'>{{j.location.address|default_if_none:""}} {{j.location.city|default_if_none:""}} {{j.location.zip_code|default_if_none:""}}</td>
@@ -106,6 +106,11 @@
                 <button class="button_white">Modifier votre choix de distributions</button>
             </a>
         </div>
+
+
+    <div id="send_messages_global">
+    {% include 'send_messages.html' %}
+    </div>
 
 
 </div>

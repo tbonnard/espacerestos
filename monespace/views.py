@@ -136,13 +136,14 @@ def user_site_update_status(request, location_id):
 
 @login_required(login_url='/login/')
 def profile(request):
+    message_form = MessagesEventsSimpleForm()
     date_to = get_date_to()
     user_distrib_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | StatusUsersLocations.objects.filter(user=request.user, status=2)
     user_distrib = [i for i in user_distrib_pre if not i.distrib.is_cancelled]
     # user_locations = [i.location for i in user_locations_pre]
     user_manager_locations = Location.objects.filter(location_managers=request.user)
     return render(request, 'profile.html', context={'distrib': user_distrib, "date_to":date_to,
-                                                    'manager_locations': user_manager_locations})
+                                                    'manager_locations': user_manager_locations,"message_form":message_form })
 
 
 @login_required(login_url='/login/')

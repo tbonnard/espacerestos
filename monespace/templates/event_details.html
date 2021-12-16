@@ -163,7 +163,7 @@
                     {% endif %}
                     <td class='table_cell'>{{j.user.last_name|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.plus_other|default_if_none:""}} personne(s)</td>
-                    <td class='table_cell'><a id="message_icon_button" title="Envoyer un message aux bénévoles" data-user="{{j.user.uuid}}"><i class='fas fa-envelope'></i></a></td>
+                    <td class='table_cell'><a id="message_icon_button" title="Envoyer un message à ce bénévole" data-user="{{j.user.uuid}}"><i class='fas fa-envelope'></i></a></td>
                     {% if request.user.user_type != 2 %}
                     <td class='table_cell'>{{j.user.username}}</td>
                     <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>
