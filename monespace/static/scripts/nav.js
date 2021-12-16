@@ -2,8 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // check width of the window and based on that hide the menu
-      if (window.innerWidth < 990) {
+      if (window.outerWidth < 990) {
+        console.log('if < 990 one time');
+        console.log(window.screen.width);
           ToggleMenu();
+          ToggleSubMenu();
       }
 
       // function to hide/unhide the menu-sidebar
@@ -31,12 +34,18 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelector('.top_bar_menu').classList.toggle("sidebarTransform_top_bar_menu");
   }
 
-  if (window.innerWidth < 990) {
-      ToggleSubMenu();
-  }
 
   window.addEventListener('resize', function(event){
-    if (window.innerWidth < 990) {
+    // console.log('resize');
+    // console.log(window.screen.width);
+    // console.log(window.innerWidth);
+      if (window.outerWidth < 990) {
+      // console.log('resize');
+      // console.log(window.screen.width);
+      // console.log(window.innerWidth);
+      // ToggleMenu();
+      // ToggleSubMenu();
+    } else {
       ToggleMenu();
       ToggleSubMenu();
     }
