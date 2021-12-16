@@ -400,7 +400,7 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 
 .sub_menu_icon {
 	display: none !important;
-  position: absolute;
+  position: fixed;
 	top:30px;
 	right:20px;
 	z-index: 3;
@@ -901,10 +901,10 @@ table {
 .table1_message {
     margin: 0px 0 0px 0;
     overflow-x: auto;
-    /* display: block; */
-    width: fit-content;
-    /* max-width: 100%; */
-		width: 85%;
+    display: block;
+    width: min-content;
+    max-width: 100%;
+		/* width: 85%; */
 		margin: 0 auto;
 		padding-bottom: 15px;
 		border-bottom: solid 1px var(--light_grey);
