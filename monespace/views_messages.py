@@ -80,7 +80,7 @@ def get_from_user_messages(user):
 @login_required(login_url='/login/')
 def get_info_if_new_messages(request):
     messages = get_to_user_messages(request.user)
-    messages_seen = [i.message for i in MessageSeen.objects.filter(user=user)]
+    messages_seen = [i.message for i in MessageSeen.objects.filter(user=request.user)]
     new_message = []
     for i in messages:
         if i not in messages_seen:
@@ -107,4 +107,19 @@ def create_messages_seen(request):
             if not MessageSeen.objects.filter(user=user, message=i):
                 new_seen = MessageSeen(user=user, message=i)
                 new_seen.save()
+        return JsonResponse(True, safe=False)
+
+
+@login_required(login_url='/login/')
+def create_message_seen(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        try:
+            message = Message.objects.get(uuid=data.get('message'))
+        except:
+            return JsonResponse(False, safe=False)
+        user = request.user
+        if not MessageSeen.objects.filter(user=user, message=message):
+            new_seen = MessageSeen(user=user, message=message)
+            new_seen.save()
         return JsonResponse(True, safe=False)

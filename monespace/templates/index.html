@@ -112,14 +112,20 @@
         <p class="info_text">Aucun message reçu</p>
         {% else %}
         {% for i in to_user_messages %}
-        <div class="message_unit">
-            <div class="notification_messages_solo" data-message="{{i.uuid}}"><span class="dot"></span></div>
+        <div class="message_unit" data-message="{{i.uuid}}">
+            <div class="notification_messages_solo" data-message="{{i.uuid}}"><span class="dot"  title="Marquer comme lu"></span></div>
             <div class="message_nav_line">
                 <div class="message_nav_line_title">Envoyé par<p class="message_nav_line_details">{{i.from_user}}</p></div>
                 <div class="message_nav_line_title">Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:""}}</p></div>
                 <div class="message_nav_line_title">Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:""}}</p></div>
                 <div class="message_nav_line_title">De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:""}}</p></div>
-                <div class="message_nav_line_title">Envoyé<p class="message_nav_line_details">{{i.get_to_event_group_display|default_if_none:""}}</p></div>
+                <div class="message_nav_line_title">Envoyé<p class="message_nav_line_details">
+                    {% if i.to_user %}
+                    A vous
+                    {% else %}
+                    {{i.get_to_event_group_display|default_if_none:""}}
+                    {% endif %}
+                </p></div>
             </div>
             <div class="message_nav_line_description">
                 {{i.description}}
@@ -140,7 +146,13 @@
                 <div class="message_nav_line_title">Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:""}}</p></div>
                 <div class="message_nav_line_title">Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:""}}</p></div>
                 <div class="message_nav_line_title">De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:""}}</p></div>
-                <div class="message_nav_line_title">Envoyé<p class="message_nav_line_details">{{i.get_to_event_group_display|default_if_none:""}}</p></div>
+                <div class="message_nav_line_title">Envoyé<p class="message_nav_line_details">
+                    {% if i.to_user %}
+                    A vous
+                    {% else %}
+                    {{i.get_to_event_group_display|default_if_none:""}}
+                    {% endif %}
+                </p></div>
             </div>
             <div class="message_nav_line_description">
                 {{i.description}}

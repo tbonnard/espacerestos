@@ -268,29 +268,40 @@ aMessageSentDiv.addEventListener('click', () => {
 
 let NotificationTopDiv = document.querySelector('#notification_messages_top');
 NotificationTopDiv.style.display = 'none';
+
+let allMessages = document.querySelectorAll('.message_unit');
+
 let notificationMessagesSolo = document.querySelectorAll('.notification_messages_solo');
+
 notificationMessagesSolo.forEach(i => {
   i.style.display = 'none';
 })
 
 
-let url = `${window.location.origin}/get_info_if_new_messages/`;
-fetch(url)
-  .then(response => response.json())
-  .then(data => {
-    if (data.length > 0) {
-      NotificationTopDiv.style.display = 'block';
-      data.forEach(j => {
-        notificationMessagesSolo.forEach(i => {
-          if (j.uuid == i.dataset.message) {
-            i.style.display = 'block';
-          }
+
+function check_if_notif() {
+  let url = `${window.location.origin}/get_info_if_new_messages/`;
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      // console.log(data);
+      if (data.length > 0) {
+        NotificationTopDiv.style.display = 'block';
+        data.forEach(j => {
+          notificationMessagesSolo.forEach(i => {
+            if (j.uuid == i.dataset.message) {
+              i.style.display = 'block';
+            }
+          })
         })
-      })
+      } else {
+        NotificationTopDiv.style.display = 'none';
+      }
+    })
+
+}
 
 
-     }
-  })
 
   function seen_messages() {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -306,17 +317,47 @@ fetch(url)
     })
     .then(response => response.json())
     .then(data => {
-      notificationMessagesSolo.forEach(i => {
-          i.style.display = 'none';
-          NotificationTopDiv.style.display = 'none';
+        // console.log(data);
       })
+    }
+
+    function seen_message(message) {
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      const request = new Request(
+                        `${window.location.origin}/create_message_seen/`,
+                        {headers: {'X-CSRFToken': csrftoken}}
+                    );
+      const response = fetch(request, {
+        method:'POST',
+        mode: 'same-origin',
+        body: JSON.stringify({
+          message:message
+          }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          // console.log(data);
+          if (data) {
+            notificationMessagesSolo.forEach(j => {
+              if (message == j.dataset.message) {
+                j.style.display = 'none';
+              }
+            })
+          }
+          check_if_notif();
+        })
+      }
+
+
+  allMessages.forEach(i => {
+    i.addEventListener('click', () => {
+      seen_message(i.dataset.message);
     })
-  }
+  })
 
 
-messagesMenu.addEventListener('click', () => {
-  seen_messages();
-})
+check_if_notif();
+
 
 
 });

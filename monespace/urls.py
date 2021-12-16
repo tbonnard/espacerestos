@@ -46,6 +46,7 @@ urlpatterns = [
     path('send_message/', views_messages.send_message, name='send_message'),
     path('get_info_if_new_messages/', views_messages.get_info_if_new_messages, name='get_info_if_new_messages'),
     path('create_messages_seen/', views_messages.create_messages_seen, name='create_messages_seen'),
+    path('create_message_seen/', views_messages.create_message_seen, name='create_message_seen'),
 
     # Change Password
     path('profil/changer-mot-de-passe/', auth_views.PasswordChangeView.as_view(
