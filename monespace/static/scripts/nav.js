@@ -46,8 +46,16 @@ document.addEventListener("DOMContentLoaded", function () {
       // ToggleMenu();
       // ToggleSubMenu();
     } else {
-      ToggleMenu();
-      ToggleSubMenu();
+      let list_class_sub_menu = document.querySelector('.top_bar_menu').classList;
+      let list_class_sidebar = document.querySelector('.sidebar').classList;
+      list_class_sub_menu.forEach( i => {
+        list_class_sidebar.forEach(j => {
+          if (i.includes('sidebarTransform_top_bar_menu') || j.includes('sidebarTransform') ) {
+                 ToggleMenu();
+                 ToggleSubMenu();
+               }
+        })
+      })
     }
   });
 

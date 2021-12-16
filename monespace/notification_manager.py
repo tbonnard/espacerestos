@@ -15,7 +15,7 @@ def send_email(type_email, to_user, from_user):
     # print(to_user)
     if type_email == 1:
         subject = f"Approbation d'un nouveau bénévole"
-        message_body = f"Un bénévole a demandé à être bénévole dans votre site. Merci de valider cet utilisateur."
+        message_body = f"Un bénévole a demandé à être bénévole dans votre site. Merci d'approuver ou non cet utilisateur depuis la plateforme."
     elif type_email == 2:
         subject = f"Nouveau message pour vous sur la plateforme des bénévoles"
         message_body = "Vous venez de recevoir un nouveau message. Merci de vous connecter à la plateforme."

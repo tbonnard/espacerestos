@@ -84,7 +84,7 @@ def send_message(request):
     # send message
     send_email(2, users_to_final, request.user)
 
-    return JsonResponse({"Success": "Le message a été envoyé - créé"}, status=200)
+    return JsonResponse({"Success": "Le message a été créé"}, status=200)
 
 
 def get_to_user_messages(user):
