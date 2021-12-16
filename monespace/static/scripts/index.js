@@ -60,7 +60,7 @@ if (document.querySelector('#events_manager_menu')) {
   }
 
   let buttonEvenManagerLoad = document.querySelector('#button_event_manager_load');
-  let info_text = document.querySelector('.info_text');
+  let info_text = document.querySelector('#no_distrib');
   info_text.style.display = 'none';
   let tableEvent = document.querySelector('.table1');
   tableEvent.style.display = 'none';

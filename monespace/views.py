@@ -34,6 +34,15 @@ def index(request):
     else:
         pending_events = None
 
+    events_user_manager = Event.objects.filter(event_manager=request.user)
+    pending_approval_in_events = StatusUsersLocations.objects.filter(status=1, distrib__in=events_user_manager)
+    if len(pending_approval_in_events) > 0:
+        users_to_approve = True
+        distrib_users_to_approve = pending_approval_in_events[0].distrib.uuid
+    else:
+        users_to_approve = False
+        distrib_users_to_approve = None
+
     eligible_events_date_locations_attendees = []
     attendees = AttendeesEvents.objects.filter(user=request.user)
     for i in eligible_events_date_locations:
@@ -68,7 +77,9 @@ def index(request):
                                                   "date_to": date_to, "pending_events":pending_events,
                                                   "attendees": attendees, "events_manager": events_manager,
                                                   "message_form": message_form, "to_user_messages": to_user_messages,
-                                                  "from_user_messages": from_user_messages})
+                                                  "from_user_messages": from_user_messages,
+                                                  "users_to_approve":users_to_approve,
+                                                  "distrib_users_to_approve":distrib_users_to_approve})
 
 
 def faq_view(request):

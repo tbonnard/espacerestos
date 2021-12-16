@@ -565,6 +565,7 @@ nav::before {
 
 #success_message_result {
 	display: none;
+	background-color: #dfd;
 }
 
 #received_messages, #sent_messages {

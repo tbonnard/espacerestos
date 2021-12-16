@@ -37,7 +37,11 @@
     {% csrf_token %}
     <div id="events_manager">
 
-        <p class="info_text">Aucune soirée de distribution à votre charge</p>
+        {% if users_to_approve %}
+        <p class="info_text">Certain(s) bénévole(s) en attente d'approbation. Cliquer <a href="{% url 'distrib_users' distrib_id=distrib_users_to_approve %}">ici</a></p>
+        {% endif %}
+
+        <p class="info_text" id="no_distrib">Aucune soirée de distribution à votre charge</p>
 
         <table class='table1'>
             <thead>
