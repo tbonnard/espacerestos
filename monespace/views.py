@@ -92,7 +92,8 @@ def all_users_site(request):
     users = User.objects.all()
     form = StatusUsersLocationsForm()
     message_form = MessagesEventsSimpleForm()
-    status_users_location = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
+    status_users_location = StatusUsersLocations.objects.all()
+    # status_users_location = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
     return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form, "users":users, "message_form":message_form})
 
 
