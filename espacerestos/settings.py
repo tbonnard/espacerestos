@@ -164,7 +164,7 @@ EMAIL_USE_TLS = True
 
 #Celery, Celery Beat and Redis settings
 CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379")
+CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL", "CELERY_BACKEND")
 if CELERY_RESULT_BACKEND == 'django-db':
     INSTALLED_APPS += ['django_celery_results',]
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -173,16 +173,3 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Paris'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get('REDIS_URL'),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "CONNECTION_POOL_KWARGS": {
-                "ssl_cert_reqs": None
-            },
-        }
-    }
-}
