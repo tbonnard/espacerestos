@@ -1,4 +1,4 @@
-# import smtplib
+import smtplib
 import os
 import environ
 from django.core.mail import send_mail, send_mass_mail
@@ -25,6 +25,9 @@ def send_email(type_email, to_user, from_user):
     elif type_email == 4:
         subject = f"Votre demande pour rejoindre la distribution a été refusée"
         message_body = "Si vous pensez que cela pourrait être une erreur, merci de communiquer avec nous."
+    elif type_email == 5:
+        subject = f"Une distribution dans 2 jours!"
+        message_body = "Ceci est un rappel que vous êtes présent pour une distribution dans 2 jours. Merci de modifier votre présence si jamais vous ne pouvez malheureusement plus venir."
     else:
         subject = 'Notification de la plateforme des bénévoles'
         message_body = 'Merci de vous connecter à la plateforme.'
@@ -54,6 +57,3 @@ def send_email(type_email, to_user, from_user):
 #     ('Dammit Walter', "Let's go bowlin'.", 'dude@aol.com', ['wsobchak@vfw.org']),
 # )
 # results = mail.send_mass_mail(emails)
-
-
-

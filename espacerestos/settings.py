@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import environ
 import os
+from celery.schedules import crontab
 
 env = environ.Env()
 # reading .env file
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'monespace',
     "djcelery_email",
+    "django_celery_beat",
 ]
 
 AUTH_USER_MODEL ='monespace.User'
@@ -159,3 +161,14 @@ EMAIL_HOST_USER = env("email_gmail")
 EMAIL_HOST_PASSWORD = env("pwd_gmail")
 EMAIL_USE_TLS = True
 
+
+#Celery, Celery Beat and Redis settings
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379")
+if CELERY_RESULT_BACKEND == 'django-db':
+    INSTALLED_APPS += ['django_celery_results',]
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Paris'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
