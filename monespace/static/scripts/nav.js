@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // function to hide/unhide the menu-sidebar
       function ToggleMenu() {
           document.querySelector('.sidebar').classList.toggle("sidebarTransform");
-          document.querySelector('#menu_icon_image').classList.toggle("logo_img_menu");
+          if (document.querySelector('#menu_icon_image')) {
+            document.querySelector('#menu_icon_image').classList.toggle("logo_img_menu");
+          }
       }
 
     // click on the menu icon toggle the sidebar-menu
@@ -29,9 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
   if (window.location.pathname.includes('event/liste/')) {
     subMenuDivIcon.style.visibility = 'hidden';
   }
+  if (window.location.pathname.includes('/faq/')) {
+    subMenuDivIcon.style.visibility = 'hidden';
+  }
 
   function ToggleSubMenu() {
+    if (document.querySelector('.top_bar_menu')) {
       document.querySelector('.top_bar_menu').classList.toggle("sidebarTransform_top_bar_menu");
+    }
   }
 
 
@@ -46,16 +53,26 @@ document.addEventListener("DOMContentLoaded", function () {
       // ToggleMenu();
       // ToggleSubMenu();
     } else {
-      let list_class_sub_menu = document.querySelector('.top_bar_menu').classList;
       let list_class_sidebar = document.querySelector('.sidebar').classList;
-      list_class_sub_menu.forEach( i => {
+      if (document.querySelector('.top_bar_menu')) {
+
+        let list_class_sub_menu = document.querySelector('.top_bar_menu').classList;
+        list_class_sub_menu.forEach( i => {
+          list_class_sidebar.forEach(j => {
+            if (i.includes('sidebarTransform_top_bar_menu') || j.includes('sidebarTransform') ) {
+                   ToggleMenu();
+                   ToggleSubMenu();
+                 }
+          })
+      })
+    } else {
         list_class_sidebar.forEach(j => {
-          if (i.includes('sidebarTransform_top_bar_menu') || j.includes('sidebarTransform') ) {
+          if (j.includes('sidebarTransform') ) {
                  ToggleMenu();
                  ToggleSubMenu();
                }
-        })
       })
+    }
     }
   });
 
