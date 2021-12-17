@@ -115,21 +115,40 @@
         <p class="info_text">Aucun message reçu</p>
         {% else %}
         {% for i in to_user_messages %}
-        <div class="pre_table_notif">
-        <table class='table1_message'>
-            <thead class="message_unit" data-message="{{i.uuid}}">
-                <tr>
-                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">
-                        {% if i.from_user == request.user  %}
-                        Vous
-                        {% else %}
-                        {{i.from_user}}
-                        {% endif %}
-                    </p></th>
-                    <th class='table_heading_message'>Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:"/"}}</p></th>
-                    <th class='table_heading_message'>Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:"/"}}</p></th>
-                    <th class='table_heading_message'>De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:"/"}}</p></th>
-                    <th class='table_heading_message'>Envoyé à<p class="message_nav_line_details">
+
+        <div class="message_div">
+
+            <div class="message_unit_div" data-message="{{i.uuid}}">
+
+                <div class="message__line_unit_div">
+                    <div class="table_heading_message_div">Envoyé par</div>
+                    <div class="message_nav_line_details_div">{% if i.from_user == request.user  %}
+                            Vous
+                            {% else %}
+                            {{i.from_user}}
+                            {% endif %}
+                    </div>
+                </div>
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>Pour le site</div>
+                    <div class="message_nav_line_details_div">{{i.to_location|default_if_none:"/"}}</div>
+                </div>
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>Pour la distribution</div>
+                    <div class="message_nav_line_details_div">{{i.to_event|default_if_none:"/"}}</div>
+                </div>
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>De la date du</div>
+                    <div class="message_nav_line_details_div">{{i.to_event_date|default_if_none:"/"}}</div>
+                </div>
+
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>Envoyé à</div>
+                    <div class="message_nav_line_details_div">
                     {% if i.to_user == request.user  %}
                     A vous
                     {% elif i.to_user %}
@@ -137,20 +156,65 @@
                         {% else %}
                     {{i.get_to_event_group_display|default_if_none:"/"}}
                     {% endif %}
-                </p></th>
-                    <th class='table_heading_message'>Envoyé le<p class="message_nav_line_details">{{i.created}}</p></th>
-                    <th><span class="notification_messages_solo" data-message="{{i.uuid}}"><span class="dot"  title="Marquer comme lu"></span></span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="td_row" colspan="6" data-loc="{{j.uuid}}">
-                        <span class="message_nav_line_description">{{i.description}}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </div>
+                </div>
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>Envoyé le</div>
+                    <div class="message_nav_line_details_div">{{i.created}}</div>
+                </div>
+
+
+            </div>
+
+            <div class="message_description_div" data-loc="{{j.uuid}}">
+                <span class="message_nav_line_description_div">{{i.description}}</span>
+            </div>
+
+            <span class="notification_messages_solo_div" data-message="{{i.uuid}}">
+                <span class="dot"  title="Marquer comme lu">
+                </span>
+            </span>
+
         </div>
+
+
+<!--        <div class="pre_table_notif">-->
+<!--        <table class='table1_message'>-->
+<!--            <thead class="message_unit" data-message="{{i.uuid}}">-->
+<!--                <tr>-->
+<!--                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">-->
+<!--                        {% if i.from_user == request.user  %}-->
+<!--                        Vous-->
+<!--                        {% else %}-->
+<!--                        {{i.from_user}}-->
+<!--                        {% endif %}-->
+<!--                    </p></th>-->
+<!--                    <th class='table_heading_message'>Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:"/"}}</p></th>-->
+<!--                    <th class='table_heading_message'>Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:"/"}}</p></th>-->
+<!--                    <th class='table_heading_message'>De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:"/"}}</p></th>-->
+<!--                    <th class='table_heading_message'>Envoyé à<p class="message_nav_line_details">-->
+<!--                    {% if i.to_user == request.user  %}-->
+<!--                    A vous-->
+<!--                    {% elif i.to_user %}-->
+<!--                        {{ i.to_user }}-->
+<!--                        {% else %}-->
+<!--                    {{i.get_to_event_group_display|default_if_none:"/"}}-->
+<!--                    {% endif %}-->
+<!--                </p></th>-->
+<!--                    <th class='table_heading_message'>Envoyé le<p class="message_nav_line_details">{{i.created}}</p></th>-->
+<!--                    <th><span class="notification_messages_solo" data-message="{{i.uuid}}"><span class="dot"  title="Marquer comme lu"></span></span></th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                <tr>-->
+<!--                    <td class="td_row" colspan="6" data-loc="{{j.uuid}}">-->
+<!--                        <span class="message_nav_line_description">{{i.description}}</span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--        </div>-->
 
         {% endfor %}
         {% endif %}
@@ -163,20 +227,40 @@
         <p class="info_text">Aucun message envoyé</p>
         {% else %}
           {% for i in from_user_messages %}
-        <table class='table1_message'>
-            <thead>
-                <tr>
-                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">
-                        {% if i.from_user == request.user  %}
-                        Vous
-                        {% else %}
-                        {{i.from_user}}
-                        {% endif %}
-                    </p></th>
-                    <th class='table_heading_message'>Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:"/"}}</p></th>
-                    <th class='table_heading_message'>Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:"/"}}</p></th>
-                    <th class='table_heading_message'>De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:"/"}}</p></th>
-                    <th class='table_heading_message'>Envoyé à<p class="message_nav_line_details">
+
+          <div class="message_div">
+
+            <div class="message_unit_div" data-message="{{i.uuid}}">
+
+                <div class="message__line_unit_div">
+                    <div class="table_heading_message_div">Envoyé par</div>
+                    <div class="message_nav_line_details_div">{% if i.from_user == request.user  %}
+                            Vous
+                            {% else %}
+                            {{i.from_user}}
+                            {% endif %}
+                    </div>
+                </div>
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>Pour le site</div>
+                    <div class="message_nav_line_details_div">{{i.to_location|default_if_none:"/"}}</div>
+                </div>
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>Pour la distribution</div>
+                    <div class="message_nav_line_details_div">{{i.to_event|default_if_none:"/"}}</div>
+                </div>
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>De la date du</div>
+                    <div class="message_nav_line_details_div">{{i.to_event_date|default_if_none:"/"}}</div>
+                </div>
+
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>Envoyé à</div>
+                    <div class="message_nav_line_details_div">
                     {% if i.to_user == request.user  %}
                     A vous
                     {% elif i.to_user %}
@@ -184,18 +268,69 @@
                         {% else %}
                     {{i.get_to_event_group_display|default_if_none:"/"}}
                     {% endif %}
-                </p></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="td_row" colspan="6" data-loc="{{j.uuid}}">
-                        <span class="message_nav_line_description">{{i.description}}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </div>
+                </div>
+
+                <div class="message__line_unit_div">
+                    <div class='table_heading_message_div'>Envoyé le</div>
+                    <div class="message_nav_line_details_div">{{i.created}}</div>
+                </div>
+
+
+            </div>
+
+            <div class="message_description_div" data-loc="{{j.uuid}}">
+                <span class="message_nav_line_description_div">{{i.description}}</span>
+            </div>
+              
+
+        </div>
+
+
+
+
+
+
+
+
+<!--          -->
+<!--          -->
+<!--        <table class='table1_message'>-->
+<!--            <thead>-->
+<!--                <tr>-->
+<!--                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">-->
+<!--                        {% if i.from_user == request.user  %}-->
+<!--                        Vous-->
+<!--                        {% else %}-->
+<!--                        {{i.from_user}}-->
+<!--                        {% endif %}-->
+<!--                    </p></th>-->
+<!--                    <th class='table_heading_message'>Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:"/"}}</p></th>-->
+<!--                    <th class='table_heading_message'>Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:"/"}}</p></th>-->
+<!--                    <th class='table_heading_message'>De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:"/"}}</p></th>-->
+<!--                    <th class='table_heading_message'>Envoyé à<p class="message_nav_line_details">-->
+<!--                    {% if i.to_user == request.user  %}-->
+<!--                    A vous-->
+<!--                    {% elif i.to_user %}-->
+<!--                        {{ i.to_user }}-->
+<!--                        {% else %}-->
+<!--                    {{i.get_to_event_group_display|default_if_none:"/"}}-->
+<!--                    {% endif %}-->
+<!--                </p></th>-->
+<!--                    <th></th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                <tr>-->
+<!--                    <td class="td_row" colspan="6" data-loc="{{j.uuid}}">-->
+<!--                        <span class="message_nav_line_description">{{i.description}}</span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+
+
+
         {% endfor %}
         {% endif %}
         </div>

@@ -269,9 +269,9 @@ aMessageSentDiv.addEventListener('click', () => {
 let NotificationTopDiv = document.querySelector('#notification_messages_top');
 NotificationTopDiv.style.display = 'none';
 
-let allMessages = document.querySelectorAll('.message_unit');
+let allMessages = document.querySelectorAll('.message_unit_div');
 
-let notificationMessagesSolo = document.querySelectorAll('.notification_messages_solo');
+let notificationMessagesSolo = document.querySelectorAll('.notification_messages_solo_div');
 
 notificationMessagesSolo.forEach(i => {
   i.style.display = 'none';

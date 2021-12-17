@@ -615,6 +615,60 @@ nav::before {
 }
 
 
+.message_div {
+	border-top: 1px solid #e1e1e1;
+	text-align: center;
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.message_unit_div{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	margin-bottom: 10px;
+	padding: 10px 0px 0px 15px;
+	font-size: .64286rem;
+	color: #6a6a6a;
+	/* border-bottom: 1px solid #e1e1e1; */
+	letter-spacing: .025em;
+	text-transform: uppercase;
+	text-align: center;
+	min-width: 90px;
+	background-color: var(--light_grey);
+}
+
+.message_nav_line_details_div {
+	text-align: center;
+	background-color: var(--light_grey);
+	margin-top: 10px;
+}
+
+.message_description_div{
+	margin-bottom: 30px;
+}
+.message_nav_line_description_div {
+	font-size: .64286rem;
+	letter-spacing: 0.10em;
+}
+
+.table_heading_message_div{
+	font-weight: bold;
+}
+
+.message__line_unit_div{
+	padding: 2%;
+}
+
+.notification_messages_solo_div{
+	position: absolute;
+	top: 2px;
+	right: 5px;
+}
+
 
 /* EVENTS */
 .event_details_master {
