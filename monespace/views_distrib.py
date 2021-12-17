@@ -117,7 +117,7 @@ def distrib_users(request, distrib_id):
             user_status_update.save()
             logs = LogsStatusUsersLocations(distrib=distrib, location=user_status_update.location, from_user=request.user, user=user_status_update.user, status=2, current_status=user_status_update.status)
             logs.save()
-            send_email(3, [user_status_update.user], request.user)
+            send_email(3, [user_status_update.user], request.user, distrib=user_status_update.distrib.name)
             return redirect(reverse('distrib_users', kwargs={'distrib_id': distrib_id}))
 
     return render(request, 'benevoles_distrib.html', context={"distrib":distrib,
@@ -141,7 +141,7 @@ def user_distrib_update_status(request, distrib_id):
             logs.save()
             user_status_int = int(user_status_update.status)
             if user_status_int == 3:
-                send_email(4, [user_status_update.user], request.user)
+                send_email(4, [user_status_update.user], request.user, distrib=user_status_update.distrib.name)
 
             return redirect(reverse('distrib_users', kwargs={'distrib_id': distrib_id}))
     return redirect('index')

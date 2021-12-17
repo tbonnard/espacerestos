@@ -7,6 +7,7 @@ from .models import Event, Location, RecurringPattern, StatusUsersLocations, Att
     EventExceptionCancelledRescheduled, User
 from .forms import EventForm, EventRecurringPatternForm, MessagesEventsSimpleForm
 from .functions_global import forbidden_to_user, location_manager_check
+from .notification_manager import send_email
 
 
 def return_date_based_pattern(rec_pattern, date):
@@ -483,6 +484,7 @@ def event_delete_all(request, event_id):
                     else:
                         break
                 for i in AttendeesEvents.objects.filter(parent_event=event_to_delete, event_date=event_date):
+                    send_email(6, [i.user], request.user, distrib=event_to_delete.name, date=event_date)
                     i.delete()
                     # or update status in attendees to 0 if we want to keep history
                 event_date = return_date_based_pattern(rec_pattern, event_date)
@@ -505,11 +507,11 @@ def event_delete_all(request, event_id):
 @location_manager_check
 def event_delete_rec(request, event_id):
     try:
-        print('1')
+        # print('1')
         date = request.GET['date']
         event_rec_to_delete = Event.objects.get(uuid=event_id)
     except:
-        print('2')
+        # print('2')
 
         return redirect('index')
     else:
@@ -533,6 +535,7 @@ def event_delete_rec(request, event_id):
             )
         rec_to_delete_exception.save()
         for i in AttendeesEvents.objects.filter(parent_event=event_rec_to_delete, event_date=date):
+            send_email(6, [i.user], request.user, distrib=event_rec_to_delete.name, date=date)
             i.delete()
             # or update status in attendees to 0 if we want to keep history
         return redirect('index')

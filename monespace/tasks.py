@@ -25,8 +25,8 @@ def send_2_days_reminder():
     for y in attendees:
         # print(y.event_date)
         list_users.append(y.user)
-    print(list_users)
-    send_email(5, list_users, email_gmail)
+    # print(list_users)
+    send_email(5, list_users, email_gmail, date=date_to)
 
     # all_events = Event.objects.all()
     # list_users = []
