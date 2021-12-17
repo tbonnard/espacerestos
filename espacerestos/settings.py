@@ -164,8 +164,9 @@ EMAIL_USE_TLS = True
 
 
 #Celery, Celery Beat and Redis settings
-CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379")
-CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL", "CELERY_BACKEND")
+CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://127.0.0.1:6379")
+CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL", "django-db")
+# CELERY_RESULT_BACKEND = "django-db"
 # if CELERY_RESULT_BACKEND == 'django-db':
 #     INSTALLED_APPS += ['django_celery_results',]
 CELERY_ACCEPT_CONTENT = ['application/json']
