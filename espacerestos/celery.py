@@ -12,16 +12,16 @@ app = Celery('espacerestos')
 # pickle the object when using Windows.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# app.conf.beat_schedule = {
-#     "every_day": {
-#         "task": "monespace.tasks.send_2_days_reminder",
-#         "schedule": crontab(day_of_week="0-6", hour=9, minute=00),
-#     },
-# }
+app.conf.beat_schedule = {
+    "every_day_2_days_reminder": {
+        "task": "monespace.tasks.send_2_days_reminder",
+        "schedule": crontab(day_of_week="0-6", hour=9, minute=00),
+    },
+}
 
 app.conf.beat_schedule = {
-    "every_thirty_seconds": {
-        "task": "monespace.tasks.send_2_days_reminder",
+    "say_hello": {
+        "task": "monespace.tasks.say_hello",
         "schedule": timedelta(seconds=30),
     },
 }

@@ -15,7 +15,6 @@ email_gmail = env("email_gmail")
 
 @shared_task()
 def send_2_days_reminder():
-    print('bonjour')
     today = datetime.datetime.now()
     days = 2
     days_added = datetime.timedelta(days=days)
@@ -26,6 +25,8 @@ def send_2_days_reminder():
     for y in attendees:
         # print(y.event_date)
         list_users.append(y.user)
+    print(list_users)
+    send_email(5, list_users, email_gmail)
 
     # all_events = Event.objects.all()
     # list_users = []
@@ -41,5 +42,8 @@ def send_2_days_reminder():
     #                         list_users.append(y.user)
     #             event_date = return_date_based_pattern(rec_pattern, event_date)
     # print(list_users)
-    #send_email(5, list_users, email_gmail)
 
+
+@shared_task()
+def say_hello():
+    print('bonjour')
