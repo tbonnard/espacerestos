@@ -45,6 +45,7 @@
 <p>{{request.user.username}}</p>
 <p>{{request.user.first_name|default_if_none:"" }}</p>
 <p>{{request.user.last_name|default_if_none:"" }}</p>
+<p>{{request.user.email|default_if_none:"" }}</p>
 <p>{{request.user.address|default_if_none:"" }}</p>
 <p>{{request.user.city|default_if_none:"" }}</p>
 <p>{{request.user.zip_code|default_if_none:"" }}</p>
