@@ -4,9 +4,11 @@
 <script src= "{% static 'scripts/benevoles_list.js' %}"></script>
 {% endblock %}
 
-
-<p>Total des bénévoles (actif, en attente) : {{ users|length }}</p>
-
+{% if request.user.user_type == 1 %}
+<p>Total des bénévoles : {{ users|length }}</p>
+{% else %}
+<p>Total des bénévoles <i>(actif, en attente)</i> : {{ users|length }}</p>
+{% endif %}
 
 <table class='table1'>
             <thead>
