@@ -13,16 +13,24 @@
 
 <div class="top_bar_menu">
 
-    <div class="sub_nav_hor active">
-        <i class="fas fa-map-marker-alt"></i>Sites actuels
-    </div>
 
     {%if admin %}
-        <a href="{% url 'location_create' %}" class="sub_nav_hor" >
-    <div>
-        <i class="fas fa-plus-circle"></i>Créer un site
+    <div class="sub_nav_hor active">
+        <i class="fas fa-map-marker-alt"></i>Tous les sites
     </div>
-        </a>
+
+    <a href="{% url 'location_create' %}" class="sub_nav_hor" >
+        <div>
+        <i class="fas fa-plus-circle"></i>Créer un site
+        </div>
+    </a>
+
+    {% else %}
+
+    <div class="sub_nav_hor active">
+        <i class="fas fa-map-marker-alt"></i>Mes sites
+    </div>
+
     {% endif %}
 
 </div>
