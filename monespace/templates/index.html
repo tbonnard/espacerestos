@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load tz %}
 {% block script %}
 <script src= "{% static 'scripts/index.js' %}"></script>
 <script src= "{% static 'scripts/scripts_events_attendee.js' %}"></script>
@@ -161,7 +161,12 @@
 
                 <div class="message__line_unit_div">
                     <div class='table_heading_message_div'>Envoyé le</div>
-                    <div class="message_nav_line_details_div">{{i.created}}</div>
+
+                    <div class="message_nav_line_details_div">
+                        {% timezone "Europe/Paris" %}
+                        {{ i.created }}
+                        {% endtimezone %}
+                    </div>
                 </div>
 
 
@@ -273,7 +278,11 @@
 
                 <div class="message__line_unit_div">
                     <div class='table_heading_message_div'>Envoyé le</div>
-                    <div class="message_nav_line_details_div">{{i.created}}</div>
+                    <div class="message_nav_line_details_div">
+                        {% timezone "Europe/Paris" %}
+                        {{ i.created }}
+                        {% endtimezone %}
+                    </div>
                 </div>
 
 
