@@ -92,7 +92,7 @@ def all_users_site(request):
     users = User.objects.all().order_by('first_name')
     form = StatusUsersLocationsForm()
     message_form = MessagesEventsSimpleForm()
-    status_users_location = StatusUsersLocations.objects.all()
+    status_users_location = StatusUsersLocations.objects.all().order_by('user__first_name')
     # status_users_location = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
     return render(request, 'benevoles.html', context={"status_users_location": status_users_location, "form": form, "users":users, "message_form":message_form})
 
@@ -106,7 +106,7 @@ def users_site(request, location_id):
         status_users_location = StatusUsersLocations.objects.filter(location=Location.objects.get(uuid=location_id),
                                                                     status=1) | StatusUsersLocations.objects.filter(
             location=Location.objects.get(uuid=location_id), status=2)
-        users_pre = [i.user for i in status_users_location]
+        users_pre = [i.user for i in status_users_location.order_by('user__first_name')]
         users=[]
         for i in users_pre:
             if i not in users:
