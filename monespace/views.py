@@ -89,7 +89,7 @@ def faq_view(request):
 @login_required(login_url='/login/')
 @admin_only
 def all_users_site(request):
-    users = User.objects.all()
+    users = User.objects.all().order_by('first_name')
     form = StatusUsersLocationsForm()
     message_form = MessagesEventsSimpleForm()
     status_users_location = StatusUsersLocations.objects.all()

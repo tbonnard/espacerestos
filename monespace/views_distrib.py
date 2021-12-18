@@ -196,11 +196,11 @@ def get_count_event_benev(request):
     status_user_distrib = StatusUsersLocations.objects.filter(status=1) | StatusUsersLocations.objects.filter(status=2)
     count_distrib_ben = {}
     for i in status_user_distrib:
-        if i.distrib.uuid in count_distrib_ben:
+        if str(i.distrib.uuid) in count_distrib_ben:
             if i.status == 1:
-                str(count_distrib_ben[i.distrib.uuid])['pending'] += 1
+                count_distrib_ben[str(i.distrib.uuid)]['pending'] += 1
             else:
-                str(count_distrib_ben[i.distrib.uuid])['active'] += 1
+                count_distrib_ben[str(i.distrib.uuid)]['active'] += 1
         else:
             if i.status == 1:
                 count_distrib_ben.setdefault(str(i.distrib.uuid), {"pending":1, "active":0})

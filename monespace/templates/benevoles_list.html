@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% if request.user.user_type == 1 %}
-<p>Total des bénévoles : {{ users|length }}</p>
+<p>Total des bénévoles <i>(incluant les désactivés)</i>: {{ users|length }}</p>
 {% else %}
 <p>Total des bénévoles <i>(actif, en attente)</i> : {{ users|length }}</p>
 {% endif %}
