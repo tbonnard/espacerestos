@@ -12,6 +12,8 @@ pwd_gmail = env("pwd_gmail")
 
 
 def send_email(type_email, to_user, from_user, **kwargs):
+    if from_user is None:
+        from_user = email_gmail
     # print(to_user)
     if type_email == 1:
         subject = f"Approbation d'un nouveau bénévole"
@@ -31,6 +33,9 @@ def send_email(type_email, to_user, from_user, **kwargs):
     elif type_email == 6:
         subject = f"La distribution du {kwargs['date']} vient d'être annuleé"
         message_body = f"La distribution '{kwargs['distrib']}' a été annulée pour la date du {kwargs['date']}"
+    elif type_email == 7:
+        subject = f"Bienvenue parmi nous!"
+        message_body = f"C'est un reéel plaisir de vous compter parmi nous! Maintenant que vous être inscrit, séléctionner les distributions our lesquels vous souhaitez être membre et compléter votre profil pour faciliter la vie du gestionnaire de distribution! Nous vous remercions infiniment et avons hàte te de vous voir!"
     else:
         subject = 'Notification de la plateforme des bénévoles'
         message_body = 'Merci de vous connecter à la plateforme.'

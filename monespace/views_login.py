@@ -5,6 +5,7 @@ import string
 import random
 
 from .forms import UserCreateForm, UserAuthenticationForm
+from .notification_manager import send_email
 
 
 def login_view(request):
@@ -32,6 +33,7 @@ def register(request):
         if form.is_valid():
             new_user = form.save()
             login(request, new_user)
+            send_email(7, [new_user], from_user=None)
             return redirect('select_locations')
     return render(request, 'register.html', context={"form": form})
 
