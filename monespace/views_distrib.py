@@ -133,7 +133,7 @@ def change_distrib_manager(request, distrib_id):
 
     if request.method== "POST":
         distrib = get_object_or_404(Event, uuid=distrib_id)
-        distrib_manager = User.objects.get(uuid=request.POST['event_manager'])
+        distrib_manager = User.objects.get(id=request.POST['event_manager'])
         previous_manager = distrib.event_manager
         distrib.event_manager = distrib_manager
         distrib.save()
