@@ -37,6 +37,7 @@ def distribution_create(request, location_id):
 
             new_rec = RecurringPattern(event=new_event, separation_count=1, max_num_occurrences=260, repeat_each_x=0)
             new_rec.save()
+
             for i in new_event.event_managers.all():
                 edit_user_type_to_manager(i)
                 check_if_new_status_to_create_update(distrib=new_event, location=new_event.location,

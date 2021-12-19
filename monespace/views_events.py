@@ -62,15 +62,18 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
     elif location is not None and event_manager is not None and distrib is not None:
         all_events = [Event.objects.get(location=location, pk=i.pk) for i in distrib if event_manager in i.event_managers.all()]
     else:
-        all_events = [Event.objects.all()]
-
+        # all_events = [Event.objects.get(pk=i.pk) for i in Event.objects.all()]
+        all_events = Event.objects.all()
+    # print(all_events)
     eligible_events_date = {}
     # for i in range(len(all_events)):
     # for j in all_events[i]:
     for j in all_events:
         event_date = j.start_date
         if j.is_recurring:
-            rec_pattern = RecurringPattern.objects.filter(event=j).first()
+            print(j.id)
+            rec_pattern = RecurringPattern.objects.get(event=j)
+            print(rec_pattern.id)
             for n in range(rec_pattern.max_num_occurrences + 1):
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
                     if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
