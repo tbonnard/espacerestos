@@ -45,7 +45,7 @@ class UserAuthenticationForm(AuthenticationForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ('location', "name", "description", "start_date", "end_date", "is_full_day", "time_from", "time_to", "is_recurring", "event_manager")
+        fields = ('location', "name", "description", "start_date", "end_date", "is_full_day", "time_from", "time_to", "is_recurring", "event_managers")
         widgets = {
             "start_date":forms.DateInput(attrs={'type': 'date'}),
             "end_date": forms.DateInput(attrs={'type': 'date'}),
@@ -62,34 +62,38 @@ class EventForm(forms.ModelForm):
                     "time_to": "Heure de fin",
                     "is_full_day": "L'événement dure toute la journée",
             "is_recurring": "L'événement se répète",
-            "event_manager": "Responsable de l'événement"
+            "event_managers": "Responsables de l'événement"
         }
 
 
 class DistributionForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ("name", "start_date", "time_from", "time_to", "event_manager")
+        fields = ("name", "start_date", "time_from", "time_to", "event_managers")
         widgets = {
             "start_date": forms.DateInput(attrs={'type': 'date'}),
             "time_from": forms.TimeInput(attrs={'type': 'time'}),
             "time_to": forms.TimeInput(attrs={'type': 'time'}),
+            "event_managers": forms.CheckboxSelectMultiple(),
         }
         labels = {
             "name": "Nom de la soirée de distribution *",
             "start_date": "Date de début *",
             "time_from": "Heure de début *",
             "time_to": "Heure de fin *",
-            "event_manager": "Responsable de la soirée distribution *"
+            "event_managers": "Responsables de la soirée distribution *"
         }
 
 
 class DistributionManagerForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ("event_manager",)
+        fields = ("event_managers",)
         labels = {
-            "event_manager": "Séléctionner le nouveau responsable de la soirée distribution"
+            "event_managers": "Modifier les responsables de la soirée de distribution"
+        }
+        widgets = {
+            "event_managers": forms.CheckboxSelectMultiple(),
         }
 
     # def __init__(self, *args, **kwargs):
@@ -138,7 +142,6 @@ class LocationForm(forms.ModelForm):
         widgets = {
             "location_managers": forms.CheckboxSelectMultiple(),
         }
-
 
 
 class SelectLocationsForm(forms.Form):

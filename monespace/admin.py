@@ -13,7 +13,7 @@ class LocationAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'location', 'name', 'event_manager', 'start_date', 'is_recurring', 'is_distrib', 'is_cancelled', 'created')
+    list_display = ('uuid', 'location', 'name', 'start_date', 'is_recurring', 'is_distrib', 'is_cancelled', 'created')
 
 
 class RecurringPatternAdmin(admin.ModelAdmin):

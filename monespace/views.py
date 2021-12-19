@@ -34,7 +34,7 @@ def index(request):
     else:
         pending_events = None
 
-    events_user_manager = Event.objects.filter(event_manager=request.user)
+    events_user_manager = [i for i in Event.objects.all() if request.user in i.event_managers.all()]
     pending_approval_in_events = StatusUsersLocations.objects.filter(status=1, distrib__in=events_user_manager)
     if len(pending_approval_in_events) > 0:
         users_to_approve = True

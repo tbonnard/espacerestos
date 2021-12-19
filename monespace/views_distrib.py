@@ -17,24 +17,30 @@ def distribution_create(request, location_id):
     location = get_object_or_404(Location, uuid=location_id)
     form = DistributionForm()
     user_from_location = [i.uuid for i in Location.objects.get(uuid=location_id).location_managers.all()]
-    form.fields['event_manager'].queryset = User.objects.filter(uuid__in=user_from_location)
-    if len(user_from_location) == 1:
-        form.initial['event_manager'] = User.objects.get(uuid=user_from_location[0])
+    form.fields['event_managers'].queryset = User.objects.filter(uuid__in=user_from_location)
+    # if len(user_from_location) == 1:
+    #     form.initial['event_managers'] = User.objects.get(uuid=user_from_location[0])
 
     if request.method == "POST":
         form = DistributionForm(data=request.POST)
         if form.is_valid():
             new_event = Event(name=form.cleaned_data['name'], start_date=form.cleaned_data['start_date'],
                               end_date=form.cleaned_data['start_date'],
-                              location=location, event_manager=form.cleaned_data['event_manager'],
+                              location=location,
                               time_from=form.cleaned_data['time_from'], time_to=form.cleaned_data['time_to'],
                               is_recurring=True, is_distrib=True)
             new_event.save()
+            managers = form.cleaned_data['event_managers']
+            for i in managers:
+                new_event.event_managers.add(i)
+            new_event.save()
+
             new_rec = RecurringPattern(event=new_event, separation_count=1, max_num_occurrences=260, repeat_each_x=0)
             new_rec.save()
-            edit_user_type_to_manager(new_event.event_manager)
-            check_if_new_status_to_create_update(distrib=new_event, location=new_event.location,
-                                                 user_to_update=new_event.event_manager, from_user=request.user,
+            for i in new_event.event_managers.all():
+                edit_user_type_to_manager(i)
+                check_if_new_status_to_create_update(distrib=new_event, location=new_event.location,
+                                                 user_to_update=i, from_user=request.user,
                                                  manager=True)
             return redirect('index')
     return render(request, 'distrib_create.html', context={"form": form, "location": location})
@@ -50,9 +56,8 @@ def distributions(request):
     # if Event.objects.filter(event_manager=request.user).count() == 1:
     #     return redirect(reverse('distrib_details', kwargs={'distrib_id': Event.objects.filter(event_manager=request.user).first().pk}))
     # else:
-    events = Event.objects.filter(event_manager=request.user)
+    events = [i for i in Event.objects.all() if request.user in i.event_managers.all()]
     return render(request, 'distributions.html', context={"events": events, "message_form":message_form})
-
 
 
 @login_required(login_url='/login/')
@@ -65,10 +70,8 @@ def distrib_details(request, distrib_id):
         return redirect('index')
     else:
         user_from_location = [i.uuid for i in Location.objects.get(uuid=distrib.location.uuid).location_managers.all()]
-        formManager = DistributionManagerForm()
-        formManager.fields['event_manager'].queryset = User.objects.filter(uuid__in=user_from_location)
-        if len(user_from_location) == 1:
-            formManager.initial['event_manager'] = User.objects.get(uuid=user_from_location[0])
+        formManager = DistributionManagerForm(instance=distrib)
+        formManager.fields['event_managers'].queryset = User.objects.filter(uuid__in=user_from_location)
 
     return render(request, 'distrib_details.html', context={"distrib":distrib, "formManager":formManager})
 
@@ -132,17 +135,30 @@ def change_distrib_manager(request, distrib_id):
         return redirect('index')
 
     if request.method== "POST":
-        distrib = get_object_or_404(Event, uuid=distrib_id)
-        distrib_manager = User.objects.get(id=request.POST['event_manager'])
-        previous_manager = distrib.event_manager
-        distrib.event_manager = distrib_manager
-        distrib.save()
-        edit_user_type_to_manager(distrib.event_manager)
-        edit_user_type_to_user(previous_manager)
-        check_if_new_status_to_create_update(distrib=distrib, location=distrib.location,
-                                             user_to_update=distrib.event_manager, from_user=request.user,
-                                             manager=True)
-        return redirect(reverse('distrib_details', kwargs={'distrib_id': distrib_id}))
+        form = DistributionManagerForm(data=request.POST)
+        if form.is_valid():
+            distrib = get_object_or_404(Event, uuid=distrib_id)
+            previous_manager = distrib.event_managers.all()
+            managers =form.cleaned_data['event_managers']
+
+            for i in managers:
+                if i not in previous_manager:
+                    distrib.event_managers.add(i)
+                    edit_user_type_to_manager(i)
+                    check_if_new_status_to_create_update(distrib=distrib, location=distrib.location,
+                                                         user_to_update=i, from_user=request.user,
+                                                         manager=True)
+            for i in previous_manager:
+                if i not in managers:
+                    distrib.event_managers.remove(i)
+                    edit_user_type_to_user(i)
+                    check_if_new_status_to_create_update(distrib=distrib, location=distrib.location,
+                                                         user_to_update=i, from_user=request.user,
+                                                         manager=True)
+            distrib.save()
+
+
+            return redirect(reverse('distrib_details', kwargs={'distrib_id': distrib_id}))
     return redirect('index')
 
 

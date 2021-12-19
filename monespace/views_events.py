@@ -50,46 +50,47 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
     if location is not None and event_manager is None and distrib is None:
         all_events = [Event.objects.filter(location=location)]
     elif location is None and event_manager is not None and distrib is None:
-        all_events = [Event.objects.filter(event_manager=event_manager)]
+        all_events = [i for i in Event.objects.all() if event_manager in i.event_managers.all()]
     elif location is not None and event_manager is not None and distrib is None:
-        all_events = [Event.objects.filter(location=location, event_manager=event_manager)]
+        all_events = [i for i in Event.objects.get(location=location) if event_manager in i.event_managers.all()]
     elif location is not None and event_manager is None and distrib is not None:
-        all_events = [Event.objects.filter(pk=i.pk, location=location) for i in distrib]
+        all_events = [Event.objects.get(pk=i.pk, location=location) for i in distrib]
     elif location is None and event_manager is not None and distrib is not None:
-        all_events = [Event.objects.filter(pk=i.pk, event_manager=event_manager) for i in distrib]
+        all_events = [Event.objects.get(pk=i.pk) for i in distrib if event_manager in i.event_managers.all()]
     elif location is None and event_manager is None and distrib is not None:
-        all_events = [Event.objects.filter(pk=i.pk) for i in distrib]
+        all_events = [Event.objects.get(pk=i.pk) for i in distrib]
     elif location is not None and event_manager is not None and distrib is not None:
-        all_events = [Event.objects.filter(location=location, event_manager=event_manager, pk=i.pk) for i in distrib]
+        all_events = [Event.objects.get(location=location, pk=i.pk) for i in distrib if event_manager in i.event_managers.all()]
     else:
         all_events = [Event.objects.all()]
 
     eligible_events_date = {}
-    for i in range(len(all_events)):
-        for j in all_events[i]:
-            event_date = j.start_date
-            if j.is_recurring:
-                rec_pattern = RecurringPattern.objects.filter(event=j).first()
-                for n in range(rec_pattern.max_num_occurrences + 1):
-                    if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
-                        if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
-                                                                                 start_date=event_date):
-                            try:
-                                events = eligible_events_date[event_date]
-                                events.append(j.serialize())
-                                eligible_events_date[event_date] = events
-                            except KeyError:
-                                eligible_events_date.setdefault(event_date, [j.serialize()])
-                    event_date = return_date_based_pattern(rec_pattern, event_date)
-
-            else:
+    # for i in range(len(all_events)):
+    # for j in all_events[i]:
+    for j in all_events:
+        event_date = j.start_date
+        if j.is_recurring:
+            rec_pattern = RecurringPattern.objects.filter(event=j).first()
+            for n in range(rec_pattern.max_num_occurrences + 1):
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
-                    try:
-                        events = eligible_events_date[event_date]
-                        events.append(j.serialize())
-                        eligible_events_date[event_date] = events
-                    except KeyError:
-                        eligible_events_date.setdefault(event_date, [j.serialize()])
+                    if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
+                                                                             start_date=event_date):
+                        try:
+                            events = eligible_events_date[event_date]
+                            events.append(j.serialize())
+                            eligible_events_date[event_date] = events
+                        except KeyError:
+                            eligible_events_date.setdefault(event_date, [j.serialize()])
+                event_date = return_date_based_pattern(rec_pattern, event_date)
+
+        else:
+            if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
+                try:
+                    events = eligible_events_date[event_date]
+                    events.append(j.serialize())
+                    eligible_events_date[event_date] = events
+                except KeyError:
+                    eligible_events_date.setdefault(event_date, [j.serialize()])
     sorted_eligible_events_date = sorted(eligible_events_date.items())
     return sorted_eligible_events_date
 
@@ -171,7 +172,7 @@ def create_event_unit(form):
                           is_recurring=form.cleaned_data['is_recurring'],
                           is_full_day=form.cleaned_data['is_full_day'],
                           location=location,
-                          event_manager=form.cleaned_data['event_manager']
+                          event_managers=form.cleaned_data['event_managers']
                           )
         new_event.save()
         return new_event
@@ -194,7 +195,7 @@ def edit_event_unit(event, form):
     event.time_to = form.cleaned_data['time_to']
     event.is_recurring = form.cleaned_data['is_recurring']
     event.is_full_day = form.cleaned_data['is_full_day']
-    event.event_manager = form.cleaned_data['event_manager']
+    event.event_managers = form.cleaned_data['event_managers']
     try:
         Location.objects.get(uuid=form['location'].value())
     except:
@@ -264,10 +265,10 @@ def default_initial_event_form(request, form, edit=False):
     for i in user_from_location:
         for y in i.location_managers.all():
             users_loc.append(y.uuid)
-    form.fields['event_manager'].queryset = User.objects.filter(uuid__in=users_loc)
-    if not edit:
-        if request.user.uuid in users_loc:
-            form.initial["event_manager"] = request.user
+    form.fields['event_managers'].queryset = User.objects.filter(uuid__in=users_loc)
+    # if not edit:
+    #     if request.user.uuid in users_loc:
+    #         form.initial["event_managers"] = request.user
     return form
 
 
