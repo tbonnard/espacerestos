@@ -64,7 +64,11 @@
 
                         {% for i in event_form_locations %}
                             {% if i.location.pk == j.pk %}
-                                <p><input class="distrib_checkbox" type="checkbox" id="{{ i.uuid }}" name="distrib" value="{{ i.uuid }}" data-distrib_us="{{ i.event_manager.uuid }}">{{ i.name }} de {{ i.time_from}} à {{ i.time_to }}, géré par {% for j in i.event_managers.all %}{{ j }}<i data-distrib_us="{{ j.uuid }}" class="fas fa-info-circle info_icon" title="Vous ne pourrez pas enlever une distribution pour lequel vous en êtes le responsable"></i> {% endfor %}</p>
+                                {% if request.user in i.event_managers.all %}
+                                <p>{{ i.name }} de {{ i.time_from}} à {{ i.time_to }}, géré par {% for z in i.event_managers.all %}{{ z }}<i data-distrib_us="{{ z.uuid }}" class="fas fa-info-circle info_icon" title="Vous ne pourrez pas enlever une distribution pour lequel vous en êtes le responsable"></i> {% endfor %}</p>
+                                {% else %}
+                                <p><input class="distrib_checkbox" type="checkbox" id="{{ i.uuid }}" name="distrib" value="{{ i.uuid }}" data-distrib_us="{{ i.event_manager.uuid }}">{{ i.name }} de {{ i.time_from}} à {{ i.time_to }}, géré par {% for z in i.event_managers.all %}{{ z }}<i data-distrib_us="{{ z.uuid }}" class="fas fa-info-circle info_icon" title="Vous ne pourrez pas enlever une distribution pour lequel vous en êtes le responsable"></i> {% endfor %}</p>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </td>
