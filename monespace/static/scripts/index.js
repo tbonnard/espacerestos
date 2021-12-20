@@ -1,6 +1,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
+
   let events14Days = document.querySelector('#events_14_days');
   let messages = document.querySelector('#messages');
 
@@ -69,6 +70,7 @@ if (document.querySelector('#events_manager_menu')) {
 
 
   function createDistrib(fromDateFinal, toDateFinal) {
+
   let url = `${window.location.origin}/events_list_json/${user_id}/?from=${fromDateFinal}&to=${toDateFinal}`;
   fetch(url)
     .then(response => response.json())
@@ -194,8 +196,8 @@ if (document.querySelector('#events_manager_menu')) {
     if (document.querySelector('.event_manager_date')) {
       let eventManagerDate = document.querySelectorAll('.event_manager_date');
       let fromDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
-      fromDate.setDate(fromDate.getDate()+2);
-      // +2 because need to search lat date visible+1 day and the search function looks on date-1 day
+      fromDate.setDate(fromDate.getDate()+1);
+      // +2 because need to search lat date visible+1 day and the search function looks on date-1 day --> NOT ANYMORE
       fromDateFinal = fromDate.toISOString().split('T')[0];
       let toDate = new Date(eventManagerDate[eventManagerDate.length -1].dataset.event_manager_date+"T00:00:00.000");
       toDate.setDate(toDate.getDate()+31);
@@ -215,14 +217,13 @@ if (document.querySelector('#events_manager_menu')) {
   })
 
   fromDate = new Date();
-  // +1 because the search function looks on date-1 day
-  fromDate.setDate(fromDate.getDate()+1);
+  // +1 because the search function looks on date-1 day --> NOT ANYMORE
+  fromDate.setDate(fromDate.getDate());
   fromDateFinal = fromDate.toISOString().split('T')[0];
   // console.log(fromDateFinal);
   toDate = new Date();
   toDate.setDate(toDate.getDate()+days);
   toDateFinal = toDate.toISOString().split('T')[0];
-
   createDistrib(fromDateFinal, toDateFinal);
 
 

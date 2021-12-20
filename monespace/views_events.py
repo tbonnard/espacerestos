@@ -35,10 +35,13 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
     :param location:
     :return: List of events - objects
     """
+
     if date_from is None:
-        date_from = datetime.datetime.now() - datetime.timedelta(days=1)
+        date_from = datetime.datetime.now()
+        # date_from = datetime.datetime.now() - datetime.timedelta(days=1)
     else:
-        date_from = date_from - datetime.timedelta(days=1)
+        date_from = date_from
+        # date_from = date_from - datetime.timedelta(days=1)
 
     if date_to is None:
         days = 14
@@ -48,11 +51,11 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
         date_to = date_to
 
     if location is not None and event_manager is None and distrib is None:
-        all_events = [Event.objects.filter(location=location)]
+        all_events = [i for i in Event.objects.filter(location=location)]
     elif location is None and event_manager is not None and distrib is None:
         all_events = [i for i in Event.objects.all() if event_manager in i.event_managers.all()]
     elif location is not None and event_manager is not None and distrib is None:
-        all_events = [i for i in Event.objects.get(location=location) if event_manager in i.event_managers.all()]
+        all_events = [i for i in Event.objects.filter(location=location) if event_manager in i.event_managers.all()]
     elif location is not None and event_manager is None and distrib is not None:
         all_events = [Event.objects.get(pk=i.pk, location=location) for i in distrib]
     elif location is None and event_manager is not None and distrib is not None:
@@ -71,9 +74,10 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
     for j in all_events:
         event_date = j.start_date
         if j.is_recurring:
-            print(j.id)
-            rec_pattern = RecurringPattern.objects.get(event=j)
-            print(rec_pattern.id)
+            try:
+                rec_pattern = RecurringPattern.objects.get(event=j)
+            except:
+                continue
             for n in range(rec_pattern.max_num_occurrences + 1):
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
                     if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
@@ -519,7 +523,7 @@ def event_delete_rec(request, event_id):
 
         return redirect('index')
     else:
-        print('3')
+        # print('3')
         if EventExceptionCancelledRescheduled.objects.filter(parent_event=event_rec_to_delete, start_date=date).first():
             rec_to_delete_exception = EventExceptionCancelledRescheduled.objects.filter(parent_event=event_rec_to_delete, start_date=date).first()
             rec_to_delete_exception.is_cancelled=True

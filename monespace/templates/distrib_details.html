@@ -41,7 +41,10 @@
         <p>Nom: {{distrib.name}}</p>
         <p>Journée: {{distrib.start_date|date:'l'}}</p>
         <p>Heure: {{distrib.time_from}} - {{distrib.time_to}}</p>
-        <p>Responsable: {{distrib.event_manager}}<a><i id="icon_change_manager" class="far fa-edit info_icon"></i></a></p>
+        <h4>Responsables</h4>
+            {% for i in distrib.event_managers.all %}
+            <p>{{i}}</p>
+            {% endfor %}<a><i id="icon_change_manager" class="far fa-edit info_icon"></i></a>
 
         <form id="change_manager" method='POST' action="{% url 'change_distrib_manager' distrib_id=distrib.uuid %}">
             {% csrf_token %}

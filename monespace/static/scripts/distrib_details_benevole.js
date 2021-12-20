@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
             aValidateCancelNo.append(iValidateCancelNo);
             iValidateCancelNo.addEventListener('click', () => {
               tdValidateCancel.style.display='none';
-              y.style.display = 'block';
+              y.style.display = 'revert';
             })
           }
         })

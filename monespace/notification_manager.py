@@ -28,7 +28,7 @@ def send_email(type_email, to_user, from_user, **kwargs):
         subject = f"Votre demande pour rejoindre la distribution a été refusée"
         message_body = f"Votre demande de rejoindre '{kwargs['distrib']}' a été refusée. Si vous pensez que cela pourrait être une erreur, merci de communiquer avec nous."
     elif type_email == 5:
-        subject = f"Une distribution dans 2 jours!"
+        subject = f"Une distribution dans 1 journée!"
         message_body = f"Ceci est un rappel que vous êtes présent à une distribution dans 2 jours (le {kwargs['date']}). Merci de modifier votre présence si jamais vous ne pouvez malheureusement plus venir."
     elif type_email == 6:
         subject = f"La distribution du {kwargs['date']} vient d'être annuleé"
@@ -36,6 +36,9 @@ def send_email(type_email, to_user, from_user, **kwargs):
     elif type_email == 7:
         subject = f"Bienvenue parmi nous!"
         message_body = f"C'est un reéel plaisir de vous compter parmi nous! Maintenant que vous être inscrit, séléctionner les distributions our lesquels vous souhaitez être membre et compléter votre profil pour faciliter la vie du gestionnaire de distribution! Nous vous remercions infiniment et avons hàte te de vous voir!"
+    elif type_email == 8:
+        subject = f"Seriez vous disponible dans 2 jours ?"
+        message_body = f"La distribution '{kwargs['distrib']}' qui tiendra lieu dans 2 jours (le {kwargs['date']}) manque de bénévoles. Si vous êtes disponible, merci de marquer votre présence sur la plateforme! Merci beaucoup."
     else:
         subject = 'Notification de la plateforme des bénévoles'
         message_body = 'Merci de vous connecter à la plateforme.'

@@ -49,6 +49,16 @@ def api_get_specific_attendees(request):
     return JsonResponse([i.serialize() for i in attendees], safe=False)
 
 
+def get_count_event_specific(event, date):
+    all_attendees = AttendeesEvents.objects.filter(parent_event=event, event_date=date)
+    count_attendees = 0
+    if len(all_attendees) > 0:
+        count_attendees = all_attendees.count()
+        for i in all_attendees:
+            count_attendees += i.plus_other
+    return count_attendees
+
+
 @login_required(login_url='/login/')
 def api_get_count_specific_attendees(request):
     data = json.loads(request.body)
@@ -59,10 +69,5 @@ def api_get_count_specific_attendees(request):
     except:
         return JsonResponse({"error": "try again - not found - api_get_count_specific_attendees"}, status=400)
     else:
-        all_attendees = AttendeesEvents.objects.filter(parent_event=event, event_date=date)
-        count_attendees = 0
-        if len(all_attendees) > 0:
-            count_attendees = all_attendees.count()
-            for i in all_attendees:
-                count_attendees += i.plus_other
+        count_attendees = get_count_event_specific(event, date)
         return JsonResponse([count_attendees], safe=False)

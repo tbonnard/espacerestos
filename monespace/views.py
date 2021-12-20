@@ -11,6 +11,7 @@ from .views_messages import get_to_user_messages, get_from_user_messages
 
 @login_required(login_url='/login/')
 def index(request):
+
     to_user_messages = get_to_user_messages(request.user)
     from_user_messages = get_from_user_messages(request.user)
 
