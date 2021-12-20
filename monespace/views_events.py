@@ -1,3 +1,8 @@
+import json
+from pprint import pprint
+from collections import defaultdict
+from collections import OrderedDict
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
@@ -27,7 +32,7 @@ def return_date_based_pattern(rec_pattern, date):
     return event_date
 
 
-def events_list(date_from, date_to, location=None, event_manager=None, distrib=None):
+def events_list(date_from, date_to, location=None, event_manager=None, distrib=None, attendance=False, user_requester=None):
     """
     Get all events based on parameters
     :param date_from:
@@ -37,18 +42,19 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
     """
 
     if date_from is None:
-        date_from = datetime.datetime.now()
+        date_from = datetime.datetime.now().replace(minute=00, hour=00, second=00)
         # date_from = datetime.datetime.now() - datetime.timedelta(days=1)
     else:
-        date_from = date_from
+        date_from = date_from.replace(minute=00, hour=00, second=00)
         # date_from = date_from - datetime.timedelta(days=1)
 
     if date_to is None:
         days = 14
         days_added = datetime.timedelta(days=days)
-        date_to = date_from + days_added
+        date_to_pre = date_from + days_added
+        date_to=date_to_pre.replace(minute=59, hour=23, second=00)
     else:
-        date_to = date_to
+        date_to = date_to.replace(minute=59, hour=23, second=00)
 
     if location is not None and event_manager is None and distrib is None:
         all_events = [i for i in Event.objects.filter(location=location)]
@@ -65,12 +71,9 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
     elif location is not None and event_manager is not None and distrib is not None:
         all_events = [Event.objects.get(location=location, pk=i.pk) for i in distrib if event_manager in i.event_managers.all()]
     else:
-        # all_events = [Event.objects.get(pk=i.pk) for i in Event.objects.all()]
         all_events = Event.objects.all()
-    # print(all_events)
-    eligible_events_date = {}
-    # for i in range(len(all_events)):
-    # for j in all_events[i]:
+
+    eligible_events_date = dict()
     for j in all_events:
         event_date = j.start_date
         if j.is_recurring:
@@ -80,25 +83,50 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
                 continue
             for n in range(rec_pattern.max_num_occurrences + 1):
                 if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
-                    if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
-                                                                             start_date=event_date):
+                    if attendance:
+                        if AttendeesEvents.objects.filter(user=user_requester, parent_event=j, event_date=datetime.datetime(event_date.year, event_date.month, event_date.day)):
+                            if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
+                                                                                     start_date=event_date):
+                                try:
+                                    eligible_events_date[event_date][str(j.uuid)] = {'details': j.serialize()}
+                                except KeyError:
+                                    eligible_events_date.setdefault(event_date, {str(j.uuid): {'details': j.serialize()} })
+
+                    else:
                         try:
-                            events = eligible_events_date[event_date]
-                            events.append(j.serialize())
-                            eligible_events_date[event_date] = events
+                            eligible_events_date[event_date][str(j.uuid)] = {'details': j.serialize() }
+                            if EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j, start_date=event_date):
+                                eligible_events_date[event_date][str(j.uuid)]['details']["event_date_cancelled"] = 1
                         except KeyError:
-                            eligible_events_date.setdefault(event_date, [j.serialize()])
+                            eligible_events_date.setdefault(event_date, { str(j.uuid): {'details': j.serialize() }})
+                            if EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j, start_date=event_date):
+                                eligible_events_date[event_date][str(j.uuid)]['details']["event_date_cancelled"] = 1
                 event_date = return_date_based_pattern(rec_pattern, event_date)
 
         else:
             if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
-                try:
-                    events = eligible_events_date[event_date]
-                    events.append(j.serialize())
-                    eligible_events_date[event_date] = events
-                except KeyError:
-                    eligible_events_date.setdefault(event_date, [j.serialize()])
+                if attendance:
+                    if AttendeesEvents.objects.filter(user=user_requester, parent_event=j, event_date=datetime.datetime(event_date.year, event_date.month, event_date.day)):
+                        if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
+                                                                                 start_date=event_date):
+                            try:
+                                eligible_events_date[event_date][str(j.uuid)] = {'details': j.serialize()}
+                            except KeyError:
+                                eligible_events_date.setdefault(event_date, {str(j.uuid): {'details': j.serialize()}})
+
+                else:
+                    try:
+                        eligible_events_date[event_date][str(j.uuid)] = {'details': j.serialize() }
+                        if EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j, start_date=event_date):
+                            eligible_events_date[event_date][str(j.uuid)]['details']["event_date_cancelled"] = 1
+
+                    except KeyError:
+                        eligible_events_date.setdefault(event_date,{str(j.uuid): {'details': j.serialize()} })
+                        if EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j, start_date=event_date):
+                            eligible_events_date[event_date][str(j.uuid)]['details']["event_date_cancelled"] = 1
+
     sorted_eligible_events_date = sorted(eligible_events_date.items())
+    # pprint(sorted_eligible_events_date)
     return sorted_eligible_events_date
 
 
@@ -113,9 +141,9 @@ def events_list_json(request, user_id):
     try:
         date_to = datetime.datetime.strptime(request.GET['to'], '%Y-%m-%d')
     except:
-        date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
-    distrib = Event.objects.filter(is_cancelled=False)
-    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(uuid=user_id), distrib=distrib)
+        # date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(days=14)
+        date_to = datetime.datetime.now() + datetime.timedelta(days=14)
+    events = events_list(date_from=date_from, date_to=date_to, location=None, event_manager=User.objects.get(uuid=user_id), distrib=None)
     return JsonResponse(events, safe=False)
 
 
@@ -307,8 +335,8 @@ def validate_event_date(event, date):
     if event.is_recurring:
         eligible_event_date = events_list(date_from=date_in_datetime, date_to=date_in_datetime, location=None, event_manager=None, distrib=None)
         for i in eligible_event_date:
-            for j in i[1]:
-                if i[0] == date_in_date and j['uuid'] == event.uuid:
+            for (j, value) in i[1].items():
+                if i[0] == date_in_date and value['details']['uuid'] == event.uuid:
                     event_valid = True
     else:
         if event.start_date == date_in_date:
@@ -459,12 +487,15 @@ def event_details(request, event_id):
             for i in event_page.location.location_managers.all():
                 if i == request.user:
                     manager_location = True
-            if event_page:
-                message_form = MessagesEventsSimpleForm()
-                return render(request, 'event_details.html',
+            message_form = MessagesEventsSimpleForm()
+            date_cancelled = False
+            if EventExceptionCancelledRescheduled.objects.filter(parent_event=event_page, start_date=date).first():
+                date_cancelled = True
+            return render(request, 'event_details.html',
                               context={"event": event_page, "manager_location": manager_location, 'date': date,
                                        "attendees": attendees, "all_attendees": all_attendees,
-                                       "count_attendees": count_attendees, "message_form":message_form})
+                                       "count_attendees": count_attendees, "message_form":message_form,
+                                       "cancelled":date_cancelled})
         return redirect('index')
 
 
@@ -520,7 +551,6 @@ def event_delete_rec(request, event_id):
         event_rec_to_delete = Event.objects.get(uuid=event_id)
     except:
         # print('2')
-
         return redirect('index')
     else:
         # print('3')
@@ -549,4 +579,15 @@ def event_delete_rec(request, event_id):
         return redirect('index')
 
 
-
+@login_required(login_url='/login/')
+@forbidden_to_user
+@location_manager_check
+def reactivate_event_date(request, event_id):
+    try:
+        date = request.GET['date']
+        exception_event_to_undo = EventExceptionCancelledRescheduled.objects.get(parent_event=Event.objects.get(uuid=event_id), start_date=date)
+    except:
+        return redirect('index')
+    else:
+        exception_event_to_undo.delete()
+        return redirect('index')

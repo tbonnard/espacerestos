@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import datetime
@@ -15,9 +17,7 @@ def index(request):
     to_user_messages = get_to_user_messages(request.user)
     from_user_messages = get_from_user_messages(request.user)
 
-    # if request.user.user_type == 1:
-    #     user_locations = Location.objects.all()
-    # else:
+
     user_distrib_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
                          StatusUsersLocations.objects.filter(user=request.user, status=2)
     distrib_user_choice = [i.distrib for i in user_distrib_pre if not i.distrib.is_cancelled]
@@ -26,11 +26,9 @@ def index(request):
     for i in distrib_attendees:
         if i not in distrib and not i.is_cancelled:
             distrib.append(i)
-    eligible_events_date_locations = events_list(date_from=None, date_to=None, location=None, distrib=distrib, event_manager=None)
 
-    pending_location = []
+
     if StatusUsersLocations.objects.filter(user=request.user, status=1):
-        # pending_location = [i.location for i in StatusUsersLocations.objects.filter(user=request.user, status=1)]
         pending_events = StatusUsersLocations.objects.filter(user=request.user, status=1)
     else:
         pending_events = None
@@ -44,33 +42,10 @@ def index(request):
         users_to_approve = False
         distrib_users_to_approve = None
 
-    eligible_events_date_locations_attendees = []
     attendees = AttendeesEvents.objects.filter(user=request.user)
-    for i in eligible_events_date_locations:
-        for j in i[1]:
-            for z in attendees:
-                if j['uuid'] == z.parent_event.uuid and i[0] == z.event_date:
-                    for y in eligible_events_date_locations_attendees:
-                        if y[0] == i[0]:
-                            for x in eligible_events_date_locations_attendees:
-                                if x[0] == i[0]:
-                                    events_that_date_index = eligible_events_date_locations_attendees.index(x)
-                                    break
-                            events_that_date = eligible_events_date_locations_attendees[events_that_date_index][1]
-                            events_that_date.append(j)
-                            for a in eligible_events_date_locations_attendees:
-                                if a[0] == i[0]:
-                                    eligible_events_date_locations_attendees[eligible_events_date_locations_attendees.index(a)] = (i[0], events_that_date)
-                                    break
-                    if i[0] not in eligible_events_date_locations_attendees:
-                        eligible_events_date_locations_attendees.append(i[0])
-                    eligible_events_date_locations_attendees[eligible_events_date_locations_attendees.index(i[0])]=(i[0],[j])
-    eligible_events_date_locations_attendees_final = []
-    dates_event = []
-    for b in eligible_events_date_locations_attendees:
-        if b[0] not in dates_event:
-            dates_event.append(b[0])
-            eligible_events_date_locations_attendees_final.append(b)
+
+    eligible_events_date_locations_attendees_final = events_list(date_from=None, date_to=None, location=None, distrib=None, event_manager=None, attendance=True, user_requester=request.user)
+
     date_to = datetime.datetime.now() - datetime.timedelta(days=1) + datetime.timedelta(weeks=8)
     events_manager = events_list(date_from=None, date_to=date_to, location=None, event_manager=request.user, distrib=None)
     message_form = MessagesEventsForm()

@@ -55,11 +55,8 @@
                 </tr>
             </thead>
             <tbody id="tbody_event_manager">
-            {% for j in events_manager %}
-            {% for z in j.1 %}
 
-            {% endfor %}
-            {% endfor %}
+            
             </tbody>
         </table>
 
@@ -89,9 +86,10 @@
 
 <h3>Vos présences des 14 prochains jours</h3>
 
-{% include "events_loop.html" %}
+    {% include 'events_loop.html' %}
 
 {% endif %}
+
 
     <div class="">
         <a href="{% url 'events_list_date'%}?from={% now 'Y-m-d' %}&to={{date_to|date:'Y-m-d'}}" >

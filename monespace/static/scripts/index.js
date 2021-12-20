@@ -75,12 +75,17 @@ if (document.querySelector('#events_manager_menu')) {
   fetch(url)
     .then(response => response.json())
     .then(data => {
+      // console.log(data);
       let options = {day: 'numeric', month: 'long', year: 'numeric'};
       if (data.length > 0) {
         tableEvent.style.display = 'block';
         info_text.style.display = 'none';
       data.forEach(i => {
-        i[1].forEach(j => {
+
+        for (const [key, value] of Object.entries(i[1])) {
+          console.log(value['details']);
+          // console.log(value['details']['uuid'])
+
           let tbody = document.querySelector('#tbody_event_manager');
           let tr = document.createElement('tr');
           let tdDate = document.createElement('td');
@@ -89,37 +94,37 @@ if (document.querySelector('#events_manager_menu')) {
           aUrlEvent.className = "event_manager_date";
           aUrlEvent.dataset.event_manager_date = new Date(i[0]+"T00:00:00.000").toISOString().split('T')[0];
           aUrlEvent.textContent = new Date(i[0]+"T00:00:00.000").toLocaleDateString('fr-FR', options);
-          aUrlEvent.href = `${window.location.origin}/event/details/${j.uuid}/?date=${i[0]}`;
+          aUrlEvent.href = `${window.location.origin}/event/details/${value['details']['uuid']}/?date=${i[0]}`;
           let tdName = document.createElement('td');
           tdName.className='table_cell';
-          tdName.textContent = j.name;
+          tdName.textContent = value['details']['name'];
           let atdName = document.createElement('a');
-          atdName.href = `${window.location.origin}/distribution/details/${j.uuid}/`;
+          atdName.href = `${window.location.origin}/distribution/details/${value['details']['uuid']}/`;
           atdName.innerHTML=`<i class='fas fa-angle-right'></i>`;
           atdName.title = 'Détails globaux sur la distribution, et non pas juste cette date'
           let tdTime = document.createElement('td');
           tdTime.className='table_cell';
-          tdTime.textContent = `${j.time_from.slice(0, -3)} - ${j.time_to.slice(0, -3)}`;
+          tdTime.textContent = `${value['details']['time_from'].slice(0, -3)} - ${value['details']['time_to'].slice(0, -3)}`;
           let tdBenevoles = document.createElement('td');
           tdBenevoles.className='table_cell button_attendance_manager';
-          tdBenevoles.id = `attend_event_number_manager_${j.uuid}${i[0]}`;
-          tdBenevoles.dataset.event_date = `${j.uuid}_${i[0]}`;
-          get_number_attendees(j.uuid, i[0]);
+          tdBenevoles.id = `attend_event_number_manager_${value['details']['uuid']}${i[0]}`;
+          tdBenevoles.dataset.event_date = `${value['details']['uuid']}_${i[0]}`;
+          get_number_attendees(value['details']['uuid'], i[0]);
           let tdMessage = document.createElement('td');
           tdMessage.className='table_cell';
           let aTdMessage = document.createElement('a');
           aTdMessage.title = 'Envoyer un message aux bénévoles';
           aTdMessage.id = `message_icon_button`;
-          aTdMessage.dataset.details = `${j.uuid}${i[0]}`
-          aTdMessage.dataset.event = `${j.uuid}`
+          aTdMessage.dataset.details = `${value['details']['uuid']}${i[0]}`
+          aTdMessage.dataset.event = `${value['details']['uuid']}`
           aTdMessage.dataset.date = `${i[0]}`
-          aTdMessage.innerHTML=`<i class='fas fa-envelope'></i>`;
+          if (value['details']['event_date_cancelled'] == 0) {
+            aTdMessage.innerHTML=`<i class='fas fa-envelope'></i>`;
+          } else {
+            aTdMessage.innerHTML=``;
+          }
           let tdCancelDate = document.createElement('td');
           tdCancelDate.className='table_cell';
-          let aURLCancelDate = document.createElement('a');
-          aURLCancelDate.title = `Annuler la distribution du ${i[0]}`;
-          let iCancelDate = document.createElement('i');
-          iCancelDate.className = "far fa-trash-alt";
           tbody.append(tr);
           tr.append(tdDate);
           tdDate.append(aUrlEvent);
@@ -130,39 +135,84 @@ if (document.querySelector('#events_manager_menu')) {
           tr.append(tdMessage);
           tdMessage.append(aTdMessage);
           tr.append(tdCancelDate);
-          tdCancelDate.append(aURLCancelDate);
-          aURLCancelDate.append(iCancelDate);
-          aURLCancelDate.addEventListener('click', () => {
-            tdCancelDate.style.display = 'none';
-            let tdValidateCancel = document.createElement('td');
-            tdValidateCancel.className='table_cell';
-            tdValidateCancel.textContent = "Êtes-vous certain?";
-            let divCancel =document.createElement('div');
-            divCancel.style.marginTop = '5px';
-            divCancel.style.marginBottom = '5px';
-            let aValidateCancelYes = document.createElement('a');
-            aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${j.uuid}/?date=${i[0]}`;
-            aValidateCancelYes.title = `Oui, annuler la distribution du ${i[0]}`;
-            let iValidateCancelYes = document.createElement('i');
-            iValidateCancelYes.className = "fas fa-check-square";
-            iValidateCancelYes.style.marginRight = '10px';
-            let aValidateCancelNo = document.createElement('a');
-            aValidateCancelNo.title = 'Non, laisser la date';
-            let iValidateCancelNo = document.createElement('i');
-            iValidateCancelNo.className = "far fa-window-close";
-            iValidateCancelNo.style.marginLeft = '5px';
-            tr.append(tdValidateCancel);
-            tdValidateCancel.append(divCancel);
-            divCancel.append(aValidateCancelYes)
-            divCancel.append(aValidateCancelNo)
-            aValidateCancelYes.append(iValidateCancelYes);
-            aValidateCancelNo.append(iValidateCancelNo);
-            iValidateCancelNo.addEventListener('click', () => {
-              tdValidateCancel.style.display='none';
-              tdCancelDate.style.display = 'block';
+          if (value['details']['event_date_cancelled'] == 0) {
+            let aURLCancelDate = document.createElement('a');
+            aURLCancelDate.title = `Annuler la distribution du ${i[0]}`;
+            let iCancelDate = document.createElement('i');
+            iCancelDate.className = "far fa-trash-alt";
+            tdCancelDate.append(aURLCancelDate);
+            aURLCancelDate.append(iCancelDate);
+            aURLCancelDate.addEventListener('click', () => {
+              tdCancelDate.style.display = 'none';
+              let tdValidateCancel = document.createElement('td');
+              tdValidateCancel.className='table_cell';
+              tdValidateCancel.textContent = "Êtes-vous certain ?";
+              let divCancel =document.createElement('div');
+              divCancel.style.marginTop = '5px';
+              divCancel.style.marginBottom = '5px';
+              let aValidateCancelYes = document.createElement('a');
+              aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${value['details']['uuid']}/?date=${i[0]}`;
+              aValidateCancelYes.title = `Oui, annuler la distribution du ${i[0]}`;
+              let iValidateCancelYes = document.createElement('i');
+              iValidateCancelYes.className = "fas fa-check-square";
+              iValidateCancelYes.style.marginRight = '10px';
+              let aValidateCancelNo = document.createElement('a');
+              aValidateCancelNo.title = 'Non, laisser la date';
+              let iValidateCancelNo = document.createElement('i');
+              iValidateCancelNo.className = "far fa-window-close";
+              iValidateCancelNo.style.marginLeft = '5px';
+              tr.append(tdValidateCancel);
+              tdValidateCancel.append(divCancel);
+              divCancel.append(aValidateCancelYes)
+              divCancel.append(aValidateCancelNo)
+              aValidateCancelYes.append(iValidateCancelYes);
+              aValidateCancelNo.append(iValidateCancelNo);
+              iValidateCancelNo.addEventListener('click', () => {
+                tdValidateCancel.style.display='none';
+                tdCancelDate.style.display = 'block';
             })
           })
-          })
+        } else {
+              tdCancelDate.innerHTML = 'annulé';
+              let aURLCancelDate = document.createElement('a');
+              aURLCancelDate.title = `Réactiver la distribution du ${i[0]}`;
+              let iCancelDate = document.createElement('i');
+              iCancelDate.className = "far fa-check-circle";
+              tdCancelDate.append(aURLCancelDate);
+              aURLCancelDate.append(iCancelDate);
+              aURLCancelDate.addEventListener('click', () => {
+                tdCancelDate.style.display = 'none';
+                let tdValidateCancel = document.createElement('td');
+                tdValidateCancel.className='table_cell';
+                tdValidateCancel.textContent = "Réactiver cette date ?";
+                let divCancel =document.createElement('div');
+                divCancel.style.marginTop = '5px';
+                divCancel.style.marginBottom = '5px';
+                let aValidateCancelYes = document.createElement('a');
+                aValidateCancelYes.href = `${window.location.origin}/reactivate_event_date/${value['details']['uuid']}/?date=${i[0]}`;
+                aValidateCancelYes.title = `Oui, remettre la distribution du ${i[0]}`;
+                let iValidateCancelYes = document.createElement('i');
+                iValidateCancelYes.className = "fas fa-check-square";
+                iValidateCancelYes.style.marginRight = '10px';
+                let aValidateCancelNo = document.createElement('a');
+                aValidateCancelNo.title = 'Non, laisser cette date annulée';
+                let iValidateCancelNo = document.createElement('i');
+                iValidateCancelNo.className = "far fa-window-close";
+                iValidateCancelNo.style.marginLeft = '5px';
+                tr.append(tdValidateCancel);
+                tdValidateCancel.append(divCancel);
+                divCancel.append(aValidateCancelYes)
+                divCancel.append(aValidateCancelNo)
+                aValidateCancelYes.append(iValidateCancelYes);
+                aValidateCancelNo.append(iValidateCancelNo);
+                iValidateCancelNo.addEventListener('click', () => {
+                  tdValidateCancel.style.display='none';
+                  tdCancelDate.style.display = 'block';
+              })
+            })
+          }
+        }
+
         })
         eventManagerDate = document.querySelectorAll('.event_manager_date');
 
@@ -225,8 +275,6 @@ if (document.querySelector('#events_manager_menu')) {
   toDate.setDate(toDate.getDate()+days);
   toDateFinal = toDate.toISOString().split('T')[0];
   createDistrib(fromDateFinal, toDateFinal);
-
-
 
 
 } else {

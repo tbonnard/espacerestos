@@ -77,6 +77,8 @@ class Event(models.Model):
                 "start_date": self.start_date,
                 "time_from": self.time_from,
                 "time_to": self.time_to,
+                "event_cancelled": self.is_cancelled,
+                "event_date_cancelled":0
                 }
 
 

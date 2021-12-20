@@ -68,6 +68,8 @@
         </div>
       </div>
 
+
+     {% if not cancelled %}
       <div class="event_right_subitem_attend">
         {% now "Y-m-d" as todays_date %}
             {% if todays_date <= date %}
@@ -85,6 +87,8 @@
             {% endif %}
             {% endif %}
       </div>
+      {% endif %}
+
 
         {% if attendees and todays_date <= date  %}
       <div class="event_right_subitem_attend">
@@ -98,7 +102,6 @@
       </div>
 
   </div>
-
 
 
 {% if todays_date <= date %}

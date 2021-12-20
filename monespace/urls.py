@@ -31,6 +31,7 @@ urlpatterns = [
     path('event/liste/', views_events.events_list_date, name='events_list_date'),
     path('event_delete_all/<uuid:event_id>/', views_events.event_delete_all, name='event_delete_all'),
     path('event_delete_rec/<uuid:event_id>/', views_events.event_delete_rec, name='event_delete_rec'),
+    path('reactivate_event_date/<uuid:event_id>/', views_events.reactivate_event_date, name='reactivate_event_date'),
     path('site/creer/', views_locations.location_create, name='location_create'),
     path('site/liste', views_locations.locations, name='locations'),
     path('profil/selectionner_sites/', views_locations.select_locations, name='select_locations'),
