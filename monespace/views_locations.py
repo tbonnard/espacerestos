@@ -142,7 +142,8 @@ def location_edit(request, location_id):
             #         edit_user_type_to_manager(manager)
             #         check_if_new_status_to_create_update(location=location_page, user_to_update=manager, from_user=request.user, manager=True)
             location_page.save()
-            return redirect('index')
+            # return redirect('index')
+            return redirect(reverse('location_details', kwargs={'location_id': location_id}))
     return render(request, 'location.html', context={"form": form, 'is_edit': True, 'location_id': location_id})
 
 

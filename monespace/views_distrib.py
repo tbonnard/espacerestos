@@ -139,6 +139,8 @@ def change_distrib_manager(request, distrib_id):
         form = DistributionManagerForm(data=request.POST)
         if form.is_valid():
             distrib = get_object_or_404(Event, uuid=distrib_id)
+            distrib.pre_alert_non_attendees_status = form.cleaned_data['pre_alert_non_attendees_status']
+            distrib.pre_alert_non_attendees_nb_attendees = form.cleaned_data['pre_alert_non_attendees_nb_attendees']
             previous_manager = distrib.event_managers.all()
             managers =form.cleaned_data['event_managers']
 

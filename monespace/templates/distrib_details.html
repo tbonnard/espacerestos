@@ -44,11 +44,18 @@
         <h4>Responsables</h4>
             {% for i in distrib.event_managers.all %}
             <p>{{i}}</p>
-            {% endfor %}<a><i id="icon_change_manager" class="far fa-edit info_icon"></i></a>
+        {% endfor %}
+        <h4>Alerte envoyée automatiquement</h4>
+        {% if distrib.pre_alert_non_attendees_status %}
+        <p>Une alerte automatique est envoyée 2 jours avant chaque distribution aux bénévoles non présents pour leur demander s'ils peuvent se libérer si le nombre de présent est en dessous de {{distrib.pre_alert_non_attendees_nb_attendees}}</p>
+        {% else %}
+        <p>Aucune alerte automatique est avant chaque distribution aux bénévoles non présents pour leur demander s'ils peuvent se libérer si le nombre de présent est en dessous de {{distrib.pre_alert_non_attendees_nb_attendees}}</p>
+        {% endif %}
+        <a id="icon_change_manager"><i  class="far fa-edit info_icon"></i>Pour modifier ces détails</a>
 
         <form id="change_manager" method='POST' action="{% url 'change_distrib_manager' distrib_id=distrib.uuid %}">
             {% csrf_token %}
-            {{formManager}}
+            {{formManager.as_p}}
             <div>
             <button class="change_manager_button" type="submit"><i id="icon_approve_change_manager" title="Valider le changement" class="fas fa-check-circle info_icon"></i></button>
             <a><i id="icon_cancel_change_manager" title="Anuler le changement"  class="far fa-window-close info_icon"></i></a>

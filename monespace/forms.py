@@ -88,9 +88,11 @@ class DistributionForm(forms.ModelForm):
 class DistributionManagerForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ("event_managers",)
+        fields = ("event_managers","pre_alert_non_attendees_status", "pre_alert_non_attendees_nb_attendees")
         labels = {
-            "event_managers": "Modifier les responsables de la soirée de distribution"
+            "event_managers": "Modifier les responsables de la soirée de distribution",
+            "pre_alert_non_attendees_status": "Voulez vous activer une alerte automatique envoyée 2 jours avant l'événement si le nombre de bénévoles est inférieur au nombre désiré ?",
+            "pre_alert_non_attendees_nb_attendees": "En dessous de ce nombre, l'alerte, si active sera envoyée"
         }
         widgets = {
             "event_managers": forms.CheckboxSelectMultiple(),

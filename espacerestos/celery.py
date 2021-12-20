@@ -13,17 +13,24 @@ app = Celery('espacerestos')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.conf.beat_schedule = {
-    "every_day_2_days_reminder": {
-        "task": "monespace.tasks.send_2_days_reminder",
-        "schedule": crontab(day_of_week="0-6", hour=9, minute=00),
+    "send_1_day_reminder_attend": {
+        "task": "monespace.tasks.send_1_day_reminder_attend",
+        "schedule": crontab(day_of_week="0-6", hour=18, minute=00),
     },
 }
 
 app.conf.beat_schedule = {
-    "say_hello": {
-        "task": "monespace.tasks.say_hello",
-        "schedule": timedelta(seconds=30),
+    "send_2_days_reminder_non_attendees": {
+        "task": "monespace.tasks.send_2_days_reminder_non_attendees",
+        "schedule": crontab(day_of_week="0-6", hour=9, minute=00),
     },
 }
+#
+# app.conf.beat_schedule = {
+#     "say_hello": {
+#         "task": "monespace.tasks.say_hello",
+#         "schedule": timedelta(seconds=30),
+#     },
+# }
 
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
