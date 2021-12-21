@@ -1,3 +1,5 @@
+import datetime
+
 from celery.utils.serialization import jsonify
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -6,7 +8,7 @@ from django.urls import reverse
 
 from .forms import DistributionForm, StatusUsersLocationsForm, DistributionManagerForm, MessagesEventsSimpleForm
 from .functions_global import forbidden_to_user
-from .models import Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, User
+from .models import Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, User, AttendeesEvents
 from .notification_manager import send_email
 from .views_locations import edit_user_type_to_manager, check_if_new_status_to_create_update, edit_user_type_to_user
 
@@ -88,6 +90,14 @@ def distrib_users(request, distrib_id):
         status_users_location = StatusUsersLocations.objects.filter(distrib=distrib, status=1) | \
                                 StatusUsersLocations.objects.filter(distrib=distrib, status=2)
         form = StatusUsersLocationsForm()
+
+        users_from_status_users_location = [i.user for i in status_users_location]
+        users_from_status_users_location_dict = {}
+        for i in users_from_status_users_location:
+            last_attendance = AttendeesEvents.objects.filter(parent_event=distrib, user=i, event_date__lte=datetime.datetime.now()).order_by('event_date').last()
+            if last_attendance is not None:
+                users_from_status_users_location_dict.setdefault(i.uuid, last_attendance.event_date)
+
     if request.method == "POST":
         try:
             user_status_update = StatusUsersLocations.objects.get(uuid=request.GET['id'])
@@ -103,7 +113,8 @@ def distrib_users(request, distrib_id):
 
     return render(request, 'benevoles_distrib.html', context={"distrib":distrib,
                                                             "status_users_location": status_users_location.order_by('user__first_name'),
-                                                            "form": form, "message_form":message_form})
+                                                            "form": form, "message_form":message_form,
+                                                              "last_attendance":users_from_status_users_location_dict})
 
 
 @login_required(login_url='/login/')

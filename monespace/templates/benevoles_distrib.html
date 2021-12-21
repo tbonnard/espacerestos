@@ -45,11 +45,12 @@
                     <th class='table_heading'>Nom d'utilisateur</th>
                     <th class='table_heading'>Email</th>
                     <th class='table_heading'>Téléphone</th>
-                    <th class='table_heading'>Dernière connexion</th>
+                    <th class='table_heading'>Dernière présence</th>
                     <th class='table_heading'>Envoyer un message</th>
                     <th class='table_heading'>Statut</th>
                     <th class='table_heading'>Mise à jour du statut</th>
                     <th class='table_heading'>Modifier le bénévole</th>
+                    <th class='table_heading'>Dernière connexion</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +68,13 @@
                     <td class='table_cell'>{{j.user.username}}</td>
                     <td class='table_cell'>{{j.user.email|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.user.tel|default_if_none:""}}</td>
-                    <td class='table_cell'>{{j.user.last_login|date:'Y-m-d H:i:s'}}</td>
+                    <td class='table_cell'>
+                        {% for key, value in last_attendance.items %}
+                        {% if key == j.user.uuid %}
+                        {{ value|date:'Y-m-d' }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
                     <td class='table_cell'><a id="message_icon_button" title="Envoyer un message à ce bénévole" data-user="{{j.user.uuid}}"><i class='fas fa-envelope'></i></a></td>
                     <td class='table_cell'><span class="user_status" data-user="{{j.user.uuid}}{{j.distrib.uuid}}" >{{j.get_status_display|default_if_none:""}}</span>
 
@@ -99,6 +106,7 @@
                         {% endif %}
                     </td>
                     <td class='table_cell'><a href="{% url 'profile_edit_manager' user_id=j.user.uuid distrib_id=j.distrib.uuid %}"><i class="fas fa-edit"></i></a></td>
+                    <td class='table_cell'>{{j.user.last_login|date:'Y-m-d H:i:s'}}</td>
 
 
 

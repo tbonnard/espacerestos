@@ -83,7 +83,7 @@ if (document.querySelector('#events_manager_menu')) {
       data.forEach(i => {
 
         for (const [key, value] of Object.entries(i[1])) {
-          console.log(value['details']);
+          // console.log(value['details']);
           // console.log(value['details']['uuid'])
 
           let tbody = document.querySelector('#tbody_event_manager');
@@ -294,6 +294,9 @@ if (document.querySelector('#events_manager_menu')) {
   }
 
 
+
+// MESSAGES
+
 let messageReceivedDiv = document.querySelector('#received_messages');
 let aMessageReceivedDiv = document.querySelector('#a_received_messages');
 let messageSentDiv = document.querySelector('#sent_messages');
@@ -404,8 +407,7 @@ function check_if_notif() {
     })
   })
 
-
-check_if_notif();
+  check_if_notif();
 
 
 

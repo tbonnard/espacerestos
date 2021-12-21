@@ -82,7 +82,7 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
             except:
                 continue
             for n in range(rec_pattern.max_num_occurrences + 1):
-                if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= date_to:
+                if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day).replace(minute=j.time_from.hour, hour=00, second=00) <= date_to:
                     if attendance:
                         if AttendeesEvents.objects.filter(user=user_requester, parent_event=j, event_date=datetime.datetime(event_date.year, event_date.month, event_date.day)):
                             if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,

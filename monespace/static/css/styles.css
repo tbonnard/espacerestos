@@ -35,6 +35,14 @@ a:hover{
   color: var(--near_black);
 }
 
+.a_reverse {
+	color: var(--near_black) !important;
+}
+
+.a_reverse:hover {
+	color: var(--pink) !important;
+}
+
 .top_bar_menu a{
 	color: var(--near_black);
 }
@@ -671,6 +679,11 @@ nav::before {
 
 
 /* EVENTS */
+
+.items_box{
+	margin-top: 20px;
+}
+
 .event_details_master {
 
 }
@@ -1143,9 +1156,14 @@ details[open] summary ~ * {
 	.container_master_mobile{
 		margin-top: 100px;
 	}
-	.container_master_revert{
+	.container_master_search{
+		margin-top: 150px;
 	}
-
+	.items_box{
+		/* position: absolute;
+		right: 5%;
+		top: 30%; */
+	}
 	#send_messages{
 		width: 70%;
 	}

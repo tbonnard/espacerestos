@@ -20,9 +20,9 @@
                     <th class='table_heading'>Email</th>
                     <th class='table_heading'>Téléphone</th>
                     <th class='table_heading'>Type d'utilisateur</th>
-                    <th class='table_heading'>Dernière connexion</th>
                     <th class='table_heading'>Envoyer un message</th>
                     <th class='table_heading'>Distributions(s) / Site(s)</th>
+                    <th class='table_heading'>Dernière connexion</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,7 +41,6 @@
                     <td class='table_cell'>{{j.email|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.tel|default_if_none:""}}</td>
                     <td class='table_cell'>{{j.get_user_type_display}}</td>
-                    <td class='table_cell'>{{j.last_login|date:'Y-m-d H:i:s'}}</td>
                     <td class='table_cell'><a id="message_icon_button" title="Envoyer un message à ce bénévole" data-user="{{j.uuid}}"><i class='fas fa-envelope'></i></a></td>
                     <td class='table_cell'>
                         {% for i in status_users_location %}
@@ -50,6 +49,7 @@
                             {% endif %}
                         {% endfor %}
                     </td>
+                    <td class='table_cell'>{{j.last_login|date:'Y-m-d H:i:s'}}</td>
                 </tr>
             {% endfor %}
             </tbody>

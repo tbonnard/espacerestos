@@ -22,6 +22,7 @@ function api_call_attend_decline(eventid, date, type) {
   .then(response => response.json())
   .then(data => {
     document.querySelectorAll(`#div_${eventid}${date}`).forEach(e => e.parentNode.removeChild(e));
+    document.querySelectorAll(`#span_${eventid}${date}`).forEach(e => e.parentNode.removeChild(e));
     get_specific_attendees(eventid, date);
   })
 
@@ -52,6 +53,7 @@ function api_call_attend_decline(eventid, date, type) {
         window.location.reload();
       }
     })
+
   }
 
 
@@ -72,18 +74,27 @@ function api_call_attend_decline(eventid, date, type) {
     .then(response => response.json())
     .then(data => {
       // console.log(data[0])
-      let span_number_attendees = document.querySelector(`#attend_event_number_${eventid}${date}`);
-      if (data[0] > 1 ) {
-        text_attendees_number = `${data} personnes confirmées`
-      } else if (data[0] > 0 ) {
-        text_attendees_number = `${data} personne confirmée`
-      } else {
-        text_attendees_number = "0 personne confirmée"
+      update_benev_number_box(eventid, date, data);
+      if (document.querySelector('#box_to_items')) {
+        update_benev_number_list(eventid, date, data);
       }
-      span_number_attendees.innerHTML = text_attendees_number;
     })
 
   }
+
+  function update_benev_number_box(eventid, date, data) {
+    let span_number_attendees = document.querySelector(`#attend_event_number_${eventid}${date}`);
+    if (data[0] > 1 ) {
+      text_attendees_number = `${data} personnes confirmées`
+    } else if (data[0] > 0 ) {
+      text_attendees_number = `${data} personne confirmée`
+    } else {
+      text_attendees_number = "0 personne confirmée"
+    }
+    span_number_attendees.innerHTML = text_attendees_number;
+  }
+
+
 
   let attendees_number_event = document.querySelectorAll(`.attend_event_number`);
   attendees_number_event.forEach( i => {
@@ -98,15 +109,20 @@ function api_call_attend_decline(eventid, date, type) {
     .then(data => {
 
       let div_attendees = document.querySelector(`#parent_${eventid}${date}`);
+      let div_attendees_list = document.querySelector(`#parent_list_${eventid}${date}`);
+
+
       for (const j in data) {
         if (data[j].parent_event == eventid && data[j].event_date == date) {
           create_elements_attendees(div_attendees, eventid, date, '', '<i class="fas fa-check-square icon_attend"></i>Je serai là', 'decline');
+          createElementsList(div_attendees_list, eventid, date, '<i class="fas fa-check-square icon_attend"></i>Je serai là', 'decline');
           get_number_attendees(eventid, date);
         }
       }
 
       if (div_attendees.children.length == 0 ) {
         create_elements_attendees(div_attendees, eventid, date, '', '<i class="far fa-square icon_attend"></i>Confirmer ma présence', 'attend');
+        createElementsList(div_attendees_list, eventid, date, '<i class="far fa-square icon_attend"></i>Confirmer ma présence', 'attend');
         get_number_attendees(eventid, date);
       }
 
@@ -141,11 +157,35 @@ function api_call_attend_decline(eventid, date, type) {
         }
       })
 
+
+      let attendees_list = document.querySelectorAll('.attendees_list');
+      attendees_list.forEach(i => {
+
+        let eventid = i.dataset.eventid;
+        let date = i.dataset.date;
+        for (const j in data) {
+
+          if (data[j].parent_event == eventid && data[j].event_date == date) {
+            createElementsList(i, eventid, date, '<i class="fas fa-check-square icon_attend"></i>Je serai là', 'decline');
+          }
+        }
+      })
+
+      attendees_list.forEach(i => {
+        let eventid = i.dataset.eventid;
+        let date = i.dataset.date;
+        if (i.children.length == 0 ) {
+          createElementsList(i, eventid, date, '<i class="far fa-square icon_attend"></i>Confirmer ma présence', 'attend');
+        }
+      })
+
+
     })
 
   };
 
 all_attendees_user();
+
 
 
   function get_user_distrib() {
@@ -169,5 +209,79 @@ all_attendees_user();
 
 
 get_user_distrib();
+
+
+// BOX TO ITEMS ELEMENTS
+
+
+if (document.querySelector('#box_to_items')) {
+  let box_to_items = document.querySelector('#box_to_items');
+  let items_to_box = document.querySelector('#items_to_box');
+
+  let box_items_distrib = document.querySelector('#box_items_distrib');
+  let list_items_distrib = document.querySelector('#list_items_distrib');
+
+
+  items_to_box.style.display = 'none';
+  list_items_distrib.style.display = 'none';
+
+  box_to_items.addEventListener('click', () => {
+    window.scrollTo({top:0,left:0,behavior:'smooth'});
+    items_to_box.style.display = 'block';
+    list_items_distrib.style.display = 'block';
+    box_to_items.style.display = 'none';
+    box_items_distrib.style.display = 'none';
+  })
+
+  items_to_box.addEventListener('click', () => {
+    window.scrollTo({top:0,left:0,behavior:'smooth'});
+    items_to_box.style.display = 'none';
+    list_items_distrib.style.display = 'none';
+    box_to_items.style.display = 'block';
+    box_items_distrib.style.display = 'block';
+  })
+
+
+  let attendanceBenev = document.querySelectorAll('.attendance_benev');
+  attendanceBenev.forEach( i => {
+    get_number_attendees(i.dataset.event, i.dataset.date);
+  })
+
+  }
+
+  function update_benev_number_list(eventid, date, data) {
+    let tdBenevoleText = document.querySelector(`#attend_event_number_manager_${eventid}${date}`);
+    tdBenevoleText.textContent = data[0];
+  }
+
+
+  // let benevListAttendance = document.querySelectorAll('.attendees_list');
+  // benevListAttendance.forEach( i => {
+  //   createElementsList(i, i.dataset.event, i.dataset.date);
+  // })
+
+
+  function createElementsList (parentDivList, eventid, date, aText, type) {
+    let span = document.createElement('span');
+    span.id = `span_${eventid}${date}`
+    parentDivList.append(span);
+    let a = document.createElement('a');
+    a.innerHTML = aText;
+    a.id = `${eventid}__${date}`;
+    span.append(a);
+    if (type == "decline") {
+      a.className = "a_reverse";
+    } else {
+    }
+      a.addEventListener('click', (e) => {
+      e.preventDefault();
+      api_call_attend_decline(eventid, date, type);
+      if (window.location.href.slice(0, -1) == window.location.origin ) {
+        window.location.reload();
+      }
+    })
+
+  }
+
 
 });
