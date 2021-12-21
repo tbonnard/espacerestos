@@ -13,6 +13,7 @@ from .models import Event, Location, RecurringPattern, StatusUsersLocations, Att
 from .forms import EventForm, EventRecurringPatternForm, MessagesEventsSimpleForm
 from .functions_global import forbidden_to_user, location_manager_check
 from .notification_manager import send_email
+from .views_distrib import get_last_attendance
 
 
 def return_date_based_pattern(rec_pattern, date):
@@ -491,11 +492,15 @@ def event_details(request, event_id):
             date_cancelled = False
             if EventExceptionCancelledRescheduled.objects.filter(parent_event=event_page, start_date=date).first():
                 date_cancelled = True
+
+            all_attendees_users = [i.user for i in all_attendees]
+            users_from_status_users_location_dict = get_last_attendance(all_attendees_users, event_page)
+
             return render(request, 'event_details.html',
                               context={"event": event_page, "manager_location": manager_location, 'date': date,
                                        "attendees": attendees, "all_attendees": all_attendees,
                                        "count_attendees": count_attendees, "message_form":message_form,
-                                       "cancelled":date_cancelled})
+                                       "cancelled":date_cancelled, "last_attendance":users_from_status_users_location_dict})
         return redirect('index')
 
 

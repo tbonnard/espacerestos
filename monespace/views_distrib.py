@@ -92,11 +92,7 @@ def distrib_users(request, distrib_id):
         form = StatusUsersLocationsForm()
 
         users_from_status_users_location = [i.user for i in status_users_location]
-        users_from_status_users_location_dict = {}
-        for i in users_from_status_users_location:
-            last_attendance = AttendeesEvents.objects.filter(parent_event=distrib, user=i, event_date__lte=datetime.datetime.now()).order_by('event_date').last()
-            if last_attendance is not None:
-                users_from_status_users_location_dict.setdefault(i.uuid, last_attendance.event_date)
+        users_from_status_users_location_dict = get_last_attendance(users_from_status_users_location, distrib)
 
     if request.method == "POST":
         try:
@@ -116,6 +112,16 @@ def distrib_users(request, distrib_id):
                                                             "form": form, "message_form":message_form,
                                                               "last_attendance":users_from_status_users_location_dict})
 
+
+def get_last_attendance(users, distrib):
+    users_from_status_users_location_dict = {}
+    for i in users:
+        last_attendance = AttendeesEvents.objects.filter(parent_event=distrib, user=i,
+                                                         event_date__lte=datetime.datetime.now()).order_by(
+            'event_date').last()
+        if last_attendance is not None:
+            users_from_status_users_location_dict.setdefault(i.uuid, last_attendance.event_date)
+    return users_from_status_users_location_dict
 
 @login_required(login_url='/login/')
 @forbidden_to_user
