@@ -20,7 +20,7 @@ def send_email(type_email, to_user, from_user, **kwargs):
         message_body = f"Un bénévole a demandé à être bénévole dans votre site. Merci d'approuver ou non cet utilisateur depuis la plateforme."
     elif type_email == 2:
         subject = f"Nouveau message de {from_user.first_name} pour vous sur la plateforme des bénévoles"
-        message_body = "Vous venez de recevoir un nouveau message. Merci de vous connecter à la plateforme."
+        message_body = f"Vous venez de recevoir un nouveau message. Voici le message de {from_user.first_name}: {kwargs['message_desc']}."
     elif type_email == 3:
         subject = f"Votre approbation pour rejoindre la distribution a été acceptée"
         message_body = f"Vous venez d'être approuvé par le responsable de distribution à rejoindre '{kwargs['distrib']}' . Vous pouvez maintenant vous rendre sur la plateforme et indiquer vos présences / voir les communications."

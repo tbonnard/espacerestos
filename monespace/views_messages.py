@@ -90,7 +90,7 @@ def send_message(request):
         # print('nothing')
     users_to_final = tuple(users_to)
     # send message
-    send_email(2, users_to_final, request.user)
+    send_email(2, users_to_final, request.user, message_desc=new_message.description)
 
     return JsonResponse({"Success": "Le message a été créé"}, status=200)
 
