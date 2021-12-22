@@ -465,9 +465,8 @@ button:hover, .input_btn:hover, .button_attendees:hover, button:focus, .input_bt
 }
 
 .item_nav span {
-	position: absolute;
-	bottom:0px;
-	left:50px;
+	display: block;
+	text-align: center;
 	color: var(--dark_grey);
 	font-size: 14px;
 }
