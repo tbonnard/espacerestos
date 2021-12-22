@@ -150,10 +150,10 @@
                             <span>pour les bénévoles de la distribution {{i.to_event.name}}</span>
                             {% endif %}
                         {% elif i.to_user %}
-                            <span>pour {% if i.from_user == request.user  %}
+                            <span>pour {% if i.to_user == request.user  %}
                                     vous même
                                     {% else %}
-                                    {{i.from_user}}
+                                    {{i.to_user}}
                                     {% endif %}</span>
                         {% else%}
                         <span></span>
@@ -228,10 +228,10 @@
                             <span>pour les bénévoles de la distribution {{i.to_event.name}}</span>
                             {% endif %}
                         {% elif i.to_user %}
-                            <span>pour {% if i.from_user == request.user  %}
+                            <span>pour {% if i.to_user == request.user  %}
                                     vous même
                                     {% else %}
-                                    {{i.from_user}}
+                                    {{i.to_user}}
                                     {% endif %}</span>
                         {% else%}
                         <span></span>
