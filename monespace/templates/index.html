@@ -173,7 +173,7 @@
                     <div class="div_answer_input">
                         <form method="POST">
                             {% csrf_token %}
-                        <input id="msg{{i.uuid}}" class="input_answer" type="text" required placeholder="répondre à {{i.from_user}}"><button class="button_reply" data-msg="{{i.uuid}}" data-to="{{i.from_user.uuid}}"><i class="far fa-check-circle"></i>Confirmer</button>
+                            <textarea id="msg{{i.uuid}}" class="input_answer" rows="1" cols="1" required placeholder="répondre à {{i.from_user}}"></textarea><button class="button_reply" data-msg="{{i.uuid}}" data-to="{{i.from_user.uuid}}"><i class="far fa-check-circle"></i>Confirmer</button>
                         </form>
                     </div>
 

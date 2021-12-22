@@ -1247,6 +1247,15 @@ details[open] summary ~ * {
 
 
 
+@media (max-width: 600px) {
+	.gmap_canvas, .mapouter {
+		width: 300px !important;
+	}
+
+}
+
+
+
 @media (max-width: 990px) {
   .menu_end {
     position: relative;

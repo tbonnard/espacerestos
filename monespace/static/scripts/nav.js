@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // check width of the window and based on that hide the menu
       if (window.outerWidth < 990) {
-        console.log('if < 990 one time');
-        console.log(window.screen.width);
+        // console.log('if < 990 one time');
+        // console.log(window.screen.width);
           ToggleMenu();
           ToggleSubMenu();
       }
