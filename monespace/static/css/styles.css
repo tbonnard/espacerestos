@@ -704,6 +704,7 @@ nav::before {
 	width: fit-content;
 	padding: 1%;
 	margin-bottom: 20px;
+	margin-top: 20px;
 	margin-left: 5%;
 }
 
