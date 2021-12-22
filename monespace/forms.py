@@ -165,12 +165,13 @@ class AttendeesEventsForm(forms.ModelForm):
 class MessagesEventsForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ('to_event_group', 'description')
+        fields = ('to_event_group', "subject", 'description')
         widgets = {
             "to_event_group": forms.Select(attrs={'required': 'true'}),
         }
         labels = {
             "to_event_group": "Séléctionner à qui envoyer ce message *",
+            "subject" : "Sujet de votre message *",
             "description": "Votre message"
         }
 
@@ -178,7 +179,19 @@ class MessagesEventsForm(forms.ModelForm):
 class MessagesEventsSimpleForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ('description',)
+        fields = ("subject", 'description')
         labels = {
+            "subject": "Sujet de votre message *",
+            "description": "Votre message"
+        }
+
+
+class MessagesEventsManagerDistrib(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('to_event_manager_group', "subject",'description')
+        labels = {
+            "to_event_manager_group": "Séléctionner à qui envoyer ce message *",
+            "subject": "Sujet de votre message *",
             "description": "Votre message"
         }

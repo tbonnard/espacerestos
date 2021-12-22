@@ -182,6 +182,7 @@ class LogsStatusUsersLocations(models.Model):
 
 class Message(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    subject = models.CharField(blank=False, default="", max_length=255)
     description = models.TextField(blank=False, default="")
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="messages_from_user")
     to_location = models.ForeignKey(Location, on_delete=models.CASCADE, blank=True, null=True, related_name="Messages_location")
@@ -192,6 +193,9 @@ class Message(models.Model):
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="message_to_user")
     info_all_locations = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    group_choices_manager = ((1, 'Aux responsables de la distribution'), (2, 'A tous les bénévoles et responsables'))
+    to_event_manager_group = models.IntegerField(choices=group_choices_manager, null=True, blank=True)
+
 
     def serialize(self):
         return {

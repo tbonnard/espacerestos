@@ -148,7 +148,7 @@ if (document.querySelector('#events_manager_menu')) {
               tdValidateCancel.className='table_cell';
               tdValidateCancel.textContent = "Êtes-vous certain ?";
               let divCancel =document.createElement('div');
-              divCancel.style.marginTop = '5px';
+              divCancel.style.marginTop = '10px';
               divCancel.style.marginBottom = '5px';
               let aValidateCancelYes = document.createElement('a');
               aValidateCancelYes.href = `${window.location.origin}/event_delete_rec/${value['details']['uuid']}/?date=${i[0]}`;
@@ -186,7 +186,7 @@ if (document.querySelector('#events_manager_menu')) {
                 tdValidateCancel.className='table_cell';
                 tdValidateCancel.textContent = "Réactiver cette date ?";
                 let divCancel =document.createElement('div');
-                divCancel.style.marginTop = '5px';
+                divCancel.style.marginTop = '10px';
                 divCancel.style.marginBottom = '5px';
                 let aValidateCancelYes = document.createElement('a');
                 aValidateCancelYes.href = `${window.location.origin}/reactivate_event_date/${value['details']['uuid']}/?date=${i[0]}`;
@@ -337,8 +337,10 @@ function check_if_notif() {
     .then(response => response.json())
     .then(data => {
       // console.log(data);
+      let countTopMsg = document.querySelector('#count_messages_new');
       if (data.length > 0) {
         NotificationTopDiv.style.display = 'block';
+        countTopMsg.innerHTML = ` (${data.length})`;
         data.forEach(j => {
           notificationMessagesSolo.forEach(i => {
             if (j.uuid == i.dataset.message) {
@@ -348,6 +350,7 @@ function check_if_notif() {
         })
       } else {
         NotificationTopDiv.style.display = 'none';
+        countTopMsg.style.display = 'none';
       }
     })
 

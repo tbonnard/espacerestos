@@ -4,6 +4,7 @@
 {% block script %}
 <script src= "{% static 'scripts/index.js' %}"></script>
 <script src= "{% static 'scripts/scripts_events_attendee.js' %}"></script>
+<script src= "{% static 'scripts/messages_items.js' %}"></script>
 {% endblock %}
 
 
@@ -23,7 +24,7 @@
 
     <div class="sub_nav_hor" id="messages_menu">
         {% csrf_token %}
-        <i class="fas fa-envelope"></i>Messages
+        <i class="fas fa-envelope"></i>Messages<span id="count_messages_new"></span>
         <div id="notification_messages_top" class="notification_messages"><span class="dot"></span></div>
     </div>
 
@@ -104,245 +105,167 @@
 <div id="messages">
 
     <div id="messages_sub_menu">
-    <a id="a_received_messages" class="active">Messages reçus</a>
-    <a id="a_sent_messages">Messages envoyés</a>
+        <a id="a_received_messages" class="active">Messages reçus</a>
+        <a id="a_sent_messages">Messages envoyés</a>
     </div>
 
+
+
     <div id="received_messages">
+
         {% if to_user_messages|length == 0 %}
         <p class="info_text">Aucun message reçu</p>
         {% else %}
+
+        <div class="">
+
         {% for i in to_user_messages %}
 
-        <div class="message_div">
-
-            <div class="message_unit_div" data-message="{{i.uuid}}">
-
-                <div class="message__line_unit_div">
-                    <div class="table_heading_message_div">Envoyé par</div>
-                    <div class="message_nav_line_details_div">{% if i.from_user == request.user  %}
-                            Vous
+            <div class="message_unit">
+                <div class="message_unit_div" data-msg="{{i.uuid}}" data-message="{{i.uuid}}">
+                    <span class="notification_messages_solo_div" data-message="{{i.uuid}}">nouveau
+<!--                    <span class="dot"  title="Marquer comme lu">-->
+<!--                    </span>-->
+                    </span>
+                    <a class="message_icon_next"><i id="icon_left_right_{{i.uuid}}" class="fas fa-2x fa-chevron-right"></i></a>
+                    <div class="line_top_message">
+                        <span>De {% if i.from_user == request.user  %}
+                                    vous même
+                                    {% else %}
+                                    {{i.from_user}}
+                                    {% endif %}</span>
+                        <span>, le {{i.created }}</span>
+                        {% if i.to_location %}
+                        <span>pour les bénévoles du site de {{i.to_location.name}}</span>
+                        {% elif i.to_event %}
+                            {% if i.to_event_date and i.to_event_group == 1 %}
+                            <span>pour les bénévoles de la distribution {{i.to_event.name}} du {{i.to_event_date }}</span>
+                            {% elif i.to_event_date and i.to_event_group == 2 %}
+                            <span>pour les bénévoles présents de la distribution {{i.to_event.name}} du {{i.to_event_date }}</span>
+                            {% elif i.to_event_date and i.to_event_group == 3 %}
+                            <span>pour les bénévoles non présents de la distribution {{i.to_event.name}} du {{i.to_event_date }}</span>
+                            {% elif i.to_event_manager_group == 1 %}
+                            <span>pour les responsables de la distribution {{i.to_event.name}}</span>
                             {% else %}
-                            {{i.from_user}}
+                            <span>pour les bénévoles de la distribution {{i.to_event.name}}</span>
                             {% endif %}
+                        {% elif i.to_user %}
+                            <span>pour {% if i.from_user == request.user  %}
+                                    vous même
+                                    {% else %}
+                                    {{i.from_user}}
+                                    {% endif %}</span>
+                        {% else%}
+                        <span></span>
+                        {% endif %}
                     </div>
-                </div>
 
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>Pour le site</div>
-                    <div class="message_nav_line_details_div">{{i.to_location|default_if_none:"/"}}</div>
-                </div>
-
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>Pour la distribution</div>
-                    <div class="message_nav_line_details_div">{{i.to_event|default_if_none:"/"}}</div>
-                </div>
-
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>De la date du</div>
-                    <div class="message_nav_line_details_div">{{i.to_event_date|default_if_none:"/"}}</div>
-                </div>
-
-
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>Envoyé à</div>
-                    <div class="message_nav_line_details_div">
-                    {% if i.to_user == request.user  %}
-                    A vous
-                    {% elif i.to_user %}
-                        {{ i.to_user }}
-                        {% else %}
-                    {{i.get_to_event_group_display|default_if_none:"/"}}
-                    {% endif %}
+                    <div class="line_top_message subject_line">
+                        Sujet: <span id="subject_{{i.uuid}}">{{ i.subject }}</span>
                     </div>
+
                 </div>
 
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>Envoyé le</div>
-
-                    <div class="message_nav_line_details_div">
-                        {% timezone "Europe/Paris" %}
-                        {{ i.created }}
-                        {% endtimezone %}
+                <div class="message_unit_div_answer" data-msg="{{i.uuid}}" data-state="closed">
+                    <div class="line_top_message_answer">
+                        {{ i.description }}
                     </div>
+                    <div class="div_answer_input">
+                        <form method="POST">
+                            {% csrf_token %}
+                        <input id="msg{{i.uuid}}" class="input_answer" type="text" required placeholder="répondre à {{i.from_user}}"><button class="button_reply" data-msg="{{i.uuid}}" data-to="{{i.from_user.uuid}}"><i class="far fa-check-circle"></i>Confirmer</button>
+                        </form>
+                    </div>
+
                 </div>
-
-
             </div>
 
-            <div class="message_description_div" data-loc="{{j.uuid}}">
-                <span class="message_nav_line_description_div">{{i.description}}</span>
-            </div>
-
-            <span class="notification_messages_solo_div" data-message="{{i.uuid}}">
-                <span class="dot"  title="Marquer comme lu">
-                </span>
-            </span>
+        {% endfor %}
 
         </div>
 
 
-<!--        <div class="pre_table_notif">-->
-<!--        <table class='table1_message'>-->
-<!--            <thead class="message_unit" data-message="{{i.uuid}}">-->
-<!--                <tr>-->
-<!--                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">-->
-<!--                        {% if i.from_user == request.user  %}-->
-<!--                        Vous-->
-<!--                        {% else %}-->
-<!--                        {{i.from_user}}-->
-<!--                        {% endif %}-->
-<!--                    </p></th>-->
-<!--                    <th class='table_heading_message'>Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:"/"}}</p></th>-->
-<!--                    <th class='table_heading_message'>Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:"/"}}</p></th>-->
-<!--                    <th class='table_heading_message'>De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:"/"}}</p></th>-->
-<!--                    <th class='table_heading_message'>Envoyé à<p class="message_nav_line_details">-->
-<!--                    {% if i.to_user == request.user  %}-->
-<!--                    A vous-->
-<!--                    {% elif i.to_user %}-->
-<!--                        {{ i.to_user }}-->
-<!--                        {% else %}-->
-<!--                    {{i.get_to_event_group_display|default_if_none:"/"}}-->
-<!--                    {% endif %}-->
-<!--                </p></th>-->
-<!--                    <th class='table_heading_message'>Envoyé le<p class="message_nav_line_details">{{i.created}}</p></th>-->
-<!--                    <th><span class="notification_messages_solo" data-message="{{i.uuid}}"><span class="dot"  title="Marquer comme lu"></span></span></th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--                <tr>-->
-<!--                    <td class="td_row" colspan="6" data-loc="{{j.uuid}}">-->
-<!--                        <span class="message_nav_line_description">{{i.description}}</span>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
-<!--        </div>-->
-
-        {% endfor %}
         {% endif %}
+
+
     </div>
+
+
 
 
 
       <div id="sent_messages">
         {% if from_user_messages|length == 0 %}
-        <p class="info_text">Aucun message envoyé</p>
+          <p class="info_text">Aucun message envoyé</p>
         {% else %}
-          {% for i in from_user_messages %}
 
-          <div class="message_div">
+        <div class="">
 
-            <div class="message_unit_div" data-message="{{i.uuid}}">
+        {% for i in from_user_messages %}
 
-                <div class="message__line_unit_div">
-                    <div class="table_heading_message_div">Envoyé par</div>
-                    <div class="message_nav_line_details_div">{% if i.from_user == request.user  %}
-                            Vous
+            <div class="message_unit">
+                <div class="message_unit_div_sent" data-msg="sent_{{i.uuid}}">
+                    <a class="message_icon_next"><i id="icon_lr_sent_{{i.uuid}}" class="fas fa-2x fa-chevron-right"></i></a>
+                    <div class="line_top_message">
+                        <span>De {% if i.from_user == request.user  %}
+                                    vous même
+                                    {% else %}
+                                    {{i.from_user}}
+                                    {% endif %}</span>
+                        <span>, le {{i.created }}</span>
+                        {% if i.to_location %}
+                        <span>pour les bénévoles du site de {{i.to_location.name}}</span>
+                        {% elif i.to_event %}
+                            {% if i.to_event_date and i.to_event_group == 1 %}
+                            <span>pour les bénévoles de la distribution {{i.to_event.name}} du {{i.to_event_date }}</span>
+                            {% elif i.to_event_date and i.to_event_group == 2 %}
+                            <span>pour les bénévoles présents de la distribution {{i.to_event.name}} du {{i.to_event_date }}</span>
+                            {% elif i.to_event_date and i.to_event_group == 3 %}
+                            <span>pour les bénévoles non présents de la distribution {{i.to_event.name}} du {{i.to_event_date }}</span>
+                            {% elif i.to_event_manager_group == 1 %}
+                            <span>pour les responsables de la distribution {{i.to_event.name}}</span>
                             {% else %}
-                            {{i.from_user}}
+                            <span>pour les bénévoles de la distribution {{i.to_event.name}}</span>
                             {% endif %}
+                        {% elif i.to_user %}
+                            <span>pour {% if i.from_user == request.user  %}
+                                    vous même
+                                    {% else %}
+                                    {{i.from_user}}
+                                    {% endif %}</span>
+                        {% else%}
+                        <span></span>
+                        {% endif %}
                     </div>
-                </div>
 
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>Pour le site</div>
-                    <div class="message_nav_line_details_div">{{i.to_location|default_if_none:"/"}}</div>
-                </div>
-
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>Pour la distribution</div>
-                    <div class="message_nav_line_details_div">{{i.to_event|default_if_none:"/"}}</div>
-                </div>
-
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>De la date du</div>
-                    <div class="message_nav_line_details_div">{{i.to_event_date|default_if_none:"/"}}</div>
-                </div>
-
-
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>Envoyé à</div>
-                    <div class="message_nav_line_details_div">
-                    {% if i.to_user == request.user  %}
-                    A vous
-                    {% elif i.to_user %}
-                        {{ i.to_user }}
-                        {% else %}
-                    {{i.get_to_event_group_display|default_if_none:"/"}}
-                    {% endif %}
+                    <div class="line_top_message subject_line">
+                        Sujet: <span id="subject_sent_{{i.uuid}}">{{ i.subject }}</span>
                     </div>
+
                 </div>
 
-                <div class="message__line_unit_div">
-                    <div class='table_heading_message_div'>Envoyé le</div>
-                    <div class="message_nav_line_details_div">
-                        {% timezone "Europe/Paris" %}
-                        {{ i.created }}
-                        {% endtimezone %}
+                <div class="message_unit_div_answer_sent" data-msg="sent_{{i.uuid}}" data-msgent="{{i.uuid}}" data-statesent="closed">
+                    <div class="line_top_message_answer">
+                        {{ i.description }}
                     </div>
+
                 </div>
-
-
             </div>
-
-            <div class="message_description_div" data-loc="{{j.uuid}}">
-                <span class="message_nav_line_description_div">{{i.description}}</span>
-            </div>
-
-
-        </div>
-
-
-
-
-
-
-
-
-<!--          -->
-<!--          -->
-<!--        <table class='table1_message'>-->
-<!--            <thead>-->
-<!--                <tr>-->
-<!--                    <th class='table_heading_message'>Envoyé par<p class="message_nav_line_details">-->
-<!--                        {% if i.from_user == request.user  %}-->
-<!--                        Vous-->
-<!--                        {% else %}-->
-<!--                        {{i.from_user}}-->
-<!--                        {% endif %}-->
-<!--                    </p></th>-->
-<!--                    <th class='table_heading_message'>Pour le site<p class="message_nav_line_details">{{i.to_location|default_if_none:"/"}}</p></th>-->
-<!--                    <th class='table_heading_message'>Pour la distribution<p class="message_nav_line_details">{{i.to_event|default_if_none:"/"}}</p></th>-->
-<!--                    <th class='table_heading_message'>De la date du<p class="message_nav_line_details">{{i.to_event_date|default_if_none:"/"}}</p></th>-->
-<!--                    <th class='table_heading_message'>Envoyé à<p class="message_nav_line_details">-->
-<!--                    {% if i.to_user == request.user  %}-->
-<!--                    A vous-->
-<!--                    {% elif i.to_user %}-->
-<!--                        {{ i.to_user }}-->
-<!--                        {% else %}-->
-<!--                    {{i.get_to_event_group_display|default_if_none:"/"}}-->
-<!--                    {% endif %}-->
-<!--                </p></th>-->
-<!--                    <th></th>-->
-<!--                </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--                <tr>-->
-<!--                    <td class="td_row" colspan="6" data-loc="{{j.uuid}}">-->
-<!--                        <span class="message_nav_line_description">{{i.description}}</span>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--            </tbody>-->
-<!--        </table>-->
-
-
 
         {% endfor %}
-        {% endif %}
+
         </div>
 
+
+        {% endif %}
+
+
+      </div>
+
+
 </div>
+
+
 
 
 <div id="send_messages_global">

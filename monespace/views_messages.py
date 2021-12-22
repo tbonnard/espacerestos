@@ -15,6 +15,9 @@ def send_message(request):
     group = data.get('group')
     description = data.get('description')
     user_uuid = data.get('user')
+    subject = data.get('subject')
+    group_manager = data.get('groupManager')
+
     try:
         users_to = User.objects.get(uuid=user_uuid)
     except:
@@ -31,8 +34,9 @@ def send_message(request):
     except:
         location = None
 
-    new_message = Message(to_event=event, to_location=location, from_user=request.user, to_event_group=group,
-                          description=description, info_all_locations=all_site, to_event_date=date, to_user=users_to)
+    new_message = Message(subject=subject, to_event=event, to_location=location, from_user=request.user,
+                          to_event_group=group, description=description, info_all_locations=all_site,
+                          to_event_date=date, to_user=users_to, to_event_manager_group=group_manager)
     new_message.save()
     group_message = int(new_message.to_event_group)
 
@@ -64,9 +68,13 @@ def send_message(request):
                 users_to.append(i.user)
     elif new_message.to_event is not None and new_message.to_event_date is None:
         # print('d')
-        for i in StatusUsersLocations.objects.filter(distrib=new_message.to_event, status=2):
-            # print('all de distirb')
-            users_to.append(i.user)
+        if new_message.to_event_manager_group == 1:
+            for i in Event.objects.filter(id=new_message.to_event.id).event_managers.all():
+                users_to.append(i)
+        else:
+            for i in StatusUsersLocations.objects.filter(distrib=new_message.to_event, status=2):
+                # print('all de distirb')
+                users_to.append(i.user)
     elif new_message.to_location is not None:
         # print('e')
         for i in StatusUsersLocations.objects.filter(location=new_message.to_location, status=2):
@@ -90,6 +98,10 @@ def send_message(request):
 def get_to_user_messages(user):
     to_user_events_pre = StatusUsersLocations.objects.filter(user=user, status=2)
     all_to_user_events = [i.distrib for i in to_user_events_pre]
+    if user.user_type != 2:
+        ditrib_managers = [i for i in Event.objects.all() if user in i.event_managers.all()]
+        for i in ditrib_managers:
+            all_to_user_events.append(i)
     messages_events = Message.objects.filter(to_event__in=all_to_user_events)
     # all_attend_to_user_events = []
     # attend_to_user_events = []
@@ -97,7 +109,10 @@ def get_to_user_messages(user):
 
     to_user_events_groups = []
     for i in messages_events:
-        if i.to_event_group == 1 and i.created >= user.date_joined:
+        if i.to_event_manager_group == 1:
+            if user in i.to_event.event_managers.all():
+                to_user_events_groups.append(i.id)
+        elif i.to_event_group == 1 and i.created >= user.date_joined:
             # all_attend_to_user_events.append(i)
             to_user_events_groups.append(i.id)
         elif i.to_event_group == 2:

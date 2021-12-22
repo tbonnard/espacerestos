@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .models import Location, StatusUsersLocations, LogsStatusUsersLocations, Event, AttendeesEvents
-from .forms import LocationForm, SelectLocationsForm, MessagesEventsSimpleForm
+from .forms import LocationForm, SelectLocationsForm, MessagesEventsSimpleForm, MessagesEventsManagerDistrib
 from .notification_manager import send_email
 from .functions_global import forbidden_to_user, admin_only
 
@@ -150,7 +150,7 @@ def location_edit(request, location_id):
 @login_required(login_url='/login/')
 def location_details(request, location_id):
     location_page = get_object_or_404(Location, uuid=location_id)
-    message_form = MessagesEventsSimpleForm()
+    message_form = MessagesEventsManagerDistrib()
     manager_location_check = False
     all_events_location = Event.objects.filter(location=location_page, is_distrib=True)
     for i in location_page.location_managers.all():

@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 
-from .forms import DistributionForm, StatusUsersLocationsForm, DistributionManagerForm, MessagesEventsSimpleForm
+from .forms import DistributionForm, StatusUsersLocationsForm, DistributionManagerForm, MessagesEventsSimpleForm, MessagesEventsManagerDistrib
 from .functions_global import forbidden_to_user
 from .models import Location, Event, RecurringPattern, StatusUsersLocations, LogsStatusUsersLocations, User, AttendeesEvents
 from .notification_manager import send_email
@@ -52,7 +52,7 @@ def distribution_create(request, location_id):
 @forbidden_to_user
 @login_required(login_url='/login/')
 def distributions(request):
-    message_form = MessagesEventsSimpleForm()
+    message_form = MessagesEventsManagerDistrib()
     # if request.user.user_type == 1:
     #     events = Event.objects.all()
     #     return render(request, 'distributions.html', context={"events": events})

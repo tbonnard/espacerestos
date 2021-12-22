@@ -37,7 +37,7 @@ class AttendeesEventsAdmin(admin.ModelAdmin):
 
 
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('uuid', "from_user", 'to_location', "to_event", "to_event_date", "to_event_group", "to_user", "info_all_locations")
+    list_display = ('uuid', "from_user", 'to_location', "to_event", "to_event_manager_group", "to_event_date", "to_event_group", "to_user", "info_all_locations")
 
 
 class MessageSeenAdmin(admin.ModelAdmin):

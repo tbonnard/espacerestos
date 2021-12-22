@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
   let user = null;
   let site = null;
   let groupField = null;
+  let groupFieldManager = null;
+  let subject = null;
+  let subjectField = document.querySelector('#id_subject');
   let descriptionField = document.querySelector('#id_description');
   const borderColor = "#cacaca";
 
@@ -20,12 +23,18 @@ document.addEventListener("DOMContentLoaded", function () {
     groupField = document.querySelector('#id_to_event_group');
   }
 
+  if (document.querySelector('#id_to_event_manager_group')) {
+    groupFieldManager = document.querySelector('#id_to_event_manager_group');
+  }
 
-   let listFieldsValidation = [descriptionField]
+
+   let listFieldsValidation = [descriptionField,subjectField]
    if (groupField != null) {
-     listFieldsValidation = [descriptionField, groupField]
+     listFieldsValidation.push(groupField)
      }
-
+  if (groupFieldManager != null) {
+    listFieldsValidation.push(groupFieldManager)
+       }
 
   let close_message_box = document.querySelector('#close_message_box');
 
@@ -37,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
   })
 
-  function send_message(event_id, event_date, all_site, user, site, group, description) {
+  function send_message(event_id, event_date, all_site, user, site, group, description, subject, groupManager) {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const request = new Request(
                       `${window.location.origin}/send_message/`,
@@ -53,7 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
               user: user,
               site: site,
               group: group,
-              description: description
+              description: description,
+              subject:subject,
+              groupManager:groupManager
           }),
     })
     .then(response => response.json())
@@ -76,9 +87,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (validationNumber == listFieldsValidation.length) {
 
+      subject = subjectField.value;
+
       if (groupField != null) {
         group = groupField.value;
       } else {group = 1}
+
+      if (groupFieldManager != null) {
+        groupManager = groupFieldManager.value;
+      } else {groupManager = 2}
+
+
 
        if (sendMessagesFormButton.dataset.event) {
          event_id = sendMessagesFormButton.dataset.event
@@ -96,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
          user = sendMessagesFormButton.dataset.user
        }
 
-       send_message(event_id, event_date, all_site, user, site, group, description);
+       send_message(event_id, event_date, all_site, user, site, group, description, subject, groupManager);
 
        listFieldsValidation.forEach(i => {
            i.style.borderColor = borderColor;
