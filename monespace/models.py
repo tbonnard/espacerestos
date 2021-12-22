@@ -193,7 +193,7 @@ class Message(models.Model):
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="message_to_user")
     info_all_locations = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    group_choices_manager = ((1, 'Aux responsables'), (2, 'Aux et responsables'))
+    group_choices_manager = ((1, 'Aux responsables'), (2, 'Aux bénévoles et responsables'))
     to_event_manager_group = models.IntegerField(choices=group_choices_manager, null=True, blank=True)
 
 
