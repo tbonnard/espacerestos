@@ -18,6 +18,7 @@ def send_message(request):
     subject = data.get('subject')
     group_manager = data.get('groupManager')
 
+
     try:
         users_to = User.objects.get(uuid=user_uuid)
     except:

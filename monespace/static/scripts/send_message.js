@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
   })
 
   function send_message(event_id, event_date, all_site, user, site, group, description, subject, groupManager) {
+
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const request = new Request(
                       `${window.location.origin}/send_message/`,
@@ -95,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (groupFieldManager != null) {
         groupManager = groupFieldManager.value;
-      } else {groupManager = 2}
+      } else {groupManager = null}
 
 
 

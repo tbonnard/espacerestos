@@ -24,7 +24,6 @@ class UserProfileForm(forms.ModelForm):
             "first_name": forms.TextInput(attrs={'required': 'true'}),
             "last_name": forms.TextInput(attrs={'required': 'true'}),
             "email":forms.EmailInput(attrs={'required': 'true'}),
-            'tel':forms.NumberInput(attrs={'min':0, 'max':9999999999}),
         }
         labels = {
             "first_name": "Prénom *",
@@ -88,13 +87,17 @@ class DistributionForm(forms.ModelForm):
 class DistributionManagerForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ("event_managers","pre_alert_non_attendees_status", "pre_alert_non_attendees_nb_attendees")
+        fields = ("time_from", "time_to", "event_managers", "pre_alert_non_attendees_status", "pre_alert_non_attendees_nb_attendees")
         labels = {
+            "time_from": "Heure de début *",
+            "time_to": "Heure de fin *",
             "event_managers": "Modifier les responsables de la soirée de distribution",
             "pre_alert_non_attendees_status": "Voulez vous activer une alerte automatique envoyée 2 jours avant l'événement si le nombre de bénévoles est inférieur au nombre désiré ?",
             "pre_alert_non_attendees_nb_attendees": "En dessous de ce nombre, l'alerte, si active sera envoyée"
         }
         widgets = {
+            "time_from": forms.TimeInput(attrs={'type': 'time'}),
+            "time_to": forms.TimeInput(attrs={'type': 'time'}),
             "event_managers": forms.CheckboxSelectMultiple(),
         }
 

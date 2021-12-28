@@ -674,7 +674,7 @@ nav::before {
 .message_icon_next{
 	position: absolute;
 	top: 35%;
-	right: 5px;
+	right: 25px;
 }
 
 .message_icon_back {
@@ -703,7 +703,6 @@ nav::before {
 	border-radius: 10px;
 	background-color: #f0f7fb;
 	width: fit-content;
-	padding: 1%;
 	margin-bottom: 20px;
 	margin-top: 20px;
 	margin-left: 5%;
@@ -1329,4 +1328,21 @@ details[open] summary ~ * {
 		max-width: 30%;
 	}
 
+	.message_unit_div, .message_unit_div_sent{
+		padding: 6%;
+	}
+
+	.line_top_message_answer{
+		padding: 3%;
+	}
+	.input_answer{
+	    width: 80% !important;
+	}
+	.div_answer_input form button{
+		display: contents;
+	}
+	.message_icon_next {
+    position: absolute;
+    top: 35%;
+    right: 5px;
 }

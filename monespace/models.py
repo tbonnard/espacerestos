@@ -196,7 +196,6 @@ class Message(models.Model):
     group_choices_manager = ((1, 'Aux responsables'), (2, 'Aux bénévoles et responsables'))
     to_event_manager_group = models.IntegerField(choices=group_choices_manager, null=True, blank=True)
 
-
     def serialize(self):
         return {
                 "uuid": self.uuid,

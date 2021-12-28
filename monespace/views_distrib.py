@@ -123,6 +123,7 @@ def get_last_attendance(users, distrib):
             users_from_status_users_location_dict.setdefault(i.uuid, last_attendance.event_date)
     return users_from_status_users_location_dict
 
+
 @login_required(login_url='/login/')
 @forbidden_to_user
 def user_distrib_update_status(request, distrib_id):
@@ -152,31 +153,78 @@ def change_distrib_manager(request, distrib_id):
     if request.user.user_type == 3 and request.user not in distrib.location.location_managers.all():
         return redirect('index')
 
-    if request.method== "POST":
+    if request.method == "POST":
         form = DistributionManagerForm(data=request.POST)
+        # check if no past distrib or not
+        # cancel next ones and create a new one if already some in the past
+        # update if no one past
         if form.is_valid():
-            distrib = get_object_or_404(Event, uuid=distrib_id)
-            distrib.pre_alert_non_attendees_status = form.cleaned_data['pre_alert_non_attendees_status']
-            distrib.pre_alert_non_attendees_nb_attendees = form.cleaned_data['pre_alert_non_attendees_nb_attendees']
-            previous_manager = distrib.event_managers.all()
-            managers =form.cleaned_data['event_managers']
+            if distrib.time_from != form.cleaned_data['time_from'] or distrib.time_to != form.cleaned_data['time_to']:
+                from .views_events import return_date_based_pattern
+                event_date = distrib.start_date
+                if distrib.is_recurring:
+                    rec_pattern = RecurringPattern.objects.get(event=distrib)
+                    need_to_delete = False
+                    for n in range(rec_pattern.max_num_occurrences + 1):
+                        if AttendeesEvents.objects.filter(parent_event=distrib, event_date=datetime.datetime(event_date.year, event_date.month, event_date.day)):
+                            need_to_delete = True
+                            break
+                        event_date = return_date_based_pattern(rec_pattern, event_date)
+                    if need_to_delete:
+                        from .views_events import check_to_delete
+                        check_to_delete(distrib, request.user)
+                        new_event = Event(name=distrib.name, start_date=distrib.start_date,
+                                          end_date=distrib.start_date,
+                                          location=distrib.location,
+                                          time_from=form.cleaned_data['time_from'],
+                                          time_to=form.cleaned_data['time_to'],
+                                          is_recurring=True, is_distrib=True,
+                                          pre_alert_non_attendees_status=form.cleaned_data['pre_alert_non_attendees_status'],
+                                        pre_alert_non_attendees_nb_attendees=form.cleaned_data['pre_alert_non_attendees_nb_attendees'])
+                        new_event.save()
+                        managers = form.cleaned_data['event_managers']
+                        for i in managers:
+                            new_event.event_managers.add(i)
+                        new_event.save()
 
-            for i in managers:
-                if i not in previous_manager:
-                    distrib.event_managers.add(i)
-                    edit_user_type_to_manager(i)
-                    check_if_new_status_to_create_update(distrib=distrib, location=distrib.location,
-                                                         user_to_update=i, from_user=request.user,
-                                                         manager=True)
-            for i in previous_manager:
-                if i not in managers:
-                    distrib.event_managers.remove(i)
-                    edit_user_type_to_user(i)
-                    check_if_new_status_to_create_update(distrib=distrib, location=distrib.location,
-                                                         user_to_update=i, from_user=request.user,
-                                                         manager=True)
-            distrib.save()
+                        new_rec = RecurringPattern(event=new_event, separation_count=1, max_num_occurrences=260,
+                                                   repeat_each_x=0)
+                        new_rec.save()
 
+                        for i in new_event.event_managers.all():
+                            edit_user_type_to_manager(i)
+                            check_if_new_status_to_create_update(distrib=new_event, location=new_event.location,
+                                                                 user_to_update=i, from_user=request.user,
+                                                                 manager=True)
+                        distrib.is_cancelled = True
+                        distrib.save()
+                        return redirect(reverse('distrib_details', kwargs={'distrib_id': new_event.uuid}))
+
+
+            else:
+                distrib = get_object_or_404(Event, uuid=distrib_id)
+                distrib.time_from = form.cleaned_data['time_from']
+                distrib.time_to = form.cleaned_data['time_to']
+                distrib.pre_alert_non_attendees_status = form.cleaned_data['pre_alert_non_attendees_status']
+                distrib.pre_alert_non_attendees_nb_attendees = form.cleaned_data['pre_alert_non_attendees_nb_attendees']
+                previous_manager = distrib.event_managers.all()
+                managers = form.cleaned_data['event_managers']
+
+                for i in managers:
+                    if i not in previous_manager:
+                        distrib.event_managers.add(i)
+                        edit_user_type_to_manager(i)
+                        check_if_new_status_to_create_update(distrib=distrib, location=distrib.location,
+                                                             user_to_update=i, from_user=request.user,
+                                                             manager=True)
+                for i in previous_manager:
+                    if i not in managers:
+                        distrib.event_managers.remove(i)
+                        edit_user_type_to_user(i)
+                        check_if_new_status_to_create_update(distrib=distrib, location=distrib.location,
+                                                             user_to_update=i, from_user=request.user,
+                                                             manager=True)
+                distrib.save()
 
             return redirect(reverse('distrib_details', kwargs={'distrib_id': distrib_id}))
     return redirect('index')

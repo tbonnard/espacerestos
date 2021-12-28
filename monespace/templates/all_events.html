@@ -37,7 +37,6 @@
 {% if events|length == 0 %}
     <p class="info_text">Aucun résultat avec ces critères de recherche</p>
 {% else %}
-
     <div id="box_items_distrib">
         {% include "events_loop.html" %}
     </div>
@@ -70,14 +69,13 @@
                 <td class="table_cell">
                     {% if value_2.event_date_cancelled == 0 %}
                      {% now "Y-m-d" as todays_date %}
-                    {% if todays_date <= i.0|date:'Y-m-d' %}
+                    {% if todays_date < i.0|date:'Y-m-d' %}
                     <form class="attendees_list" id="parent_list_{{value_2.uuid}}{{i.0|date:'Y-m-d'}}" data-eventid="{{value_2.uuid}}" data-date="{{i.0|date:'Y-m-d'}}">
                     </form>
                     {% endif %}
                     {% else %}
                     <span>annulé</span>
                     {% endif %}
-
                 </td>
             </tr>
 

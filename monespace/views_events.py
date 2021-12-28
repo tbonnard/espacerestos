@@ -83,7 +83,7 @@ def events_list(date_from, date_to, location=None, event_manager=None, distrib=N
             except:
                 continue
             for n in range(rec_pattern.max_num_occurrences + 1):
-                if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day).replace(minute=j.time_from.hour, hour=00, second=00) <= date_to:
+                if date_from <= datetime.datetime(event_date.year, event_date.month, event_date.day).replace(minute=j.time_from.minute, hour=j.time_from.hour, second=00) <= date_to:
                     if attendance:
                         if AttendeesEvents.objects.filter(user=user_requester, parent_event=j, event_date=datetime.datetime(event_date.year, event_date.month, event_date.day)):
                             if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True, parent_event=j,
@@ -504,6 +504,44 @@ def event_details(request, event_id):
         return redirect('index')
 
 
+def check_to_delete(event_to_delete, requested_user):
+    new_number_occurences = 0
+    if event_to_delete.is_recurring:
+        rec_pattern = RecurringPattern.objects.filter(event=event_to_delete).first()
+        event_date = event_to_delete.start_date
+        for n in range(rec_pattern.max_num_occurrences + 1):
+            if datetime.datetime(event_to_delete.start_date.year, event_to_delete.start_date.month, event_to_delete.start_date.day).replace(minute=event_to_delete.time_to.minute, hour=event_to_delete.time_to.hour, second=00) <= datetime.datetime(event_date.year, event_date.month, event_date.day).replace(minute=event_to_delete.time_to.minute, hour=event_to_delete.time_to.hour, second=00) <= datetime.datetime.now():
+                new_number_occurences += 1
+                # if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True,
+                #                                                          parent_event=event_to_delete,
+                #                                                          start_date=event_date):
+                #     new_number_occurences += 1
+                # else:
+                #     continue
+
+            if datetime.datetime(event_date.year, event_date.month, event_date.day).replace(minute=event_to_delete.time_from.minute, hour=event_to_delete.time_from.hour, second=00) >= datetime.datetime.now():
+                for i in AttendeesEvents.objects.filter(parent_event=event_to_delete, event_date=event_date):
+                    send_email(6, [i.user], requested_user, distrib=event_to_delete.name, date=event_date)
+                    i.delete()
+                    # or update status in attendees to 0 if we want to keep history
+
+            event_date = return_date_based_pattern(rec_pattern, event_date)
+
+        # no need anymore -->
+        # rec_event_updated_to_specific_date = Event.objects.filter(was_recurring_event_rec=event_to_delete)
+        # for i in rec_event_updated_to_specific_date:
+        #     if datetime.datetime(i.start_date.year, i.start_date.month, i.start_date.day) > datetime.datetime.now():
+        #         i.delete()
+
+        rec_pattern.max_num_occurrences = new_number_occurences - 1
+        rec_pattern.save()
+
+    if new_number_occurences == 0:
+        event_to_delete.delete()
+
+    return new_number_occurences
+
+
 @login_required(login_url='/login/')
 @forbidden_to_user
 @location_manager_check
@@ -515,34 +553,7 @@ def event_delete_all(request, event_id):
     else:
         event_to_delete.is_cancelled = True
         event_to_delete.save()
-        new_number_occurences = 0
-        if event_to_delete.is_recurring:
-            rec_pattern = RecurringPattern.objects.filter(event=event_to_delete).first()
-            event_date = event_to_delete.start_date
-            for n in range(rec_pattern.max_num_occurrences + 1):
-                if datetime.datetime(event_to_delete.start_date.year, event_to_delete.start_date.month, event_to_delete.start_date.day) <= datetime.datetime(event_date.year, event_date.month, event_date.day) <= datetime.datetime.now():
-                    if not EventExceptionCancelledRescheduled.objects.filter(is_cancelled=True,
-                                                                             parent_event=event_to_delete,
-                                                                             start_date=event_date):
-                        new_number_occurences += 1
-                    else:
-                        break
-                for i in AttendeesEvents.objects.filter(parent_event=event_to_delete, event_date=event_date):
-                    send_email(6, [i.user], request.user, distrib=event_to_delete.name, date=event_date)
-                    i.delete()
-                    # or update status in attendees to 0 if we want to keep history
-                event_date = return_date_based_pattern(rec_pattern, event_date)
-
-            rec_event_updated_to_specific_date = Event.objects.filter(was_recurring_event_rec=event_to_delete)
-            for i in rec_event_updated_to_specific_date:
-                if datetime.datetime(i.start_date.year, i.start_date.month, i.start_date.day) > datetime.datetime.now():
-                    i.delete()
-
-        if new_number_occurences == 0:
-            event_to_delete.delete()
-        else:
-            rec_pattern.max_num_occurrences = new_number_occurences -1
-            rec_pattern.save()
+        check_to_delete(event_to_delete, request.user)
         return redirect('index')
 
 

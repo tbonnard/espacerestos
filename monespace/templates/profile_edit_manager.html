@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {%load static%}
 
+{% block script %}
+<script src= "{% static 'scripts/user_prof_tel.js' %}"></script>
+{% endblock %}
+
+
 {% block content %}
 <div class="top_bar_menu">
 
@@ -8,10 +13,11 @@
         <i class="fas fa-user-circle"></i>Modification du profil
     </div>
 
+
     <a href="{% url 'distrib_users' distrib_id=distrib.uuid %}" class="sub_nav_hor" >
         <div>
         <i class="fas fa-ban"></i>Annuler
-    </div>
+        </div>
     </a>
 
 </div>
@@ -27,6 +33,9 @@
     <img src="{{user.profile_picture.url}}" class="profile_img">
     {% endif %}
     <p><label for="id_username">Nom d'utilisateur&nbsp;:</label> <p id="id_username">{{user.username}}</p>
+
+
+
     <form method="POST" action=" {% url 'profile_edit_manager' user_id=user.uuid distrib_id=distrib.uuid %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}

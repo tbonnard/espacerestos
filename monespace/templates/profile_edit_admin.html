@@ -13,11 +13,12 @@
         <i class="fas fa-user-circle"></i>Modification du profil
     </div>
 
-    <a href="{% url 'profile' %}" class="sub_nav_hor" >
+    <a href="{% url 'all_users_site' %}" class="sub_nav_hor" >
         <div>
         <i class="fas fa-ban"></i>Annuler
-    </div>
+        </div>
     </a>
+
 
 </div>
 
@@ -27,16 +28,18 @@
 
 <div class="form_div_space">
 
-    <h3>Modifier votre profil</h3>
-    {% if request.user.profile_picture %}
-    <img src="{{request.user.profile_picture.url}}" class="profile_img">
+    <h3>Modifier le profil</h3>
+    {% if user.profile_picture %}
+    <img src="{{user.profile_picture.url}}" class="profile_img">
     {% endif %}
-    <p><label for="id_username">Nom d'utilisateur&nbsp;:</label> <p id="id_username">{{request.user.username}}</p>
-    <form method="POST" action=" {% url 'profile_edit' %}" enctype="multipart/form-data">
+    <p><label for="id_username">Nom d'utilisateur&nbsp;:</label> <p id="id_username">{{user.username}}</p>
+
+    <form method="POST" action=" {% url 'profile_edit_admin' user_id=user.uuid %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type='submit' id="confirm" value="Confirmer" class='input_btn'/>
     </form>
+
 
 </div>
 </div>

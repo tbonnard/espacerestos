@@ -19,19 +19,23 @@ document.addEventListener("DOMContentLoaded", function () {
     let date_from = document.querySelector('#date_from').value;
     let date_to = document.querySelector('#date_to').value;
     let param_loc_value_update = params.get('location');
-    if (param_loc_value_update) {
-      form_action.href = `${window.location.origin}/event/liste/?from=${date_from}&to=${date_to}&location=${param_loc_value}`
+    let param_all_value_update = params.get('all');
+    let param_distrib_value_update = params.get('distrib');
+    if (param_loc_value_update || param_all_value_update ||  param_distrib_value_update) {
+      form_action.href = `${window.location.origin}/event/liste/?from=${date_from}&to=${date_to}&location=${param_loc_value}&all=${param_all_value_update}&distrib=${param_distrib_value_update}`
     } else {
       form_action.href = `${window.location.origin}/event/liste/?from=${date_from}&to=${date_to}`
     }
     }
 
   date_from_select.addEventListener('change', () => {
-    diff_dates()
+    console.log('bonjour');
+    diff_dates();
   })
 
   date_to_select.addEventListener('change', () => {
-    diff_dates()
+    console.log('bonjaaour');
+    diff_dates();
   })
 
 });

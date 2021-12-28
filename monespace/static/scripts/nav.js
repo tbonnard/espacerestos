@@ -28,12 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let topBarMenu = document.querySelector('.top_bar_menu');
   let subMenuIcon = document.querySelector('#sub_menu_icon');
 
-  if (window.location.pathname.includes('event/liste/')) {
+  if (window.location.pathname.includes('event/liste') || window.location.pathname.includes('/faq') || window.location.pathname.includes('/login')  || window.location.pathname.includes('/password')  || window.location.pathname.includes('/register')  ) {
     subMenuDivIcon.style.visibility = 'hidden';
   }
-  if (window.location.pathname.includes('/faq/')) {
-    subMenuDivIcon.style.visibility = 'hidden';
-  }
+
 
   function ToggleSubMenu() {
     if (document.querySelector('.top_bar_menu')) {

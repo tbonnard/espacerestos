@@ -22,6 +22,7 @@
                     <th class='table_heading'>Type d'utilisateur</th>
                     <th class='table_heading'>Envoyer un message</th>
                     <th class='table_heading'>Distributions(s) / Site(s)</th>
+                    <th class='table_heading'>Modifier le bénévole</th>
                     <th class='table_heading'>Dernière connexion</th>
                 </tr>
             </thead>
@@ -49,6 +50,7 @@
                             {% endif %}
                         {% endfor %}
                     </td>
+                    <td class='table_cell'><a href="{% url 'profile_edit_admin' user_id=j.uuid %}"><i class="fas fa-edit"></i></a></td>
                     <td class='table_cell'>{{j.last_login|date:'Y-m-d H:i:s'}}</td>
                 </tr>
             {% endfor %}

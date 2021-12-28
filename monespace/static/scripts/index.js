@@ -101,7 +101,14 @@ if (document.querySelector('#events_manager_menu')) {
           let atdName = document.createElement('a');
           atdName.href = `${window.location.origin}/distribution/details/${value['details']['uuid']}/`;
           atdName.innerHTML=`<i class='fas fa-angle-right'></i>`;
-          atdName.title = 'Détails globaux sur la distribution, et non pas juste cette date'
+          atdName.title = 'Détails globaux sur la distribution, et non pas juste cette date';
+          let tdLocation = document.createElement('td');
+          tdLocation.className='table_cell';
+          tdLocation.textContent = value['details']['location']['name'];
+          let atdLocation = document.createElement('a');
+          atdLocation.href = `${window.location.origin}/site/${value['details']['location']['uuid']}/`;
+          atdLocation.innerHTML=`<i class='fas fa-angle-right'></i>`;
+          atdLocation.title = 'Détails du site';
           let tdTime = document.createElement('td');
           tdTime.className='table_cell';
           tdTime.textContent = `${value['details']['time_from'].slice(0, -3)} - ${value['details']['time_to'].slice(0, -3)}`;
@@ -130,6 +137,8 @@ if (document.querySelector('#events_manager_menu')) {
           tdDate.append(aUrlEvent);
           tr.append(tdName);
           tdName.append(atdName);
+          tr.append(tdLocation);
+          tdLocation.append(atdLocation);
           tr.append(tdTime);
           tr.append(tdBenevoles);
           tr.append(tdMessage);
