@@ -197,6 +197,7 @@ all_attendees_user();
     .then(response => response.json())
     .then(data => {
       let attendeesForm = document.querySelectorAll('.attendees');
+      let attendeesList= document.querySelectorAll('.attendees_list');
       attendeesForm.forEach(i => {
         data.forEach(y => {
           if (y.id_distrib == i.dataset.eventid && y.user_status == 1) {
@@ -204,6 +205,16 @@ all_attendees_user();
           }
         })
       })
+
+      attendeesList.forEach(i => {
+        data.forEach(y => {
+          if (y.id_distrib == i.dataset.eventid && y.user_status == 1) {
+            i.innerHTML = "<p class='info_text'>en attente du responsable</p>"
+          }
+        })
+      })
+
+
     })
   }
 
