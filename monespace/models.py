@@ -38,7 +38,7 @@ class User(AbstractUser):
         # Resize/modify the image
         width_img = im.width
         height_img = im.height
-        while width_img > 200 or height_img > 200:
+        while width_img > 500 or height_img > 500:
             im = im.resize((width_img//2, height_img//2))
             width_img = im.width
             height_img = im.height
