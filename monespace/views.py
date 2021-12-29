@@ -17,7 +17,6 @@ def index(request):
     to_user_messages = get_to_user_messages(request.user)
     from_user_messages = get_from_user_messages(request.user)
 
-
     user_distrib_pre = StatusUsersLocations.objects.filter(user=request.user, status=1) | \
                          StatusUsersLocations.objects.filter(user=request.user, status=2)
     distrib_user_choice = [i.distrib for i in user_distrib_pre if not i.distrib.is_cancelled]
@@ -26,7 +25,6 @@ def index(request):
     for i in distrib_attendees:
         if i not in distrib and not i.is_cancelled:
             distrib.append(i)
-
 
     if StatusUsersLocations.objects.filter(user=request.user, status=1):
         pending_events = StatusUsersLocations.objects.filter(user=request.user, status=1)
@@ -134,6 +132,7 @@ def profile(request):
                                                     'manager_locations': user_manager_locations,"message_form":message_form })
 
 
+
 @login_required(login_url='/login/')
 def profile_edit(request):
     form = UserProfileForm(instance=request.user)
@@ -146,7 +145,7 @@ def profile_edit(request):
             except:
                 pass
             else:
-                updated_user.profile_picture.save(image.name, image)
+                request.user.save_image(image)
             finally:
                 updated_user.first_name = form.cleaned_data['first_name']
                 updated_user.last_name = form.cleaned_data['last_name']
@@ -177,7 +176,7 @@ def profile_edit_manager(request, user_id, distrib_id):
                 except:
                     pass
                 else:
-                    updated_user.profile_picture.save(image.name, image)
+                    request.user.save_image(image)
                 finally:
                     updated_user.first_name = form.cleaned_data['first_name']
                     updated_user.last_name = form.cleaned_data['last_name']
@@ -204,7 +203,7 @@ def profile_edit_admin(request, user_id):
             except:
                 pass
             else:
-                updated_user.profile_picture.save(image.name, image)
+                request.user.save_image(image)
             finally:
                 updated_user.first_name = form.cleaned_data['first_name']
                 updated_user.last_name = form.cleaned_data['last_name']

@@ -4,6 +4,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django import utils
 
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
+
 country_list = (("FR", 'France'),)
 
 
@@ -23,6 +28,30 @@ class User(AbstractUser):
             return f"{self.username}"
         else:
             return f"{self.first_name} {self.last_name}"
+
+    def save_image(self, new_image):
+        # Opening the uploaded image
+        im = Image.open(new_image)
+
+        output = BytesIO()
+
+        # Resize/modify the image
+        width_img = im.width
+        height_img = im.height
+        while width_img > 200 or height_img > 200:
+            im = im.resize((width_img//2, height_img//2))
+            width_img = im.width
+            height_img = im.height
+
+        # after modifications, save it to the output
+        im.save(output, format='PNG', quality=100)
+        output.seek(0)
+
+        # change the imagefield value to be the newley modifed image value
+        self.profile_picture = InMemoryUploadedFile(output, 'ImageField', "%s.png" % new_image.name.split('.')[0], 'image/png',
+                                        sys.getsizeof(output), None)
+
+        super(User, self).save()
 
 
 class Location(models.Model):
