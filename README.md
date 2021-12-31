@@ -11,10 +11,11 @@ Le but de cette plateforme était de permettre aux gestionnaire de distribution 
 
 ### Fonctionnalités principales
 Création / modification / annulation d'événements récurrents ou non
-</br>Gestion des site de l'association
-</br>Gestion de la récurrence des événements par règles de récurrence
+</br>Gestion des sites de l'association
+</br>Gestion de la récurrence des événements par règle de récurrence
 </br>Gestion des membres et des rôles (admin, gestionnaire ou utilisateur)
-</br>Gestion des présence aux événements
+</br>Gestion des présences aux événements
+</br>Envoi de messages internes et alertes
 </br>Téléchargement des informations des bénévoles
 
 ### Langages de la plateforme
