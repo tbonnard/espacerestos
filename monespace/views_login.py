@@ -6,6 +6,7 @@ import random
 
 from .forms import UserCreateForm, UserAuthenticationForm
 from .notification_manager import send_email
+from .models import User
 
 
 def login_view(request):
