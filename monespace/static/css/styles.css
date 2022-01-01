@@ -2,9 +2,10 @@
 
 /* GLOBAL */
 :root {
-	--pink: #e5007d;
-	--pink-btn: #e64883;
-  --light_pink: #fcebf1;
+  /* GREEN */
+      --pink: #4D8026;
+      --pink-btn: #4D8026;
+      --light_pink: #E6F4DB;
   --orange: #f7a823;
   --light_grey: #f7f7f7;
   --dark_grey: #999999;

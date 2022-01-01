@@ -25,7 +25,7 @@
 
 <div class="menu_icon">
     <i id='menu' class="fas fa-bars"></i>
-        <a href="{% url 'index' %}" id="menu_icon_image"><img src="{% static 'images/logo.svg' %}" alt="Les Restos du Cœur"></a>
+<!--        <a href="{% url 'index' %}" id="menu_icon_image"><img src="{% static 'images/logo.svg' %}"></a>-->
 </div>
 
 <div class="sub_menu_icon">
@@ -39,6 +39,13 @@
 
         <div class="items_nav">
             {% if not request.user.is_authenticated %}
+
+            <div class="menu_button">
+                <a href="{% url 'login_view_admin' %}" >
+                    <button class="">Login de Demo</button>
+                </a>
+            </div>
+
             <div>
                 <a href="{% url 'login_view' %}" >
                     <div class="item_nav" data-path="login">
