@@ -147,7 +147,7 @@ textarea {
 
 textarea:focus {
 	outline: 0;
-	border: 1px solid #e5007d;
+	border: 1px solid var(--pink);
 	background-color: #fff;
 	outline: none;
 	box-shadow: 0 0 5px #cacaca;
